@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brisk — Read the Market. Not the Manual.</title>
+  <meta name="description" content="No charts, no jargon, no BS. Brisk tells you if a stock is worth your attention right now." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#080b0e; --bg2:#0d1117; --bg3:#141a21;
+      --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.12);
+      --text:#e2e8f0; --muted:#64748b; --muted2:#94a3b8;
+      --green:#00e87a; --gdim:rgba(0,232,122,0.08); --gglow:rgba(0,232,122,0.15);
+      --red:#ff5555; --rdim:rgba(255,85,85,0.08);
+      --yellow:#fbbf24; --ydim:rgba(251,191,36,0.08);
+      --display:'Bebas Neue',sans-serif; --body:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:var(--body); font-size:16px; line-height:1.6; overflow-x:hidden; cursor:none; }
+    #cursor { width:8px; height:8px; background:var(--green); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .18s,height .18s; mix-blend-mode:difference; }
+    #cursor.big { width:30px; height:30px; }
+    @media(hover:none){#cursor{display:none}body{cursor:auto}}
+    body::after { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,0.017) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.017) 1px,transparent 1px); background-size:64px 64px; pointer-events:none; z-index:0; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:64px; border-bottom:1px solid var(--border); background:rgba(8,11,14,.9); backdrop-filter:blur(24px); }
+    .logo { font-family:var(--display); font-size:26px; letter-spacing:4px; color:var(--green); text-decoration:none; }
+    .logo span { color:rgba(255,255,255,.25); }
+    .nav-l { display:flex; gap:36px; align-items:center; }
+    .nav-l a { color:var(--muted); text-decoration:none; font-size:13px; transition:color .2s; }
+    .nav-l a:hover { color:var(--text); }
+    .live-badge { font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--green); border:1px solid rgba(0,232,122,.3); padding:5px 12px; border-radius:100px; display:flex; align-items:center; gap:6px; }
+    .live-badge::before { content:''; width:5px; height:5px; background:var(--green); border-radius:50%; animation:blink 2s infinite; }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    /* HERO */
+    .hero { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:80px 48px 60px; overflow:hidden; }
+    .hero-glow { position:absolute; width:700px; height:700px; background:radial-gradient(circle,rgba(0,232,122,.08) 0%,transparent 65%); right:-80px; top:50%; transform:translateY(-50%); pointer-events:none; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; color:var(--green); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:28px; }
+    .eyebrow::before { content:''; width:24px; height:1px; background:var(--green); }
+    h1 { font-family:var(--display); font-size:clamp(78px,11vw,148px); line-height:.9; letter-spacing:1px; margin-bottom:32px; animation:up .9s cubic-bezier(.16,1,.3,1) both; }
+    @keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+    h1 em { color:var(--green); font-style:normal; display:block; }
+    h1 .dim { color:var(--muted); display:block; }
+    .hero-sub { font-size:17px; color:var(--muted2); font-weight:300; max-width:480px; line-height:1.75; margin-bottom:48px; animation:up .9s .12s cubic-bezier(.16,1,.3,1) both; }
+    .ctas { display:flex; gap:14px; flex-wrap:wrap; animation:up .9s .24s cubic-bezier(.16,1,.3,1) both; }
+    .btn-p { background:var(--green); color:#000; font-family:var(--body); font-size:14px; font-weight:500; padding:13px 28px; border-radius:8px; text-decoration:none; border:none; cursor:none; transition:transform .2s,box-shadow .2s; display:inline-flex; align-items:center; gap:8px; }
+    .btn-p:hover { transform:translateY(-2px); box-shadow:0 8px 28px var(--gglow); }
+    .btn-g { background:transparent; color:var(--text); font-family:var(--body); font-size:14px; font-weight:400; padding:13px 28px; border-radius:8px; text-decoration:none; border:1px solid var(--border2); cursor:none; transition:border-color .2s,background .2s; display:inline-flex; align-items:center; gap:8px; }
+    .btn-g:hover { border-color:rgba(0,232,122,.4); background:var(--gdim); }
+
+    /* TAPE */
+    .tape-wrap { position:relative; z-index:2; background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); overflow:hidden; padding:11px 0; }
+    .tape-track { display:flex; width:max-content; animation:scroll 35s linear infinite; }
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .tape-item { display:flex; align-items:center; gap:10px; padding:0 28px; border-right:1px solid var(--border); font-family:var(--mono); font-size:11px; white-space:nowrap; }
+    .td { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .ts { color:var(--text); font-weight:500; }
+    .tp { color:var(--muted); }
+    .cg{color:var(--green)}.cr{color:var(--red)}.cy{color:var(--yellow)}
+    .dg{background:var(--green)}.dr{background:var(--red)}.dy{background:var(--yellow)}
+
+    /* STATS */
+    .stats { position:relative; z-index:2; display:flex; border-bottom:1px solid var(--border); }
+    .si { flex:1; padding:28px 0; text-align:center; border-right:1px solid var(--border); }
+    .si:last-child{border-right:none}
+    .sn { font-family:var(--display); font-size:40px; color:var(--green); display:block; line-height:1; margin-bottom:6px; }
+    .sl { font-family:var(--mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* SECTION */
+    .sec { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:96px 48px; }
+    .sdiv { border-top:1px solid var(--border); position:relative; z-index:2; }
+    .slbl { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--green); text-transform:uppercase; margin-bottom:14px; }
+    .stitle { font-family:var(--display); font-size:clamp(44px,5.5vw,72px); letter-spacing:1px; line-height:.95; margin-bottom:18px; }
+    .ssub { color:var(--muted2); font-size:15px; font-weight:300; max-width:480px; line-height:1.75; }
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    /* SIGNALS */
+    .sig-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:56px; }
+    .sig { padding:36px 28px 32px; border-radius:16px; border:1px solid var(--border); transition:transform .25s; }
+    .sig:hover{transform:translateY(-4px)}
+    .sig.sg{background:linear-gradient(145deg,rgba(0,232,122,.07),rgba(0,232,122,.01));border-color:rgba(0,232,122,.18)}
+    .sig.sy{background:linear-gradient(145deg,rgba(251,191,36,.07),rgba(251,191,36,.01));border-color:rgba(251,191,36,.18)}
+    .sig.sr{background:linear-gradient(145deg,rgba(255,85,85,.07),rgba(255,85,85,.01));border-color:rgba(255,85,85,.18)}
+    .sig-dot{width:12px;height:12px;border-radius:50%;margin-bottom:20px}
+    .sg .sig-dot{background:var(--green);box-shadow:0 0 10px var(--gglow)}
+    .sy .sig-dot{background:var(--yellow)} .sr .sig-dot{background:var(--red)}
+    .sig-name{font-family:var(--display);font-size:34px;letter-spacing:1px;margin-bottom:8px}
+    .sg .sig-name{color:var(--green)} .sy .sig-name{color:var(--yellow)} .sr .sig-name{color:var(--red)}
+    .sig-tag{font-size:14px;font-weight:500;margin-bottom:10px}
+    .sig-desc{font-size:13px;color:var(--muted2);line-height:1.7;font-weight:300}
+
+    /* CARDS */
+    .whead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;flex-wrap:wrap;gap:20px}
+    .fltrs{display:flex;gap:8px}
+    .fb{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:none;transition:all .18s}
+    .fb:hover{color:var(--text)}
+    .fb.fa{background:var(--green);border-color:var(--green);color:#000}
+    .fb.fr{background:var(--red);border-color:var(--red);color:#fff}
+    .fb.fy{background:var(--yellow);border-color:var(--yellow);color:#000}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+    .sc{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;overflow:hidden;transition:border-color .22s,transform .22s,box-shadow .22s;cursor:none;animation:cardIn .45s ease both}
+    @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .sc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;opacity:0;transition:opacity .22s}
+    .sc.ccg::after{background:var(--green)}.sc.ccr::after{background:var(--red)}.sc.ccy::after{background:var(--yellow)}
+    .sc:hover{transform:translateY(-3px);border-color:var(--border2)}
+    .sc.ccg:hover{box-shadow:0 10px 36px rgba(0,232,122,.08)}
+    .sc.ccr:hover{box-shadow:0 10px 36px rgba(255,85,85,.08)}
+    .sc.ccy:hover{box-shadow:0 10px 36px rgba(251,191,36,.08)}
+    .sc:hover::after{opacity:1}
+    .ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+    .ctick{font-family:var(--display);font-size:30px;letter-spacing:1px;line-height:1}
+    .cname{font-size:11px;color:var(--muted);margin-top:4px;font-weight:300}
+    .cbadge{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;padding:5px 11px;border-radius:100px;flex-shrink:0}
+    .cbadge .bd{width:4px;height:4px;border-radius:50%}
+    .bg{background:var(--gdim);color:var(--green);border:1px solid rgba(0,232,122,.22)}
+    .br{background:var(--rdim);color:var(--red);border:1px solid rgba(255,85,85,.22)}
+    .by{background:var(--ydim);color:var(--yellow);border:1px solid rgba(251,191,36,.22)}
+    .cm{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:14px;padding:12px 0}
+    .cmet{display:flex;flex-direction:column;gap:4px}
+    .cmet+.cmet{border-left:1px solid var(--border);padding-left:12px}
+    .ml{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted)}
+    .mv{font-family:var(--mono);font-size:14px;font-weight:500}
+    .creason{font-size:12px;color:var(--muted2);line-height:1.65;font-style:italic;font-weight:300}
+    .cfooter{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:12px;opacity:.45;letter-spacing:.5px}
+    .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:6px}
+    @keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
+
+    /* HOW */
+    .how-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:56px}
+    .hc{padding:36px 28px;border-right:1px solid var(--border);background:var(--bg2);transition:background .2s}
+    .hc:last-child{border-right:none} .hc:hover{background:var(--bg3)}
+    .hn{font-family:var(--display);font-size:52px;color:rgba(0,232,122,.12);line-height:1;margin-bottom:18px}
+    .ht{font-size:15px;font-weight:500;margin-bottom:8px}
+    .hd{font-size:13px;color:var(--muted2);line-height:1.7;font-weight:300}
+
+    /* ABOUT */
+    .about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-top:60px}
+    .founder{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:14px}
+    .fav{width:52px;height:52px;border-radius:50%;background:var(--gdim);border:1px solid rgba(0,232,122,.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;color:var(--green);flex-shrink:0}
+    .fname{font-size:15px;font-weight:500} .frole{font-size:12px;color:var(--muted);font-weight:300;margin-top:2px}
+    .ftag{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:1.5px;background:var(--gdim);border:1px solid rgba(0,232,122,.2);padding:3px 10px;border-radius:100px;margin-top:4px;display:inline-block}
+    .atext p{font-size:14px;color:var(--muted2);line-height:1.85;margin-bottom:18px;font-weight:300}
+    .atext p strong{color:var(--text);font-weight:500} .atext p em{color:var(--green);font-style:normal}
+    .acards{display:flex;flex-direction:column;gap:10px}
+    .acard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+    .acard:hover{border-color:var(--border2)}
+    .aicon{width:34px;height:34px;border-radius:8px;background:var(--gdim);border:1px solid rgba(0,232,122,.18);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0}
+    .abody h4{font-size:13px;font-weight:500;margin-bottom:3px}
+    .abody p{font-size:12px;color:var(--muted);line-height:1.6}
+
+    /* DISCLAIMER */
+    .disc{position:relative;z-index:2;border-top:1px solid var(--border);background:var(--bg2);padding:20px 48px;text-align:center}
+    .disc p{font-family:var(--mono);font-size:9.5px;color:var(--muted);line-height:1.9;max-width:860px;margin:0 auto;letter-spacing:.2px}
+
+    /* FOOTER */
+    .footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:56px 48px 36px;background:var(--bg2)}
+    .ftop{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .fblogo{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--green);margin-bottom:12px}
+    .fblogo span{color:rgba(255,255,255,.25)}
+    .fbdesc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.75;max-width:240px}
+    .fbby{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-top:16px}
+    .fbby span{color:var(--green)}
+    .fcol h5{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+    .fcol a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:11px;transition:color .18s}
+    .fcol a:hover{color:var(--text)}
+    .soon{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--green);border:1px solid rgba(0,232,122,.3);padding:2px 7px;border-radius:100px;margin-left:6px;vertical-align:middle}
+    .fbot{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+    .fbot p{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.3px}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      nav{padding:0 20px} .nav-l{display:none}
+      .hero{padding:88px 20px 56px} .sec{padding:64px 20px}
+      .sig-grid{grid-template-columns:1fr}
+      .how-grid{grid-template-columns:1fr 1fr}
+      .hc{border-bottom:1px solid var(--border)}
+      .about-wrap{grid-template-columns:1fr;gap:40px}
+      .footer{padding:48px 20px 28px} .ftop{grid-template-columns:1fr 1fr;gap:32px}
+      .stats{flex-wrap:wrap} .si{min-width:50%;border-bottom:1px solid var(--border)}
+      .disc{padding:18px 20px}
+    }
+    @media(max-width:560px){.how-grid{grid-template-columns:1fr}.ftop{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">BRISK<span>.</span></a>
+  <div class="nav-l">
+    <a href="#signals">Signals</a>
+    <a href="#watchlist">Watchlist</a>
+    <a href="#how">Method</a>
+    <a href="#about">About</a>
+    <span class="live-badge">LIVE</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">50+ US stocks · updated daily</div>
+  <h1>
+    <em>READ</em>
+    <span>THE MARKET.</span>
+    <span class="dim">NOT THE MANUAL.</span>
+  </h1>
+  <p class="hero-sub">
+    No charts. No jargon. No BS.<br>
+    Brisk tells you if a stock is worth your attention right now —
+    in the same way your most financially switched-on friend would.
+  </p>
+  <div class="ctas">
+    <a href="#watchlist" class="btn-p">See Live Signals ↓</a>
+    <a href="#how" class="btn-g">How it works</a>
+  </div>
+</section>
+
+<!-- TICKER TAPE -->
+<div class="tape-wrap">
+  <div class="tape-track" id="tape"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="si"><span class="sn" id="s-total">—</span><span class="sl">Stocks Tracked</span></div>
+  <div class="si"><span class="sn" id="s-green" style="color:var(--green)">—</span><span class="sl">Green Signals</span></div>
+  <div class="si"><span class="sn" id="s-red" style="color:var(--red)">—</span><span class="sl">Red Signals</span></div>
+  <div class="si"><span class="sn" id="s-time" style="font-size:22px;letter-spacing:0">—</span><span class="sl">Last Refreshed</span></div>
+</div>
+
+<!-- SIGNALS -->
+<div class="sdiv">
+  <div class="sec" id="signals">
+    <div class="reveal">
+      <div class="slbl">// what the signals mean</div>
+      <h2 class="stitle">THREE LIGHTS.<br>ZERO CONFUSION.</h2>
+      <p class="ssub">We took the complicated stuff and turned it into three simple verdicts. Here's what each one actually means for you.</p>
+    </div>
+    <div class="sig-grid reveal">
+      <div class="sig sg">
+        <div class="sig-dot"></div>
+        <div class="sig-name">GREEN LIGHT</div>
+        <div class="sig-tag">This stock might be worth a look.</div>
+        <p class="sig-desc">The price has dipped but the company is still solid. Like a great product going on sale — smart buyers show up when others aren't paying attention.</p>
+      </div>
+      <div class="sig sy">
+        <div class="sig-dot"></div>
+        <div class="sig-name">YELLOW LIGHT</div>
+        <div class="sig-tag">Meh. Nothing exciting happening here.</div>
+        <p class="sig-desc">Not cheap enough to be interesting, not overpriced enough to avoid. No strong reason to act — but keep it on your radar. Could shift any day.</p>
+      </div>
+      <div class="sig sr">
+        <div class="sig-dot"></div>
+        <div class="sig-name">RED LIGHT</div>
+        <div class="sig-tag">Everyone's already in. Late to the party.</div>
+        <p class="sig-desc">When a stock runs hot for too long, the easy gains are usually already gone. Sit back, let the hype cool down, and revisit it later.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WATCHLIST -->
+<div class="sdiv">
+  <div class="sec" id="watchlist">
+    <div class="whead reveal">
+      <div>
+        <div class="slbl">// live signals</div>
+        <h2 class="stitle">THE WATCHLIST</h2>
+        <p class="ssub">Updated every morning. No hype. Just the signal.</p>
+      </div>
+      <div class="fltrs">
+        <button class="fb fa" onclick="doFilter(this,'ALL')">ALL</button>
+        <button class="fb"    onclick="doFilter(this,'GREEN')">GREEN</button>
+        <button class="fb"    onclick="doFilter(this,'YELLOW')">YELLOW</button>
+        <button class="fb"    onclick="doFilter(this,'RED')">RED</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p id="gmsg" style="text-align:center;margin-top:40px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;"></p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="sdiv">
+  <div class="sec" id="how">
+    <div class="reveal">
+      <div class="slbl">// under the hood</div>
+      <h2 class="stitle">NO MAGIC.<br>JUST METHOD.</h2>
+      <p class="ssub">The same signals traders have used for decades — translated into something a normal person can actually understand.</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="hc"><div class="hn">01</div><div class="ht">We pull the price</div><p class="hd">Every day, we fetch live market prices for every stock on the list. Real data, updated daily.</p></div>
+      <div class="hc"><div class="hn">02</div><div class="ht">We check if it's overheating</div><p class="hd">If too many people are piling in too fast, that's a warning sign. We catch that before you do.</p></div>
+      <div class="hc"><div class="hn">03</div><div class="ht">We check the bigger trend</div><p class="hd">A stock can look cheap and still be falling. We look at both the short-term momentum and the 200-day direction.</p></div>
+      <div class="hc"><div class="hn">04</div><div class="ht">We write it in plain words</div><p class="hd">No RSI. No moving averages in sight. Just: "This looks like a deal" or "Everyone's in — wait for it to cool."</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="sdiv">
+  <div class="sec" id="about">
+    <div class="reveal">
+      <div class="slbl">// who's behind this</div>
+      <h2 class="stitle">BUILT BY A<br>REAL PERSON.</h2>
+    </div>
+    <div class="about-wrap">
+      <div class="reveal">
+        <div class="founder">
+          <div class="fav">AP</div>
+          <div>
+            <div class="fname">Ayush Pathak</div>
+            <div class="frole">Founder, Brisk — Amritsar, India</div>
+            <div class="ftag">INDIE BUILDER</div>
+          </div>
+        </div>
+        <div class="atext">
+          <p><strong>I built Brisk because I was tired of being talked down to.</strong> Every finance app out there assumes you already know what an RSI is, what a moving average means, and why any of it matters.</p>
+          <p>Most people don't. And that's completely fine — it doesn't mean you should stay locked out of building wealth.</p>
+          <p>So I built the app I actually wanted. One that <em>talks like a person</em>, not a Bloomberg terminal. One that says "this looks like a deal right now" instead of throwing a chart at your face.</p>
+          <p><strong>Brisk is early, honest, and built by one person with zero funding.</strong> If it helps you think about money a little more clearly — that's the whole point.</p>
+          <p style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:1.5px;margin-top:8px;">— Ayush Pathak</p>
+        </div>
+      </div>
+      <div class="acards reveal">
+        <div class="acard"><div class="aicon">50+</div><div class="abody"><h4>US stocks tracked daily</h4><p>From Apple to Berkshire. The biggest names, analyzed every morning before you wake up.</p></div></div>
+        <div class="acard"><div class="aicon">0</div><div class="abody"><h4>Jargon. Absolutely zero.</h4><p>Real technical analysis under the hood. You never have to see a single formula.</p></div></div>
+        <div class="acard"><div class="aicon">3</div><div class="abody"><h4>Possible outcomes, always</h4><p>Green, Yellow, Red. That's it. No score out of 100. Just one clear verdict, every time.</p></div></div>
+        <div class="acard"><div class="aicon">↗</div><div class="abody"><h4>Direct investing — coming soon</h4><p>Act on signals without leaving the app. We're working on it. Stay tuned.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disc">
+  <p>⚠ IMPORTANT — Brisk is for informational and educational purposes only. Nothing on this site constitutes financial advice or a recommendation to buy or sell any security. Signals are based on technical indicators only and do not account for your personal financial situation, risk tolerance, or tax obligations. Past performance does not guarantee future results. Brisk is not registered with any financial regulatory authority. Always consult a qualified financial advisor before making investment decisions. The creator of Brisk is not responsible for any financial losses. Never invest money you cannot afford to lose.</p>
+</div>
+
+<!-- FOOTER -->
+<!--
+  ═══════════════════════════════════════════
+  HOW TO ADD NEW THINGS TO THE FOOTER:
+  ─ New page? Create the file, uncomment the link.
+  ─ New feature? Add it under the Product column.
+  ─ Broker affiliate? Replace # with your link.
+    US brokers with affiliate programs:
+    · Webull:   webull.com/activity/referral
+    · Public:   public.com/partners
+    · IBKR:     interactivebrokers.com/referral
+  ═══════════════════════════════════════════
+-->
+<footer class="footer">
+  <div class="ftop">
+    <div>
+      <div class="fblogo">BRISK<span>.</span></div>
+      <p class="fbdesc">The market, translated. No noise, no charts, no condescension.</p>
+      <p class="fbby">BUILT BY <span>AYUSH PATHAK</span> · AMRITSAR, INDIA</p>
+    </div>
+    <div class="fcol">
+      <h5>Product</h5>
+      <a href="#watchlist">Live signals</a>
+      <a href="#signals">How signals work</a>
+      <a href="#how">Our method</a>
+      <!-- <a href="/alerts">Price alerts <span class="soon">SOON</span></a> -->
+      <!-- <a href="/watchlist-custom">My watchlist <span class="soon">SOON</span></a> -->
+    </div>
+    <div class="fcol">
+      <h5>Company</h5>
+      <a href="#about">About</a>
+      <a href="mailto:hello@brisk.app">Contact</a>
+      <!-- <a href="/blog">Blog</a> -->
+      <!-- <a href="/press">Press</a> -->
+    </div>
+    <div class="fcol">
+      <h5>Legal</h5>
+      <a href="#" onclick="document.querySelector('.disc').scrollIntoView({behavior:'smooth'});return false;">Disclaimer</a>
+      <!-- <a href="/privacy">Privacy policy</a> -->
+      <!-- <a href="/terms">Terms of use</a> -->
+      <!-- Broker affiliates (uncomment when ready): -->
+      <!-- <a href="YOUR_WEBULL_LINK" target="_blank">Open account — Webull ↗</a> -->
+      <!-- <a href="YOUR_PUBLIC_LINK" target="_blank">Open account — Public ↗</a> -->
+    </div>
+  </div>
+  <div class="fbot">
+    <p>© 2025 Brisk · Built by Ayush Pathak</p>
+    <p>NOT FINANCIAL ADVICE · FOR INFORMATIONAL USE ONLY</p>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// STEP 1 — Paste your Google Sheet CSV URL here:
+// (Instructions below the URL line)
+// ═══════════════════════════════════════════════════
+const SHEET_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+// How to get this URL:
+// 1. Open your Google Sheet
+// 2. File → Share → Publish to web
+// 3. First dropdown: choose "Stocks" (your sheet tab name)
+// 4. Second dropdown: choose "Comma-separated values (.csv)"
+// 5. Click Publish → Copy the URL
+// 6. Paste it above replacing YOUR_GOOGLE_SHEET_CSV_URL_HERE
+// 7. Save the file, push to GitHub (git add . → git commit -m "connect sheet" → git push)
+
+// ═══════════════════════════════════════════════════
+// Demo data — shows while Sheet isn't connected yet
+// ═══════════════════════════════════════════════════
+const DEMO = [
+  {t:'AAPL', n:'Apple Inc.',           px:'252.62',rsi:'38',tr:'Above Average',sf:'4',v:'YELLOW',r:"Nothing exciting here right now. Not a screaming deal, but not overpriced either. Keep it on your radar."},
+  {t:'MSFT', n:'Microsoft Corp.',      px:'371.04',rsi:'52',tr:'Above Average',sf:'5',v:'YELLOW',r:"Sitting in the middle of the road. No strong signal either way. Patience is the move here."},
+  {t:'GOOGL',n:'Alphabet Inc.',        px:'160.93',rsi:'40',tr:'Above Average',sf:'4',v:'YELLOW',r:"Not cheap enough to get excited about, but the long-term direction is still solid. Watch."},
+  {t:'AMZN', n:'Amazon.com Inc.',      px:'195.40',rsi:'48',tr:'Above Average',sf:'5',v:'YELLOW',r:"Holding steady but no clear entry point just yet. Wait for a cleaner signal."},
+  {t:'NVDA', n:'NVIDIA Corp.',         px:'118.68',rsi:'44',tr:'Below Average',sf:'3',v:'YELLOW',r:"Has cooled off from its highs. The overall direction is softer now — no rush to jump in."},
+  {t:'META', n:'Meta Platforms',       px:'573.20',rsi:'62',tr:'Above Average',sf:'6',v:'YELLOW',r:"Trending well but getting pricier. Could keep going — or could stall. No clear call right now."},
+  {t:'TSLA', n:'Tesla Inc.',           px:'248.30',rsi:'74',tr:'Above Average',sf:'2',v:'RED',   r:"Everyone's already in. When a stock gets this popular this fast, the easy gains are usually gone. Wait."},
+  {t:'NFLX', n:'Netflix Inc.',         px:'890.50',rsi:'72',tr:'Above Average',sf:'2',v:'RED',   r:"Been on a big run. Might have more in the tank, but chasing a stock this hot is how people get burned. Sit back."},
+  {t:'JPM',  n:'JPMorgan Chase',       px:'236.10',rsi:'31',tr:'Above Average',sf:'7',v:'GREEN', r:"On sale right now and the company is rock solid. This is the kind of setup where patient investors show up."},
+  {t:'BRK.B',n:'Berkshire Hathaway',  px:'452.00',rsi:'29',tr:'Above Average',sf:'8',v:'GREEN', r:"Buffett's own fund, currently dipped. You don't get many chances to buy boring-but-reliable at a discount."},
+  {t:'VOO',  n:'Vanguard S&P 500 ETF',px:'505.66',rsi:'33',tr:'Below Average',sf:'4',v:'YELLOW',r:"The whole US market in one fund. Slightly beaten down. Long-term thinkers have bought dips like this before."},
+  {t:'V',    n:'Visa Inc.',            px:'315.80',rsi:'45',tr:'Above Average',sf:'5',v:'YELLOW',r:"Steady as ever. Visa makes money every time someone taps a card. Nothing alarming, nothing exciting."},
+];
+
+const NAMES = {'AAPL':'Apple Inc.','MSFT':'Microsoft Corp.','GOOGL':'Alphabet Inc.','AMZN':'Amazon.com Inc.','NVDA':'NVIDIA Corp.','META':'Meta Platforms','TSLA':'Tesla Inc.','BRK.B':'Berkshire Hathaway','JPM':'JPMorgan Chase','V':'Visa Inc.','MA':'Mastercard Inc.','UNH':'UnitedHealth Group','JNJ':'Johnson & Johnson','XOM':'Exxon Mobil','WMT':'Walmart Inc.','PG':'Procter & Gamble','HD':'Home Depot','CVX':'Chevron Corp.','LLY':'Eli Lilly','MRK':'Merck & Co.','ABBV':'AbbVie Inc.','KO':'Coca-Cola Co.','PEP':'PepsiCo Inc.','COST':'Costco Wholesale','TMO':'Thermo Fisher','MCD':"McDonald's Corp.",'ABT':'Abbott Labs','ACN':'Accenture plc','DHR':'Danaher Corp.','NKE':'Nike Inc.','TXN':'Texas Instruments','PM':'Philip Morris','UPS':'UPS Inc.','MS':'Morgan Stanley','GS':'Goldman Sachs','BAC':'Bank of America','C':'Citigroup Inc.','WFC':'Wells Fargo','INTC':'Intel Corp.','AMD':'Advanced Micro Devices','QCOM':'Qualcomm Inc.','IBM':'IBM Corp.','ORCL':'Oracle Corp.','CRM':'Salesforce Inc.','ADBE':'Adobe Inc.','NFLX':'Netflix Inc.','DIS':'Walt Disney Co.','VOO':'Vanguard S&P 500 ETF','QQQ':'Invesco QQQ ETF','SPY':'SPDR S&P 500 ETF'};
+
+let ALL=[], ACTIVE='ALL';
+
+function verd(raw){if(!raw)return'YELLOW';if(raw.includes('GREEN'))return'GREEN';if(raw.includes('RED'))return'RED';return'YELLOW';}
+function cc(v){return v==='GREEN'?'ccg':v==='RED'?'ccr':'ccy';}
+function bc(v){return v==='GREEN'?'bg':v==='RED'?'br':'by';}
+function dc(v){return v==='GREEN'?'dg':v==='RED'?'dr':'dy';}
+function vc(v){return v==='GREEN'?'cg':v==='RED'?'cr':'cy';}
+function tc(t){if(!t)return'var(--muted)';const c=t.replace('📈 ','').replace('📉 ','');if(c.includes('Above'))return'var(--green)';if(c.includes('Below'))return'var(--red)';return'var(--muted)';}
+function ct(t){if(!t)return'—';return t.replace('📈 ','').replace('📉 ','');}
+function px(p){if(!p||p==='N/A')return'—';const n=parseFloat(p);return isNaN(n)?'—':'$'+n.toFixed(2);}
+
+function render(){
+  const grid=document.getElementById('grid'), msg=document.getElementById('gmsg');
+  const list=ACTIVE==='ALL'?ALL:ALL.filter(s=>verd(s.v||s.verdict||'')===ACTIVE);
+  if(!list.length){grid.innerHTML='';msg.textContent='No '+ACTIVE+' signals right now. Check back tomorrow.';return;}
+  msg.textContent='';
+  grid.innerHTML=list.map((s,i)=>{
+    const v=s.v||verd(s.verdict||'');
+    const trend=ct(s.tr||s.trend);
+    const rsiNum=parseFloat(s.rsi||0);
+    return`<div class="sc ${cc(v)}" style="animation-delay:${i*.04}s">
+      <div class="ct"><div><div class="ctick">${s.t||s.ticker||'—'}</div><div class="cname">${s.n||s.name||NAMES[s.t||s.ticker]||''}</div></div>
+      <div class="cbadge ${bc(v)}"><span class="bd ${dc(v)}"></span>${v}</div></div>
+      <div class="cm">
+        <div class="cmet"><span class="ml">PRICE</span><span class="mv">${px(s.px||s.price)}</span></div>
+        <div class="cmet"><span class="ml">RSI</span><span class="mv" style="color:${rsiNum<35?'var(--green)':rsiNum>70?'var(--red)':'var(--text)'}">${s.rsi||'—'}</span></div>
+        <div class="cmet"><span class="ml">TREND</span><span class="mv" style="font-size:11px;color:${tc(s.tr||s.trend)}">${trend}</span></div>
+        <div class="cmet"><span class="ml">SAFETY</span><span class="mv">${s.sf||s.safety||'—'}<span style="font-size:10px;opacity:.4">/10</span></span></div>
+      </div>
+      <p class="creason">"${s.r||s.reason||'Loading signal...'}"</p>
+      <div class="cfooter">Brisk · Updated today</div>
+    </div>`;
+  }).join('');
+  document.getElementById('s-total').textContent=ALL.length;
+  document.getElementById('s-green').textContent=ALL.filter(s=>verd(s.v||s.verdict||'')==='GREEN').length;
+  document.getElementById('s-red').textContent=ALL.filter(s=>verd(s.v||s.verdict||'')==='RED').length;
+  document.getElementById('s-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  buildTape();
+}
+
+function buildTape(){
+  const items=ALL.map(s=>{const v=s.v||verd(s.verdict||'');return`<div class="tape-item"><span class="td ${dc(v)}"></span><span class="ts">${s.t||s.ticker}</span><span class="tp">${px(s.px||s.price)}</span><span class="${vc(v)}">${v}</span></div>`;}).join('');
+  document.getElementById('tape').innerHTML=items+items;
+}
+
+function doFilter(btn,type){
+  ACTIVE=type;
+  document.querySelectorAll('.fb').forEach(b=>b.className='fb');
+  btn.className='fb '+(type==='GREEN'?'fa':type==='RED'?'fr':type==='YELLOW'?'fy':'fa');
+  render();
+}
+
+function showSkeleton(){
+  document.getElementById('grid').innerHTML=Array(8).fill(0).map(()=>`<div class="sc ccy" style="pointer-events:none"><div class="ct" style="margin-bottom:14px"><div><div class="skel" style="width:72px;height:28px;margin-bottom:6px"></div><div class="skel" style="width:110px;height:10px"></div></div><div class="skel" style="width:64px;height:24px;border-radius:100px"></div></div><div class="skel" style="width:100%;height:38px;margin-bottom:14px"></div><div class="skel" style="width:100%;height:32px"></div></div>`).join('');
+}
+
+async function load(){
+  showSkeleton();
+  if(SHEET_URL==='YOUR_GOOGLE_SHEET_CSV_URL_HERE'){
+    document.getElementById('gmsg').textContent='⚡ Demo mode — connect your Google Sheet to show live data';
+    setTimeout(()=>{ALL=DEMO;render();},700);
+    return;
+  }
+  try{
+    const res=await fetch(SHEET_URL);
+    const text=await res.text();
+    const rows=text.trim().split('\n').slice(1);
+    ALL=rows.map(row=>{
+      const cols=row.split(',');
+      const cl=c=>(c||'').replace(/^"|"$/g,'').trim();
+      const t=cl(cols[0]);
+      if(!t||t==='Ticker')return null;
+      const v=verd(cl(cols[5]));
+      return{t,n:NAMES[t]||t,px:cl(cols[1]),rsi:cl(cols[2]),tr:cl(cols[3]),sf:cl(cols[4]),verdict:cl(cols[5]),v,r:cl(cols[6])};
+    }).filter(Boolean);
+    render();
+  }catch(e){
+    console.warn('Sheet error:',e);
+    ALL=DEMO;render();
+    document.getElementById('gmsg').textContent='Could not load live data — showing demo. Check your Sheet URL.';
+  }
+}
+
+// Cursor
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button,.sc,.acard,.hc').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'));});
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+load();
+</script>
+</body>
+</html>
