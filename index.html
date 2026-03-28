@@ -145,7 +145,7 @@
 
     /* Expandable deep-dive panel */
     .deep{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
-    .sc.open .deep{max-height:400px;opacity:1}
+    .sc.open .deep{max-height:900px;opacity:1}
     .deep-inner{border-top:1px solid var(--border);margin-top:14px;padding-top:16px;display:flex;flex-direction:column;gap:12px}
 
     .why-block{padding:12px 14px;border-radius:10px;display:flex;gap:10px;align-items:flex-start}
@@ -160,6 +160,29 @@
     .why-text{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300}
 
     .cfooter{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:12px;opacity:.4;letter-spacing:.5px}
+
+    /* FUNDAMENTALS PANEL */
+    .fund-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+    .fund-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .fund-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+    .fund-verdict{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;font-weight:500}
+    .fund-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--bg3);border-radius:8px;overflow:hidden;margin-bottom:12px}
+    .fund-met{display:flex;flex-direction:column;gap:3px;padding:10px 10px;border-right:1px solid var(--border)}
+    .fund-met:last-child{border-right:none}
+    .fund-lbl{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+    .fund-val{font-family:var(--mono);font-size:13px;font-weight:500}
+    .fund-hint{font-size:9px;color:var(--muted);margin-top:1px}
+    .fund-moat{margin-bottom:10px}
+    .fund-moat-text{font-size:11px;color:var(--muted2);margin-top:4px;font-style:italic}
+    .fund-note{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+    .fund-note p{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300}
+    .fund-checklist{display:flex;flex-direction:column;gap:5px}
+    .chk-item{font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px}
+    .chk-item span{font-family:var(--mono);font-size:11px;font-weight:500;width:12px;flex-shrink:0}
+    .chk-item strong{color:var(--text)}
+    .chk-yes{background:rgba(0,232,122,0.06)}.chk-yes span{color:var(--green)}
+    .chk-no{background:rgba(255,85,85,0.06)}.chk-no span{color:var(--red)}
+    .chk-mid{background:rgba(251,191,36,0.06)}.chk-mid span{color:var(--yellow)}
     .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:6px}
     @keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
 
@@ -212,6 +235,8 @@
       .footer{padding:48px 20px 28px}.ftop{grid-template-columns:1fr 1fr;gap:32px}
       .stats{flex-wrap:wrap}.si{min-width:50%;border-bottom:1px solid var(--border)}
       .disc{padding:18px 20px}
+      .fund-guide-grid{grid-template-columns:1fr !important}
+      .fund-metrics{grid-template-columns:repeat(2,1fr) !important}
     }
     @media(max-width:560px){.how-grid{grid-template-columns:1fr}.ftop{grid-template-columns:1fr}}
   </style>
@@ -226,6 +251,7 @@
     <a href="#signals">Signals</a>
     <a href="#watchlist">Watchlist</a>
     <a href="#how">Method</a>
+    <a href="#fundamentals">Fundamentals</a>
     <a href="#about">About</a>
     <a href="crypto.html">Crypto</a>
     <span class="live-badge">LIVE</span>
@@ -309,6 +335,94 @@
   </div>
 </div>
 
+<!-- FUNDAMENTALS GUIDE -->
+<div class="sdiv">
+  <div class="sec" id="fundamentals">
+    <div class="reveal">
+      <div class="slbl">// how to actually pick a stock</div>
+      <h2 class="stitle">THE CHECKLIST<br>SMART BUYERS USE.</h2>
+      <p class="ssub">Technical signals tell you when. Fundamentals tell you what. Here's how to use both together — and when to buy, hold, or sell.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:56px" class="reveal fund-guide-grid">
+
+      <div style="background:var(--bg2);border:1px solid rgba(0,232,122,0.2);border-radius:16px;padding:28px 24px">
+        <div style="font-family:var(--display);font-size:28px;color:var(--green);margin-bottom:16px">WHEN TO BUY</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✓</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">EPS is growing</div><div style="font-size:12px;color:var(--muted2)">Earnings per share going up = company making more money. That's the core of everything.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✓</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">ROE above 15%</div><div style="font-size:12px;color:var(--muted2)">Return on Equity tells you how efficiently a company turns investor money into profit. Above 15% is healthy.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✓</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Debt/Equity below 0.6</div><div style="font-size:12px;color:var(--muted2)">Low debt means the company isn't stretched thin. If things go bad, they can survive. High debt companies are fragile.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✓</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">P/E is fair vs peers</div><div style="font-size:12px;color:var(--muted2)">You're not paying a crazy premium. P/E below 25 is generally reasonable — but compare within the same industry.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✓</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Strong competitive moat</div><div style="font-size:12px;color:var(--muted2)">The company has something that's hard to copy — a brand, patents, network effects, switching costs. That's what protects future profits.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid rgba(251,191,36,0.2);border-radius:16px;padding:28px 24px">
+        <div style="font-family:var(--display);font-size:28px;color:var(--yellow);margin-bottom:16px">WHEN TO HOLD</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">~</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Earnings are meeting targets</div><div style="font-size:12px;color:var(--muted2)">Not growing fast but not missing either. The story is intact. No reason to exit a good company mid-journey.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">~</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Pays consistent dividends</div><div style="font-size:12px;color:var(--muted2)">A company that keeps paying and growing its dividend is telling you something — it's confident in its own future.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">~</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Market leader in a growing sector</div><div style="font-size:12px;color:var(--muted2)">Even if the stock isn't exciting today, if it owns its industry and that industry is growing — patience gets rewarded.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">~</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">The original reason you bought still holds</div><div style="font-size:12px;color:var(--muted2)">Ask yourself: has anything actually changed about this business? If no — sit tight. Price moves aren't the same as business changes.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid rgba(255,85,85,0.2);border-radius:16px;padding:28px 24px">
+        <div style="font-family:var(--display);font-size:28px;color:var(--red);margin-bottom:16px">WHEN TO SELL</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✗</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Earnings consistently missing</div><div style="font-size:12px;color:var(--muted2)">One bad quarter happens. Two or three in a row means something is broken. That's your signal to reassess.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✗</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Debt rising rapidly</div><div style="font-size:12px;color:var(--muted2)">Companies that keep borrowing to fund operations — not acquisitions — are often papering over a problem. Watch debt levels quarterly.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✗</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Price far beyond intrinsic value</div><div style="font-size:12px;color:var(--muted2)">When a stock's P/E is 80-100x and earnings aren't growing to match — you're holding air. Book the profit.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✗</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Competitive moat is cracking</div><div style="font-size:12px;color:var(--muted2)">A new competitor is winning customers, the product is getting commoditised, or the industry is shifting against them. These are the slow-moving disasters to watch for.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px">✗</span>
+            <div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Down 7–10% from your buy price</div><div style="font-size:12px;color:var(--muted2)">The classic stop-loss rule. Cuts losses before they compound. Hard to do emotionally — but mathematically sound.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ABOUT -->
 <div class="sdiv">
   <div class="sec" id="about">
@@ -320,7 +434,7 @@
       <div class="reveal">
         <div class="founder">
           <div class="fav">AP</div>
-          <div><div class="fname">Ayush Pathak</div><div class="frole">Founder, Brisk — Delhi, India</div><div class="ftag">APP BUILDER</div></div>
+          <div><div class="fname">Ayush Pathak</div><div class="frole">Founder, Brisk — Delhi, India</div><div class="ftag">FINTECH PRODUCT STRATEGIST</div></div>
         </div>
         <div class="atext">
           <p><strong>I build apps. Brisk is one of them.</strong> I got frustrated that every finance tool out there assumes you already speak the language — RSI, MACD, moving averages. They hand you a chart and expect you to figure it out.</p>
@@ -478,6 +592,231 @@ const STOCK_CONTEXT = {
 };
 
 // ─────────────────────────────────────────────────────────────
+// FUNDAMENTALS DATABASE
+// Updated quarterly after earnings. Data as of Q1 2025.
+// Scores: eps=EPS growth, roe=Return on Equity, debt=Debt ratio
+//   health: 'strong' | 'ok' | 'weak'
+//   pe: Price/Earnings ratio (lower = cheaper, varies by sector)
+//   roe: Return on Equity % (higher = better, >15% is good)
+//   debt: Debt-to-Equity ratio (lower = safer, <0.6 ideal)
+//   eps_trend: 'growing' | 'flat' | 'declining'
+//   moat: one-line competitive advantage
+//   verdict: 'BUY' | 'HOLD' | 'CAUTION' — fundamental view only
+//   note: plain English fundamental summary
+//
+// HOW TO UPDATE THIS QUARTERLY:
+// 1. After earnings, look up the stock on finance.yahoo.com
+// 2. Update pe, roe, debt, eps_trend for that ticker
+// 3. Save + push (the usual 4 steps)
+// ─────────────────────────────────────────────────────────────
+const FUNDAMENTALS = {
+  'AAPL': { pe:28, roe:160, debt:1.8, eps_trend:'growing', health:'strong',
+    moat:'Ecosystem lock-in, brand loyalty, App Store monopoly',
+    verdict:'HOLD', note:'Exceptional business but trades at a premium. ROE is off the charts because they buy back so much stock. High debt vs equity but covered easily by cash flow. Not cheap, not dangerous.' },
+  'MSFT': { pe:32, roe:38, debt:0.4, eps_trend:'growing', health:'strong',
+    moat:'Azure cloud, Office 365, enterprise lock-in, LinkedIn',
+    verdict:'HOLD', note:'One of the cleanest balance sheets in tech. Low debt, growing earnings, dominant in enterprise. Only concern is valuation — you pay a premium for quality here.' },
+  'GOOGL': { pe:21, roe:32, debt:0.1, eps_trend:'growing', health:'strong',
+    moat:'Search monopoly, YouTube, Android, massive data advantage',
+    verdict:'BUY', note:'Cheapest of the mega-caps on a P/E basis. Almost no debt. Search dominance hasn\'t cracked despite AI competition. Strong fundamental case.' },
+  'AMZN': { pe:35, roe:22, debt:0.5, eps_trend:'growing', health:'strong',
+    moat:'AWS cloud dominance, logistics network, Prime ecosystem',
+    verdict:'HOLD', note:'AWS alone justifies most of the valuation. Retail is low-margin but massive. Earnings have been accelerating. Not cheap but the growth rate supports it.' },
+  'NVDA': { pe:42, roe:115, debt:0.4, eps_trend:'growing', health:'strong',
+    moat:'CUDA software ecosystem, AI chip dominance, data center relationships',
+    verdict:'CAUTION', note:'Fundamentals are genuinely exceptional — ROE is extraordinary, earnings growing fast. But the P/E prices in perfection. Any slowdown in AI spending and this re-rates hard. Strong company, risky price.' },
+  'META': { pe:24, roe:37, debt:0.1, eps_trend:'growing', health:'strong',
+    moat:'Network effects across FB/Instagram/WhatsApp, ad targeting data',
+    verdict:'BUY', note:'Massively underrated on fundamentals. Low P/E for its growth rate, almost no debt, advertising revenue rebounding. The metaverse losses are the main drag but declining.' },
+  'TSLA': { pe:95, roe:10, debt:0.1, eps_trend:'declining', health:'weak',
+    moat:'Brand, Supercharger network, software OTA — but moat is narrowing',
+    verdict:'CAUTION', note:'Fundamentals don\'t support the valuation. P/E of 95 requires massive future growth while current earnings are falling. Low debt is good. But you\'re paying for a future that isn\'t guaranteed.' },
+  'BRK.B': { pe:14, roe:13, debt:0.3, eps_trend:'growing', health:'strong',
+    moat:'Diversified businesses, capital allocation track record, insurance float',
+    verdict:'BUY', note:'One of the cheapest valuations among quality large-caps. Conservative, well-run, diversified. No single business risk. Buffett\'s cash pile gives flexibility. Clean fundamental case.' },
+  'JPM': { pe:12, roe:17, debt:1.2, eps_trend:'growing', health:'strong',
+    moat:'Scale, brand, full-service banking, investment bank dominance',
+    verdict:'BUY', note:'Best-in-class bank at a reasonable valuation. Banks carry debt by nature — JPM\'s is well-managed. ROE above 15% is strong for financials. Fundamentals support the stock.' },
+  'V': { pe:31, roe:47, debt:0.6, eps_trend:'growing', health:'strong',
+    moat:'Payment network effects, 4B+ cards, merchant acceptance everywhere',
+    verdict:'HOLD', note:'Premium valuation for a premium business. Visa takes a cut of everything without lending money — almost zero credit risk. ROE is exceptional. Worth paying up for, but it\'s never cheap.' },
+  'MA': { pe:33, roe:175, debt:2.1, eps_trend:'growing', health:'strong',
+    moat:'Payment network, brand, global acceptance, data analytics',
+    verdict:'HOLD', note:'Nearly identical business model to Visa. High debt vs equity but covered by earnings. ROE is astronomical due to buybacks. Same story — premium price, premium business.' },
+  'UNH': { pe:16, roe:26, debt:0.7, eps_trend:'growing', health:'strong',
+    moat:'Scale, data, Optum health services integration',
+    verdict:'BUY', note:'Defensive healthcare giant at a reasonable P/E. Consistent earnings growth, manageable debt. Optum is becoming a second growth engine. Solid fundamental case especially in uncertain markets.' },
+  'JNJ': { pe:14, roe:22, debt:0.5, eps_trend:'flat', health:'ok',
+    moat:'Diversified healthcare, brand, R&D pipeline, consumer brands',
+    verdict:'HOLD', note:'Classic defensive hold. Low P/E, pays dividends, manageable debt. Earnings growth has slowed post-Kenvue spinoff. Not exciting but not dangerous. Good for stability.' },
+  'XOM': { pe:13, roe:16, debt:0.2, eps_trend:'flat', health:'ok',
+    moat:'Scale, reserves, refining capacity, LNG infrastructure',
+    verdict:'HOLD', note:'Cheap by P/E, but oil earnings swing with commodity prices. Low debt is a strength. Worth holding if you believe in long oil cycle — risky if energy transition accelerates.' },
+  'WMT': { pe:32, roe:22, debt:0.6, eps_trend:'growing', health:'strong',
+    moat:'Logistics scale, everyday low prices, grocery dominance, Walmart+',
+    verdict:'HOLD', note:'Expensive for a retailer but Walmart has been successfully reinventing itself with advertising revenue and fintech. Consistent earnings. Valuation is stretched though.' },
+  'PG': { pe:24, roe:32, debt:0.7, eps_trend:'flat', health:'ok',
+    moat:'Brand portfolio, distribution, consumer staples pricing power',
+    verdict:'HOLD', note:'Defensive staples giant. Pays reliable dividends. Earnings growth is slow but consistent. Decent ROE. Buy for safety, not growth.' },
+  'HD': { pe:22, roe:1500, debt:8.4, eps_trend:'flat', health:'ok',
+    moat:'Scale, contractor relationships, brand, store locations',
+    verdict:'HOLD', note:'ROE looks insane because they have negative book equity from buybacks — ignore it here. Housing market slowdown is the main risk. Fundamentally solid business at a fair price.' },
+  'CVX': { pe:14, roe:12, debt:0.2, eps_trend:'flat', health:'ok',
+    moat:'Reserves, refining, Permian Basin position, LNG',
+    verdict:'HOLD', note:'Similar to XOM — cheap on P/E, low debt, commodity-dependent earnings. Pays solid dividend. Hold if you want energy exposure.' },
+  'LLY': { pe:48, roe:62, debt:1.8, eps_trend:'growing', health:'strong',
+    moat:'GLP-1 drug patents (Ozempic/Mounjaro), pipeline depth, scale',
+    verdict:'HOLD', note:'Fundamentals are strong but valuation is pricing in GLP-1 dominance for decades. If weight-loss drug competition heats up or pipeline disappoints, re-rating will be painful. High conviction needed.' },
+  'MRK': { pe:14, roe:30, debt:0.8, eps_trend:'growing', health:'strong',
+    moat:'Keytruda cancer drug, vaccines, pipeline',
+    verdict:'BUY', note:'Cheap P/E, strong ROE, growing earnings driven by Keytruda. Patent cliff is a risk post-2028 but well-known and partially priced in. Good fundamental value.' },
+  'ABBV': { pe:16, roe:55, debt:3.2, eps_trend:'growing', health:'ok',
+    moat:'Humira successor drugs (Skyrizi, Rinvoq), dermatology pipeline',
+    verdict:'HOLD', note:'High debt from AbbVie\'s acquisition strategy — the main risk. But earnings are growing post-Humira patent cliff. ROE strong. Yield is attractive. Debt level warrants monitoring.' },
+  'KO': { pe:24, roe:41, debt:1.7, eps_trend:'flat', health:'ok',
+    moat:'Brand, distribution network, pricing power, 200+ country presence',
+    verdict:'HOLD', note:'The ultimate defensive stock. Slow growth but reliable. Pays consistent dividend. You buy KO for stability, not to get rich fast.' },
+  'PEP': { pe:21, roe:55, debt:2.2, eps_trend:'flat', health:'ok',
+    moat:'Snacks + beverages dual business, Frito-Lay, distribution',
+    verdict:'HOLD', note:'Slightly better value than KO with a diversified snacks business. Higher debt but manageable. Consistent dividend payer. Same defensive logic.' },
+  'COST': { pe:50, roe:30, debt:0.4, eps_trend:'growing', health:'strong',
+    moat:'Membership model loyalty, bulk buying power, Kirkland brand',
+    verdict:'HOLD', note:'P/E of 50 is expensive but Costco always trades at a premium because the business is exceptional. Membership renewal rate near 93% is a moat. Low debt. Growth is consistent.' },
+  'TMO': { pe:26, roe:14, debt:0.8, eps_trend:'flat', health:'ok',
+    moat:'Life science tools, lab equipment dominance, customer stickiness',
+    verdict:'HOLD', note:'Post-COVID earnings have normalized after pandemic testing boom. Debt from acquisitions is manageable. Core business is solid but growth has slowed. Fair value territory.' },
+  'MCD': { pe:22, roe:180, debt:6.2, eps_trend:'flat', health:'ok',
+    moat:'Brand, real estate ownership, franchise model, global scale',
+    verdict:'HOLD', note:'Like HD — high debt and crazy ROE from franchise model. McDonald\'s owns the land under many locations. Consumer slowdown hurts. Dividend is reliable. Hold for income.' },
+  'ABT': { pe:18, roe:17, debt:0.5, eps_trend:'growing', health:'strong',
+    moat:'Medical devices, diagnostics, diversified healthcare',
+    verdict:'BUY', note:'Reasonable P/E, manageable debt, growing earnings as medical devices recover post-COVID. Dividend aristocrat. Clean fundamental picture.' },
+  'ACN': { pe:27, roe:30, debt:0.1, eps_trend:'growing', health:'strong',
+    moat:'IT consulting relationships, brand, talent scale, AI consulting pivot',
+    verdict:'HOLD', note:'Almost zero debt, good ROE, growing earnings in AI consulting. Slightly expensive but high-quality business. Fair hold at current levels.' },
+  'DHR': { pe:34, roe:12, debt:0.5, eps_trend:'flat', health:'ok',
+    moat:'Life science tools, software, recurring revenue business model',
+    verdict:'HOLD', note:'Post-COVID normalization hit earnings hard. P/E looks high for current earnings but forward-looking. Debt is fine. Business quality is strong — waiting for growth to return.' },
+  'NKE': { pe:24, roe:35, debt:0.8, eps_trend:'declining', health:'ok',
+    moat:'Brand, athlete relationships, direct-to-consumer shift',
+    verdict:'CAUTION', note:'Earnings have been declining as Nike lost market share to competitors and had a botched DTC strategy. ROE still looks good but trend is the worry. Recovery is not guaranteed.' },
+  'TXN': { pe:30, roe:38, debt:0.8, eps_trend:'flat', health:'strong',
+    moat:'Analog chip dominance, manufacturing scale, long product cycles',
+    verdict:'HOLD', note:'Best capital allocator in semiconductors. High ROE, manageable debt, pays growing dividend. Chip cycle is in a trough — earnings likely to recover. Patient hold.' },
+  'PM': { pe:18, roe:180, debt:9.8, eps_trend:'growing', health:'ok',
+    moat:'Brand, IQOS heated tobacco, international markets',
+    verdict:'HOLD', note:'Extreme debt from acquisitions — the key risk. But earnings are growing and IQOS is genuinely popular internationally. High yield. Hold for income investors, not growth.' },
+  'UPS': { pe:20, roe:28, debt:1.2, eps_trend:'declining', health:'ok',
+    moat:'Logistics network, B2B relationships, international reach',
+    verdict:'CAUTION', note:'Earnings have been declining as e-commerce growth slowed. Management cut the dividend — a warning sign. P/E looks ok but declining earnings are the concern. Watch carefully.' },
+  'MS': { pe:14, roe:13, debt:3.4, eps_trend:'growing', health:'ok',
+    moat:'Wealth management scale, investment banking brand',
+    verdict:'HOLD', note:'Banks carry high debt by nature. Morgan Stanley\'s wealth management pivot makes earnings more stable. Reasonable P/E. Good hold for financial sector exposure.' },
+  'GS': { pe:12, roe:11, debt:4.8, eps_trend:'growing', health:'ok',
+    moat:'Investment banking brand, trading, asset management',
+    verdict:'HOLD', note:'Cheapest P/E in big banking. Goldman\'s consumer banking retreat was the right call. Core IB and trading is strong. High debt is normal for banks.' },
+  'BAC': { pe:13, roe:10, debt:1.7, eps_trend:'flat', health:'ok',
+    moat:'Consumer banking scale, Merrill Lynch, deposit base',
+    verdict:'HOLD', note:'Cheap P/E, but ROE below 15% is middling for banks. Rate sensitivity is a double-edged sword. Reasonable hold for banking exposure below JPM quality.' },
+  'C': { pe:10, roe:7, debt:1.8, eps_trend:'flat', health:'ok',
+    moat:'Global transaction banking, treasury services, international reach',
+    verdict:'HOLD', note:'Cheapest of the big banks and undergoing a major restructuring. ROE is low but improving. High risk, potential high reward if the turnaround works.' },
+  'WFC': { pe:12, roe:12, debt:1.4, eps_trend:'flat', health:'ok',
+    moat:'Consumer banking, mortgage, deposit base',
+    verdict:'HOLD', note:'Still operating under Fed asset cap from the fake accounts scandal. Lifting that cap would be a catalyst. Cheap valuation, decent ROE. Speculative recovery play.' },
+  'INTC': { pe:22, roe:1, debt:0.5, eps_trend:'declining', health:'weak',
+    moat:'x86 architecture, manufacturing scale — both under serious threat',
+    verdict:'CAUTION', note:'Fundamentals are genuinely weak. ROE near zero, earnings falling, losing market share to AMD and TSMC. The foundry bet is expensive and uncertain. High risk turnaround story.' },
+  'AMD': { pe:38, roe:4, debt:0.1, eps_trend:'growing', health:'ok',
+    moat:'EPYC server chips, Ryzen consumer brand, AI GPU challenger',
+    verdict:'HOLD', note:'Earnings growing but ROE is still low as the company matures. Almost no debt is a strength. AI GPU story is real but NVDA has a massive lead. Growth stock valuation.' },
+  'QCOM': { pe:14, roe:38, debt:0.6, eps_trend:'growing', health:'strong',
+    moat:'Mobile chip patents, Snapdragon brand, automotive expansion',
+    verdict:'BUY', note:'Cheap P/E, strong ROE, growing earnings, manageable debt. The market undervalues QCOM because of Apple dependency fear. Automotive and IoT diversification is underappreciated.' },
+  'IBM': { pe:20, roe:180, debt:3.2, eps_trend:'flat', health:'ok',
+    moat:'Hybrid cloud, enterprise consulting relationships, mainframe base',
+    verdict:'HOLD', note:'High ROE from financial engineering and buybacks. High debt. Earnings are stable but flat. The HashiCorp acquisition adds cloud complexity. Income stock, not a growth story.' },
+  'ORCL': { pe:32, roe:180, debt:6.8, eps_trend:'growing', health:'ok',
+    moat:'Database dominance, cloud ERP (Fusion), enterprise lock-in',
+    verdict:'HOLD', note:'Very high debt from acquisitions. But cloud revenue is growing fast and enterprise customers almost never leave Oracle. ROE inflated by buybacks. Growth is real.' },
+  'CRM': { pe:35, roe:10, debt:0.2, eps_trend:'growing', health:'strong',
+    moat:'CRM market leader, Salesforce ecosystem, enterprise switching costs',
+    verdict:'HOLD', note:'Low debt, growing earnings, but ROE is low for the price. Salesforce is transitioning from growth to profitability mode. Fair valuation for the quality, not cheap.' },
+  'ADBE': { pe:24, roe:38, debt:0.4, eps_trend:'growing', health:'strong',
+    moat:'Creative software monopoly, subscription lock-in, Firefly AI',
+    verdict:'BUY', note:'Attractive P/E for its earnings quality, strong ROE, low debt, growing earnings. The Figma deal failure was a blessing — avoided overpaying. AI features are genuine.' },
+  'NFLX': { pe:38, roe:36, debt:0.6, eps_trend:'growing', health:'strong',
+    moat:'Content library, recommendation algorithm, global subscriber base',
+    verdict:'HOLD', note:'Earnings and ROE have both improved dramatically. Password sharing crackdown worked. Debt is manageable. P/E is high but growth rate may justify it. Improving fundamentals.' },
+  'DIS': { pe:22, roe:4, debt:0.5, eps_trend:'flat', health:'ok',
+    moat:'IP library (Marvel, Star Wars, Pixar), theme parks, ESPN',
+    verdict:'HOLD', note:'ROE is still recovering post-COVID and streaming losses. P/E reasonable. Parks are strong. Streaming is getting better. Not a compelling buy, not a sell. Watch earnings recovery.' },
+  'VOO': { pe:22, roe:null, debt:null, eps_trend:'growing', health:'strong',
+    moat:'Holds 500 companies — no single point of failure',
+    verdict:'BUY', note:'Not a single stock — an index fund. Average P/E of the S&P 500. Fundamentals of 500 companies rolled into one. Long term this is the most reliable bet in markets.' },
+  'QQQ': { pe:28, roe:null, debt:null, eps_trend:'growing', health:'strong',
+    moat:'Top 100 Nasdaq companies — tech concentration',
+    verdict:'HOLD', note:'Higher P/E than VOO due to tech weighting. More volatile but historically higher returns over long periods. Only for long time horizons.' },
+  'SPY': { pe:22, roe:null, debt:null, eps_trend:'growing', health:'strong',
+    moat:'Holds 500 companies — same as VOO, slightly higher fee',
+    verdict:'BUY', note:'Functionally identical to VOO. Tracks the S&P 500. The default choice for most investors globally. Long term fundamental case is as strong as any single stock.' },
+  'DEFAULT': { pe:null, roe:null, debt:null, eps_trend:'unknown', health:'ok',
+    moat:'Competitive advantage not yet assessed',
+    verdict:'HOLD', note:'Fundamental data not yet in our database for this stock. Signal is based on technical momentum only. Check Yahoo Finance for P/E, ROE, and debt figures.' }
+};
+
+// ─────────────────────────────────────────────────────────────
+// FUNDAMENTAL SCORING — lenient mode
+// Technicals lead. Fundamentals can nudge the color label
+// shown inside the expandable panel but don't override the
+// main card color. They add a "Fundamentals say:" line.
+// ─────────────────────────────────────────────────────────────
+function fundScore(ticker) {
+  const f = FUNDAMENTALS[ticker] || FUNDAMENTALS['DEFAULT'];
+  if (!f || f.verdict === 'HOLD') return { score: 'neutral', label: 'Neutral', color: 'var(--yellow)' };
+  if (f.verdict === 'BUY') return { score: 'positive', label: 'Supportive', color: 'var(--green)' };
+  if (f.verdict === 'CAUTION') return { score: 'negative', label: 'Cautious', color: 'var(--red)' };
+  return { score: 'neutral', label: 'Neutral', color: 'var(--yellow)' };
+}
+
+function fundPanel(ticker) {
+  const f = FUNDAMENTALS[ticker] || FUNDAMENTALS['DEFAULT'];
+  const fs = fundScore(ticker);
+  const peColor = !f.pe ? 'var(--muted)' : f.pe < 20 ? 'var(--green)' : f.pe > 40 ? 'var(--red)' : 'var(--yellow)';
+  const roeColor = !f.roe ? 'var(--muted)' : f.roe > 20 ? 'var(--green)' : f.roe > 10 ? 'var(--yellow)' : 'var(--red)';
+  const debtColor = !f.debt ? 'var(--muted)' : f.debt < 0.6 ? 'var(--green)' : f.debt < 1.5 ? 'var(--yellow)' : 'var(--red)';
+  const epsColor = f.eps_trend === 'growing' ? 'var(--green)' : f.eps_trend === 'declining' ? 'var(--red)' : 'var(--yellow)';
+
+  const peVal = f.pe ? f.pe + 'x' : 'N/A';
+  const roeVal = f.roe ? f.roe + '%' : 'N/A';
+  const debtVal = f.debt != null ? f.debt : 'N/A';
+  const epsVal = f.eps_trend === 'growing' ? 'Growing' : f.eps_trend === 'declining' ? 'Declining' : 'Flat';
+
+  return `
+  <div class="fund-panel">
+    <div class="fund-header">
+      <span class="fund-title">FUNDAMENTALS</span>
+      <span class="fund-verdict" style="color:${fs.color}">${fs.label}</span>
+    </div>
+    <div class="fund-metrics">
+      <div class="fund-met"><span class="fund-lbl">P/E RATIO</span><span class="fund-val" style="color:${peColor}">${peVal}</span><span class="fund-hint">${f.pe < 20 ? 'Cheap' : f.pe > 40 ? 'Pricey' : 'Fair'}</span></div>
+      <div class="fund-met"><span class="fund-lbl">ROE</span><span class="fund-val" style="color:${roeColor}">${roeVal}</span><span class="fund-hint">${!f.roe ? '—' : f.roe > 20 ? 'Strong' : f.roe > 10 ? 'Ok' : 'Weak'}</span></div>
+      <div class="fund-met"><span class="fund-lbl">DEBT/EQUITY</span><span class="fund-val" style="color:${debtColor}">${debtVal}</span><span class="fund-hint">${f.debt == null ? '—' : f.debt < 0.6 ? 'Low' : f.debt < 1.5 ? 'Medium' : 'High'}</span></div>
+      <div class="fund-met"><span class="fund-lbl">EPS TREND</span><span class="fund-val" style="color:${epsColor};font-size:11px">${epsVal}</span><span class="fund-hint">Earnings</span></div>
+    </div>
+    <div class="fund-moat"><span class="fund-lbl">MOAT</span><p class="fund-moat-text">${f.moat}</p></div>
+    <div class="fund-note"><p>${f.note}</p></div>
+    <div class="fund-checklist">
+      <div class="fund-lbl" style="margin-bottom:8px">BUY / HOLD / SELL CHECKLIST</div>
+      <div class="chk-item ${f.eps_trend==='growing'?'chk-yes':f.eps_trend==='declining'?'chk-no':'chk-mid'}"><span>${f.eps_trend==='growing'?'✓':f.eps_trend==='declining'?'✗':'~'}</span> Earnings growing: <strong>${epsVal}</strong></div>
+      <div class="chk-item ${f.roe&&f.roe>15?'chk-yes':f.roe&&f.roe>8?'chk-mid':'chk-no'}"><span>${f.roe&&f.roe>15?'✓':f.roe&&f.roe>8?'~':'✗'}</span> ROE above 15%: <strong>${roeVal}</strong></div>
+      <div class="chk-item ${f.debt!=null&&f.debt<0.6?'chk-yes':f.debt!=null&&f.debt<1.5?'chk-mid':'chk-no'}"><span>${f.debt!=null&&f.debt<0.6?'✓':f.debt!=null&&f.debt<1.5?'~':'✗'}</span> Debt/Equity below 0.6: <strong>${debtVal}</strong></div>
+      <div class="chk-item ${f.pe&&f.pe<25?'chk-yes':f.pe&&f.pe<40?'chk-mid':'chk-no'}"><span>${f.pe&&f.pe<25?'✓':f.pe&&f.pe<40?'~':'✗'}</span> P/E below 25: <strong>${peVal}</strong></div>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
 // DEMO DATA
 // ─────────────────────────────────────────────────────────────
 const DEMO = [
@@ -530,12 +869,16 @@ function render(){
     const rsiNum=parseFloat(s.rsi||0);
     const id='card-'+i;
     const info=ctx(s.t||s.ticker);
+    const fs=fundScore(s.t||s.ticker);
     const whyLabel=v==='GREEN'?'Why it got green':v==='RED'?'Why it got red':'Why it\'s yellow';
 
     return`<div class="sc ${cc(v)}" id="${id}" style="animation-delay:${i*.04}s" onclick="toggleCard('${id}')">
       <div class="ct">
         <div><div class="ctick">${s.t||s.ticker||'—'}</div><div class="cname">${s.n||s.name||NAMES[s.t||s.ticker]||''}</div></div>
-        <div class="cbadge ${bc(v)}"><span class="bd ${dc(v)}"></span>${v}</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="cbadge ${bc(v)}"><span class="bd ${dc(v)}"></span>${v}</div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:${fs.color};opacity:0.8">F: ${fs.label}</div>
+        </div>
       </div>
       <div class="cm">
         <div class="cmet"><span class="ml">PRICE</span><span class="mv">${fmtpx(s.px||s.price)}</span></div>
@@ -546,7 +889,7 @@ function render(){
       <p class="creason">"${s.r||s.reason||'Loading signal...'}"</p>
       <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${id}')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="elbl">WHY THIS SIGNAL</span>
+        <span class="elbl">WHY THIS SIGNAL + FUNDAMENTALS</span>
       </button>
       <div class="deep">
         <div class="deep-inner">
@@ -562,6 +905,7 @@ function render(){
             <span class="why-icon">i</span>
             <div><div class="why-label">Know this about ${s.t||s.ticker}</div><p class="why-text">${info.ctx}</p></div>
           </div>
+          ${fundPanel(s.t||s.ticker)}
         </div>
       </div>
       <div class="cfooter">Brisk · Updated today</div>
