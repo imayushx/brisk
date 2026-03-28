@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Brisk Crypto — Read the Chain. Not the Hype.</title>
+  <meta name="description" content="Top 50 crypto signals in plain English. What each coin actually does, and whether now is a good time to pay attention."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#06080b;--bg2:#0c0f14;--bg3:#121720;
+      --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+      --text:#e2e8f0;--muted:#64748b;--muted2:#94a3b8;
+      --green:#00e87a;--gdim:rgba(0,232,122,0.08);--gglow:rgba(0,232,122,0.15);
+      --red:#ff5555;--rdim:rgba(255,85,85,0.08);
+      --yellow:#fbbf24;--ydim:rgba(251,191,36,0.08);
+      --purple:#a855f7;--pdim:rgba(168,85,247,0.08);
+      --blue:#3b82f6;--bdim:rgba(59,130,246,0.08);
+      --orange:#f97316;--odim:rgba(249,115,22,0.08);
+      --display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none}
+    #cursor{width:8px;height:8px;background:var(--purple);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s,height .18s;mix-blend-mode:difference}
+    #cursor.big{width:30px;height:30px}
+    @media(hover:none){#cursor{display:none}body{cursor:auto}}
+    body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(168,85,247,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,0.012) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;border-bottom:1px solid var(--border);background:rgba(6,8,11,.92);backdrop-filter:blur(24px)}
+    .logo{font-family:var(--display);font-size:26px;letter-spacing:4px;color:var(--purple);text-decoration:none}
+    .logo span{color:rgba(255,255,255,.25)}
+    .nav-l{display:flex;gap:36px;align-items:center}
+    .nav-l a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
+    .nav-l a:hover{color:var(--text)}
+    .nav-l a.here{color:var(--purple)}
+    .live-badge{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--purple);border:1px solid rgba(168,85,247,.35);padding:5px 12px;border-radius:100px;display:flex;align-items:center;gap:6px}
+    .live-badge::before{content:'';width:5px;height:5px;background:var(--purple);border-radius:50%;animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    /* HERO */
+    .hero{position:relative;z-index:2;min-height:80vh;display:flex;flex-direction:column;justify-content:center;padding:80px 48px 60px;overflow:hidden}
+    .hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(168,85,247,.1) 0%,transparent 65%);right:-60px;top:50%;transform:translateY(-50%);pointer-events:none}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--purple);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:28px}
+    .eyebrow::before{content:'';width:24px;height:1px;background:var(--purple)}
+    h1{font-family:var(--display);font-size:clamp(68px,9vw,128px);line-height:.9;letter-spacing:1px;margin-bottom:28px;animation:up .9s cubic-bezier(.16,1,.3,1) both}
+    @keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+    h1 em{color:var(--purple);font-style:normal;display:block}
+    h1 .dim{color:var(--muted);display:block}
+    .hero-sub{font-size:17px;color:var(--muted2);font-weight:300;max-width:520px;line-height:1.75;margin-bottom:40px;animation:up .9s .12s cubic-bezier(.16,1,.3,1) both}
+    .ctas{display:flex;gap:14px;flex-wrap:wrap;animation:up .9s .24s cubic-bezier(.16,1,.3,1) both}
+    .btn-p{background:var(--purple);color:#fff;font-family:var(--body);font-size:14px;font-weight:500;padding:13px 28px;border-radius:8px;text-decoration:none;border:none;cursor:none;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(168,85,247,.3)}
+    .btn-g{background:transparent;color:var(--text);font-family:var(--body);font-size:14px;font-weight:400;padding:13px 28px;border-radius:8px;text-decoration:none;border:1px solid var(--border2);cursor:none;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px}
+    .btn-g:hover{border-color:rgba(168,85,247,.4);background:var(--pdim)}
+
+    /* ECOSYSTEM PILLS */
+    .eco-bar{position:relative;z-index:2;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);padding:16px 48px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .eco-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-right:6px;white-space:nowrap}
+    .eco-pill{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:6px 14px;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+    .eco-pill:hover{color:var(--text);border-color:var(--border2)}
+    .eco-pill.ep-all{border-color:var(--purple);color:var(--purple);background:var(--pdim)}
+    .eco-pill.ep-layer1{border-color:var(--orange);color:var(--orange);background:var(--odim)}
+    .eco-pill.ep-defi{border-color:var(--blue);color:var(--blue);background:var(--bdim)}
+    .eco-pill.ep-store{border-color:var(--yellow);color:var(--yellow);background:var(--ydim)}
+    .eco-pill.ep-infra{border-color:var(--green);color:var(--green);background:var(--gdim)}
+    .eco-pill.ep-meme{border-color:var(--red);color:var(--red);background:var(--rdim)}
+
+    /* STATS */
+    .stats{position:relative;z-index:2;display:flex;border-bottom:1px solid var(--border)}
+    .si{flex:1;padding:24px 0;text-align:center;border-right:1px solid var(--border)}
+    .si:last-child{border-right:none}
+    .sn{font-family:var(--display);font-size:36px;color:var(--purple);display:block;line-height:1;margin-bottom:6px}
+    .sl{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+
+    /* SECTIONS */
+    .sec{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:80px 48px}
+    .sdiv{border-top:1px solid var(--border);position:relative;z-index:2}
+    .slbl{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--purple);text-transform:uppercase;margin-bottom:14px}
+    .stitle{font-family:var(--display);font-size:clamp(40px,5vw,68px);letter-spacing:1px;line-height:.95;margin-bottom:18px}
+    .ssub{color:var(--muted2);font-size:15px;font-weight:300;max-width:520px;line-height:1.75}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+    .reveal.in{opacity:1;transform:translateY(0)}
+
+    /* FILTERS */
+    .whead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;flex-wrap:wrap;gap:20px}
+    .fltrs{display:flex;gap:8px;flex-wrap:wrap}
+    .fb{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:none;transition:all .18s}
+    .fb:hover{color:var(--text)}
+    .fb.fa{background:var(--green);border-color:var(--green);color:#000}
+    .fb.fr{background:var(--red);border-color:var(--red);color:#fff}
+    .fb.fy{background:var(--yellow);border-color:var(--yellow);color:#000}
+
+    /* CRYPTO CARDS */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+    .cc{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;overflow:hidden;transition:border-color .22s,transform .22s,box-shadow .22s;cursor:pointer;animation:cardIn .45s ease both}
+    @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .cc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;opacity:0;transition:opacity .22s}
+    .cc.ccg::after{background:var(--green)}.cc.ccr::after{background:var(--red)}.cc.ccy::after{background:var(--yellow)}
+    .cc:hover{transform:translateY(-2px);border-color:var(--border2)}
+    .cc.ccg:hover{box-shadow:0 10px 36px rgba(0,232,122,.08)}
+    .cc.ccr:hover{box-shadow:0 10px 36px rgba(255,85,85,.08)}
+    .cc.ccy:hover{box-shadow:0 10px 36px rgba(251,191,36,.08)}
+    .cc:hover::after,.cc.open::after{opacity:1}
+
+    /* Card header */
+    .cctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+    .ccleft{display:flex;align-items:center;gap:10px}
+    .cc-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;border:1px solid var(--border2)}
+    .cc-sym{font-family:var(--display);font-size:24px;letter-spacing:1px;line-height:1}
+    .cc-name{font-size:11px;color:var(--muted);font-weight:300}
+    .cc-eco{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 8px;border-radius:100px;margin-top:3px;display:inline-block}
+
+    /* Eco type colors */
+    .eco-layer1{background:var(--odim);color:var(--orange);border:1px solid rgba(249,115,22,.2)}
+    .eco-defi{background:var(--bdim);color:var(--blue);border:1px solid rgba(59,130,246,.2)}
+    .eco-store{background:var(--ydim);color:var(--yellow);border:1px solid rgba(251,191,36,.2)}
+    .eco-infra{background:var(--gdim);color:var(--green);border:1px solid rgba(0,232,122,.2)}
+    .eco-meme{background:var(--rdim);color:var(--red);border:1px solid rgba(255,85,85,.2)}
+    .eco-exchange{background:var(--pdim);color:var(--purple);border:1px solid rgba(168,85,247,.2)}
+
+    .cbadge{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;padding:5px 11px;border-radius:100px;flex-shrink:0}
+    .cbadge .bd{width:4px;height:4px;border-radius:50%}
+    .bg2c{background:var(--gdim);color:var(--green);border:1px solid rgba(0,232,122,.22)}
+    .br2c{background:var(--rdim);color:var(--red);border:1px solid rgba(255,85,85,.22)}
+    .by2c{background:var(--ydim);color:var(--yellow);border:1px solid rgba(251,191,36,.22)}
+    .dg{background:var(--green)}.dr{background:var(--red)}.dy{background:var(--yellow)}
+
+    /* Metrics */
+    .cm{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:14px;padding:12px 0}
+    .cmet{display:flex;flex-direction:column;gap:4px}
+    .cmet+.cmet{border-left:1px solid var(--border);padding-left:12px}
+    .ml{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted)}
+    .mv{font-family:var(--mono);font-size:13px;font-weight:500}
+    .mv.pos{color:var(--green)}.mv.neg{color:var(--red)}
+
+    /* Reason + expand */
+    .creason{font-size:12px;color:var(--muted2);line-height:1.65;font-style:italic;font-weight:300;margin-bottom:12px}
+    .expand-btn{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;background:none;border:none;cursor:pointer;padding:0;transition:color .18s}
+    .expand-btn:hover{color:var(--text)}
+    .expand-btn svg{transition:transform .25s;flex-shrink:0}
+    .cc.open .expand-btn svg{transform:rotate(180deg)}
+    .deep{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+    .cc.open .deep{max-height:500px;opacity:1}
+    .deep-inner{border-top:1px solid var(--border);margin-top:14px;padding-top:16px;display:flex;flex-direction:column;gap:10px}
+    .why-block{padding:12px 14px;border-radius:10px;display:flex;gap:10px;align-items:flex-start}
+    .why-block.why-yes{background:rgba(0,232,122,0.06);border:1px solid rgba(0,232,122,0.15)}
+    .why-block.why-no{background:rgba(255,85,85,0.06);border:1px solid rgba(255,85,85,0.15)}
+    .why-block.why-ctx{background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.15)}
+    .why-icon{font-size:13px;flex-shrink:0;margin-top:1px;font-family:var(--mono)}
+    .why-label{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+    .why-yes .why-label{color:var(--green)}.why-no .why-label{color:var(--red)}.why-ctx .why-label{color:var(--purple)}
+    .why-text{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300}
+    .cfooter{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:12px;opacity:.4}
+
+    .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:6px}
+    @keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
+
+    /* DISCLAIMER + FOOTER */
+    .disc{position:relative;z-index:2;border-top:1px solid var(--border);background:var(--bg2);padding:20px 48px;text-align:center}
+    .disc p{font-family:var(--mono);font-size:9.5px;color:var(--muted);line-height:1.9;max-width:860px;margin:0 auto}
+    .footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:48px;background:var(--bg2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+    .flogo{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--purple)}
+    .flogo span{color:rgba(255,255,255,.25)}
+    .fcopy{font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+    @media(max-width:900px){
+      nav{padding:0 20px}.nav-l{display:none}
+      .hero{padding:88px 20px 56px}.sec{padding:60px 20px}
+      .eco-bar{padding:14px 20px}
+      .stats{flex-wrap:wrap}.si{min-width:50%;border-bottom:1px solid var(--border)}
+      .disc{padding:18px 20px}.footer{padding:32px 20px}
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">BRISK<span>.</span></a>
+  <div class="nav-l">
+    <a href="index.html">Stocks</a>
+    <a href="crypto.html" class="here">Crypto</a>
+    <a href="index.html#how">Method</a>
+    <a href="index.html#about">About</a>
+    <span class="live-badge">LIVE</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">Top 50 crypto by market cap · live data</div>
+  <h1><em>READ</em><span>THE CHAIN.</span><span class="dim">NOT THE HYPE.</span></h1>
+  <p class="hero-sub">
+    Crypto is not one thing. Bitcoin is a store of value. Ethereum is a platform. Solana is infrastructure. Dogecoin is a meme with a life of its own.<br><br>
+    Brisk shows you what each coin actually <em>does</em> — and whether now is a good time to pay attention. Tap any card for the full why.
+  </p>
+  <div class="ctas">
+    <a href="#coins" class="btn-p">See Live Signals ↓</a>
+    <a href="index.html" class="btn-g">← Back to Stocks</a>
+  </div>
+</section>
+
+<!-- ECOSYSTEM FILTER BAR -->
+<div class="eco-bar" id="ecobar">
+  <span class="eco-lbl">Filter by role:</span>
+  <button class="eco-pill ep-all" onclick="ecoFilter(this,'all')">ALL</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'layer1')">Layer 1 — The foundations</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'defi')">DeFi — Financial tools</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'store')">Store of value</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'infra')">Infrastructure</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'exchange')">Exchanges</button>
+  <button class="eco-pill" onclick="ecoFilter(this,'meme')">Meme coins</button>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="si"><span class="sn" id="s-total">—</span><span class="sl">Coins Tracked</span></div>
+  <div class="si"><span class="sn" id="s-green" style="color:var(--green)">—</span><span class="sl">Green Signals</span></div>
+  <div class="si"><span class="sn" id="s-red" style="color:var(--red)">—</span><span class="sl">Red Signals</span></div>
+  <div class="si"><span class="sn" id="s-mcap" style="font-size:20px;letter-spacing:0">—</span><span class="sl">Total Market Cap</span></div>
+</div>
+
+<!-- COINS -->
+<div class="sdiv">
+  <div class="sec" id="coins">
+    <div class="whead reveal">
+      <div>
+        <div class="slbl">// live signals</div>
+        <h2 class="stitle">THE CRYPTO<br>WATCHLIST</h2>
+        <p class="ssub">Live prices from CoinGecko. Signals calculated from 14-day momentum and market cap rank. Tap any card for the full picture.</p>
+      </div>
+      <div class="fltrs">
+        <button class="fb fa" onclick="sigFilter(this,'ALL')">ALL</button>
+        <button class="fb" onclick="sigFilter(this,'GREEN')">GREEN</button>
+        <button class="fb" onclick="sigFilter(this,'YELLOW')">YELLOW</button>
+        <button class="fb" onclick="sigFilter(this,'RED')">RED</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p id="gmsg" style="text-align:center;margin-top:40px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;"></p>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disc">
+  <p>⚠ CRYPTO DISCLAIMER — Cryptocurrency is extremely high-risk and highly volatile. You can lose all of your money. Nothing on this page is financial advice. Signals are based on short-term price momentum only and do not reflect fundamentals, regulatory risk, or project viability. Crypto markets operate 24/7 and can move 50%+ in either direction within days. Brisk is not responsible for any losses. Never invest money you cannot afford to lose entirely. Always do your own research.</p>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="flogo">BRISK<span>.</span></div>
+  <p class="fcopy">© 2025 Brisk · Built by Ayush Pathak · NOT FINANCIAL ADVICE</p>
+  <a href="index.html" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;">← Back to Stocks</a>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// CRYPTO CONTEXT DATABASE
+// What each coin actually does in the ecosystem — and the honest
+// catch for each one. This is the "why behind the color" for crypto.
+// ─────────────────────────────────────────────────────────────
+const CRYPTO_INFO = {
+  'bitcoin':     {sym:'BTC',eco:'store',   role:'Store of value',   icon:'₿', color:'#f7931a',
+    what:'Digital gold. There will only ever be 21 million Bitcoin. It\'s the most decentralized, most secure crypto network. People hold it like gold — as a long-term store of value, not for daily transactions.',
+    why_green:'Bitcoin dips are historically bought by long-term holders. If momentum is oversold, it usually means a relief bounce isn\'t far away.',
+    why_red:'Bitcoin has led every crypto cycle. When it\'s overbought, the whole market usually follows it down. Being late to BTC is very expensive.',
+    catch:'Bitcoin\'s price is still largely driven by sentiment and macro. It can drop 50-80% in bear markets — and it has, multiple times. Time horizon matters enormously here.'},
+  'ethereum':    {sym:'ETH',eco:'layer1',  role:'Smart contract platform', icon:'Ξ', color:'#627eea',
+    what:'The world\'s programmable blockchain. Most DeFi apps, NFTs, and new tokens are built on Ethereum. Think of it like the internet\'s operating system for finance.',
+    why_green:'ETH dips during periods of low on-chain activity. But the underlying network keeps growing. Smart contract usage is near all-time highs.',
+    why_red:'When ETH is running hot, it\'s usually being driven by speculative DeFi activity — which unwinds fast.',
+    catch:'Ethereum is being challenged by faster, cheaper chains like Solana. It\'s still the dominant platform, but competition is real.'},
+  'tether':      {sym:'USDT',eco:'store',  role:'Stablecoin (= 1 USD)', icon:'$', color:'#26a17b',
+    what:'Tether is pegged to 1 US dollar. It\'s not an investment — it\'s a way to hold USD in the crypto ecosystem without leaving. No signal applies here.',
+    why_green:'N/A — stablecoins don\'t appreciate.',
+    why_red:'N/A — stablecoins don\'t appreciate.',
+    catch:'Tether has faced controversy about whether it truly holds full USD reserves. Most people use it for moving money, not holding it long-term.'},
+  'binancecoin': {sym:'BNB',eco:'exchange',role:'Binance ecosystem token', icon:'B', color:'#f3ba2f',
+    what:'BNB powers the Binance ecosystem — the world\'s largest crypto exchange. Used for trading fees, Binance Smart Chain transactions, and a range of financial products.',
+    why_green:'BNB is deeply tied to Binance trading volume. When crypto activity picks up, BNB demand rises.',
+    why_red:'BNB is a centralized exchange token. Unlike BTC or ETH, it\'s controlled by a company — which creates regulatory and counterparty risk.',
+    catch:'Binance is under regulatory scrutiny globally. Any legal action against Binance directly hits BNB. This is a key risk that doesn\'t exist for decentralized assets.'},
+  'solana':      {sym:'SOL',eco:'layer1',  role:'High-speed blockchain', icon:'◎', color:'#9945ff',
+    what:'Solana is the fastest major blockchain — 65,000 transactions per second vs Ethereum\'s ~15. It\'s become the home of meme coins, retail crypto apps, and fast-moving DeFi.',
+    why_green:'SOL is extremely sensitive to crypto market cycles. Oversold periods have historically snapped back hard.',
+    why_red:'When SOL is hot, it\'s usually leading a meme coin frenzy. Those unwind violently.',
+    catch:'Solana has had several major network outages. It\'s technically impressive but still proving its reliability. Not as battle-tested as Bitcoin or Ethereum.'},
+  'usd-coin':    {sym:'USDC',eco:'store',  role:'Stablecoin (= 1 USD)', icon:'$', color:'#2775ca',
+    what:'USDC is a dollar-backed stablecoin issued by Circle, regulated in the US. Most institutional crypto apps prefer USDC over Tether due to its clearer regulatory standing.',
+    why_green:'N/A — stablecoin.',
+    why_red:'N/A — stablecoin.',
+    catch:'Safer than Tether in terms of regulatory clarity — but still a crypto asset. If Circle faces issues, the peg could break temporarily (it did briefly in 2023).'},
+  'ripple':      {sym:'XRP',eco:'infra',   role:'Cross-border payments', icon:'✕', color:'#0085c0',
+    what:'XRP is designed for fast, cheap international bank transfers. Ripple (the company) works directly with banks and financial institutions globally.',
+    why_green:'XRP has massive retail following and any positive news from Ripple\'s ongoing legal situation can cause sharp moves.',
+    why_red:'XRP tends to run hard on news, then give it all back. Most pumps are sentiment-driven.',
+    catch:'XRP has been in a multi-year legal battle with the SEC. The outcome still shapes its future in the US market. It\'s less of a decentralized asset and more of a company product.'},
+  'cardano':     {sym:'ADA',eco:'layer1',  role:'Proof-of-stake blockchain', icon:'A', color:'#0033ad',
+    what:'Cardano takes a slow, research-first approach to building a blockchain. It\'s fully proof-of-stake and has a strong academic foundation.',
+    why_green:'ADA has a loyal community and tends to run during altcoin seasons.',
+    why_red:'Cardano\'s DeFi ecosystem is tiny compared to Ethereum and Solana. "Overpriced vs what it delivers" is a frequent criticism.',
+    catch:'Cardano has been "almost there" for years. The ecosystem adoption hasn\'t matched the technical ambitions. Worth watching, but judge it on what\'s actually built on it.'},
+  'avalanche-2': {sym:'AVAX',eco:'layer1', role:'Fast smart contract chain', icon:'▲', color:'#e84142',
+    what:'Avalanche is designed for speed and custom blockchain creation. It has a unique subnet architecture that lets companies build their own mini-blockchains.',
+    why_green:'AVAX tends to benefit when institutions look for Ethereum alternatives.',
+    why_red:'The subnet story hasn\'t attracted the adoption originally expected.',
+    catch:'Avalanche competes with both Ethereum and Solana. Being in the middle means it needs a very clear use case to win long-term.'},
+  'dogecoin':    {sym:'DOGE',eco:'meme',   role:'Meme coin / Elon coin', icon:'Ð', color:'#c2a633',
+    what:'Dogecoin started as a joke in 2013 and became one of the most valuable crypto assets on earth. It has no cap on supply and no unique technical feature. It runs on vibes and Elon tweets.',
+    why_green:'DOGE is the ultimate sentiment trade. If momentum is building, it can 10x fast.',
+    why_red:'DOGE is the ultimate retail trap. When it\'s hot, influencers pile in. When it cools, retail is left holding.',
+    catch:'There is no fundamentals case for DOGE. It is purely a social phenomenon. If you buy it, you\'re not investing — you\'re speculating on crowd psychology. Be extremely honest with yourself about that.'},
+  'tron':        {sym:'TRX',eco:'infra',   role:'High-throughput payments', icon:'T', color:'#ef0027',
+    what:'TRON is a blockchain focused on high-speed, low-cost transactions — especially for stablecoin transfers (it handles a huge portion of USDT transfers globally).',
+    why_green:'TRX often benefits from stablecoin transaction volumes staying high.',
+    why_red:'TRON\'s founder Justin Sun has a controversial history in crypto. Regulatory risk is elevated.',
+    catch:'Despite high usage for USDT transfers, TRON\'s DeFi ecosystem is small and its reputation in serious crypto circles is mixed.'},
+  'polkadot':    {sym:'DOT',eco:'infra',   role:'Blockchain interoperability', icon:'●', color:'#e6007a',
+    what:'Polkadot is designed to connect different blockchains together, letting them share data and assets. Think of it as the internet backbone — but for blockchains.',
+    why_green:'DOT tends to move with the broader altcoin market. Oversold periods create bounces.',
+    why_red:'The interoperability narrative has cooled significantly. Cosmos and other projects compete for the same story.',
+    catch:'Polkadot has been building for years but hasn\'t achieved the ecosystem size its valuation implied. The "blockchain internet" story is still waiting to fully materialize.'},
+  'chainlink':   {sym:'LINK',eco:'infra',  role:'Real-world data feeds', icon:'⬡', color:'#2a5ada',
+    what:'Chainlink connects blockchains to real-world data — price feeds, weather, sports scores. Almost every major DeFi protocol uses Chainlink to get data from the outside world.',
+    why_green:'LINK is an infrastructure play. When DeFi usage grows, LINK demand grows with it.',
+    why_red:'LINK is often overlooked in bull markets vs flashier narratives despite having real utility.',
+    catch:'Chainlink is genuinely useful but its token price doesn\'t always reflect that — it often lags in bull markets and drops hard in bear markets. Patience is required.'},
+  'shiba-inu':   {sym:'SHIB',eco:'meme',   role:'Meme coin / DOGE rival', icon:'犬', color:'#f00500',
+    what:'SHIB was created as a "DOGE killer" in 2020. It has a large community (the "SHIB army") and has added some DeFi features, but remains primarily a sentiment-driven asset.',
+    why_green:'SHIB bull runs are driven by social media momentum — when it moves, it moves fast.',
+    why_red:'SHIB has trillions of tokens in supply. For the price to reach $0.001, it would need a market cap larger than the entire US stock market.',
+    catch:'Like DOGE, this is speculation on crowd psychology, not investment in a business. The supply mechanics make very large price moves mathematically difficult at scale.'},
+  'litecoin':    {sym:'LTC',eco:'store',   role:'"Silver to Bitcoin\'s gold"', icon:'Ł', color:'#bfbbbb',
+    what:'Litecoin is one of the oldest cryptocurrencies (2011). It\'s faster and cheaper than Bitcoin but never found a dominant use case. Often called "Bitcoin lite."',
+    why_green:'LTC sometimes rallies in anticipation of its halving events (supply cut in half).',
+    why_red:'Litecoin has lost significant market share and developer interest to newer chains.',
+    catch:'Litecoin exists mainly because it was there early. There\'s no strong reason to choose LTC over Bitcoin for store of value or over Solana for payments today.'},
+  'uniswap':     {sym:'UNI',eco:'defi',    role:'Decentralized exchange', icon:'🦄', color:'#ff007a',
+    what:'Uniswap is the world\'s largest decentralized exchange — you can swap any crypto token without a centralized company in the middle. It runs on Ethereum and processes billions daily.',
+    why_green:'UNI token benefits when trading volumes rise and when DeFi activity is growing.',
+    why_red:'Most of Uniswap\'s fees go to liquidity providers, not UNI holders. The token\'s value case is still being debated.',
+    catch:'Uniswap is genuinely revolutionary infrastructure, but UNI the token doesn\'t capture all its value. There\'s been ongoing debate about whether holders should receive a cut of fees.'},
+  'stellar':     {sym:'XLM',eco:'infra',   role:'Payments for the unbanked', icon:'★', color:'#7d00ff',
+    what:'Stellar focuses on fast, cheap international payments — especially for people without bank accounts. It partners with payment companies and NGOs in developing markets.',
+    why_green:'XLM tends to run with payment narratives during altcoin seasons.',
+    why_red:'Despite years of work, Stellar hasn\'t achieved mainstream payment adoption at scale.',
+    catch:'Stellar has real-world partnerships but operates in a crowded space (XRP, Circle, traditional banks) all competing for the same cross-border payments market.'},
+  'monero':      {sym:'XMR',eco:'store',   role:'Privacy coin', icon:'Ⓜ', color:'#f26822',
+    what:'Monero is built around total financial privacy. Transactions are untraceable by design. It\'s the most used crypto on darknet markets — which is both its biggest use case and its biggest regulatory liability.',
+    why_green:'XMR benefits from any news about financial surveillance or privacy concerns.',
+    why_red:'Monero has been delisted from multiple major exchanges due to regulatory pressure. Liquidity is shrinking.',
+    catch:'Privacy is a genuine need — but Monero\'s association with illegal activity makes it a regulatory target. Several major exchanges no longer list it. Access risk is real.'},
+  'aave':        {sym:'AAVE',eco:'defi',   role:'Decentralized lending', icon:'Gh', color:'#b6509e',
+    what:'Aave lets anyone borrow or lend crypto without a bank or broker. You deposit crypto as collateral and borrow against it — or earn interest by lending. It\'s the largest DeFi lending protocol.',
+    why_green:'AAVE benefits strongly from rising DeFi activity and crypto bull market sentiment.',
+    why_red:'Lending protocols are vulnerable to bad debt in fast market crashes. Flash crashes can cascade.',
+    catch:'Aave is well-run but DeFi lending still carries smart contract risk — code bugs have cost protocols hundreds of millions before.'},
+  'cosmos':      {sym:'ATOM',eco:'infra',  role:'Blockchain interoperability', icon:'⚛', color:'#2e3148',
+    what:'Like Polkadot, Cosmos is building the "internet of blockchains" — a way for different chains to communicate. It has one of the most active developer ecosystems in crypto.',
+    why_green:'ATOM has genuine utility and an active ecosystem that drives organic demand.',
+    why_red:'The ATOM token has been criticized for not capturing enough value from the Cosmos ecosystem it enables.',
+    catch:'Cosmos is technically excellent and widely used, but ATOM\'s tokenomics have been a source of controversy — many chains built on Cosmos don\'t need ATOM.'}
+};
+
+// Signal logic for crypto — based on 7-day price change and 24h change
+function cryptoSignal(change7d, change24h, eco) {
+  // Stablecoins are always yellow
+  if(eco==='store'&&(change7d>-2&&change7d<2)) return'YELLOW';
+  // Strong upward momentum = RED (overheated)
+  if(change7d>25||change24h>12) return'RED';
+  // Strong downward = GREEN (oversold, potential bounce)
+  if(change7d<-20||(change7d<-10&&change24h<-5)) return'GREEN';
+  // Meme coins — stricter thresholds
+  if(eco==='meme'&&change7d>10) return'RED';
+  if(eco==='meme'&&change7d<-15) return'GREEN';
+  return'YELLOW';
+}
+
+function cryptoReason(signal, sym, change7d, change24h, eco) {
+  const up7=change7d>0, pct7=Math.abs(change7d).toFixed(1), pct24=Math.abs(change24h).toFixed(1);
+  if(eco==='store'&&(change7d>-2&&change7d<2)) return`${sym} is holding its peg. It's a dollar — not an investment. Use it to move money, not grow it.`;
+  if(signal==='GREEN') {
+    if(eco==='meme') return`${sym} has dropped ${pct7}% this week. Meme coin drops can bounce fast — but they can also keep going. This is speculation territory.`;
+    return`${sym} is down ${pct7}% over the past week. For solid projects, oversold conditions like this tend to attract buyers. But nothing is guaranteed.`;
+  }
+  if(signal==='RED') {
+    if(eco==='meme') return`${sym} is up ${pct7}% this week and ${pct24}% today. Meme coin runs attract attention but burn late buyers. This is a classic FOMO setup.`;
+    return`${sym} is up ${pct7}% in a week. Strong momentum — but buying after a run like this means you're paying a premium. Wait for a pullback.`;
+  }
+  if(up7) return`${sym} is up ${pct7}% this week but nothing extreme. Holding steady — no clear signal to act on right now.`;
+  return`${sym} is down ${pct7}% this week but not dramatically oversold. Neutral territory — keep watching.`;
+}
+
+function fmtMcap(n){
+  if(!n||isNaN(n))return'—';
+  if(n>=1e12)return'$'+(n/1e12).toFixed(2)+'T';
+  if(n>=1e9)return'$'+(n/1e9).toFixed(1)+'B';
+  if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';
+  return'$'+n.toLocaleString();
+}
+function fmtPx(n){
+  if(!n||isNaN(n))return'—';
+  if(n>=1000)return'$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+  if(n>=1)return'$'+n.toFixed(2);
+  return'$'+n.toFixed(6);
+}
+function fmtPct(n){if(!n||isNaN(n))return'—';const s=n>=0?'+':'';return s+n.toFixed(2)+'%';}
+
+function verd(signal){return signal||'YELLOW';}
+function cc(v){return v==='GREEN'?'ccg':v==='RED'?'ccr':'ccy';}
+function bc(v){return v==='GREEN'?'bg2c':v==='RED'?'br2c':'by2c';}
+function dc(v){return v==='GREEN'?'dg':v==='RED'?'dr':'dy';}
+function ecoClass(e){return'eco-'+e;}
+
+let ALL=[], SIGACTIVE='ALL', ECOACTIVE='all';
+
+function toggleCard(id){
+  const card=document.getElementById(id);
+  if(!card)return;
+  const isOpen=card.classList.contains('open');
+  document.querySelectorAll('.cc.open').forEach(c=>{if(c.id!==id)c.classList.remove('open');});
+  card.classList.toggle('open',!isOpen);
+}
+
+function render(){
+  const grid=document.getElementById('grid'),msg=document.getElementById('gmsg');
+  let list=ALL;
+  if(ECOACTIVE!=='all') list=list.filter(c=>c.eco===ECOACTIVE);
+  if(SIGACTIVE!=='ALL') list=list.filter(c=>c.signal===SIGACTIVE);
+  if(!list.length){grid.innerHTML='';msg.textContent='No coins match this filter right now.';return;}
+  msg.textContent='';
+
+  grid.innerHTML=list.map((c,i)=>{
+    const info=CRYPTO_INFO[c.id]||{};
+    const signal=c.signal;
+    const id='cc-'+i;
+    const eco=info.eco||'infra';
+    const iconBg=info.color||'#333';
+    const change24cls=c.change24h>=0?'pos':'neg';
+    const change7cls=c.change7d>=0?'pos':'neg';
+    const whyLabel=signal==='GREEN'?'Why it got green':signal==='RED'?'Why it got red':'Why it\'s yellow';
+
+    return`<div class="cc ${cc(signal)}" id="${id}" style="animation-delay:${i*.03}s" onclick="toggleCard('${id}')">
+      <div class="cctop">
+        <div class="ccleft">
+          <div class="cc-icon" style="background:${iconBg}22;border-color:${iconBg}44;color:${iconBg}">${info.icon||c.sym[0]}</div>
+          <div>
+            <div class="cc-sym">${c.sym}</div>
+            <div class="cc-name">${c.name}</div>
+            <span class="cc-eco ${ecoClass(eco)}">${info.role||eco}</span>
+          </div>
+        </div>
+        <div class="cbadge ${bc(signal)}"><span class="bd ${dc(signal)}"></span>${signal}</div>
+      </div>
+      <div class="cm">
+        <div class="cmet"><span class="ml">PRICE</span><span class="mv">${fmtPx(c.price)}</span></div>
+        <div class="cmet"><span class="ml">24H</span><span class="mv ${change24cls}">${fmtPct(c.change24h)}</span></div>
+        <div class="cmet"><span class="ml">MKT CAP</span><span class="mv" style="font-size:12px">${fmtMcap(c.mcap)}</span></div>
+      </div>
+      <p class="creason">"${c.reason}"</p>
+      <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${id}')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>WHAT IS ${c.sym} &amp; WHY THIS SIGNAL</span>
+      </button>
+      <div class="deep">
+        <div class="deep-inner">
+          <div class="why-block why-ctx">
+            <span class="why-icon">i</span>
+            <div><div class="why-label">What ${c.sym} actually does</div><p class="why-text">${info.what||'A crypto asset in the ecosystem.'}</p></div>
+          </div>
+          <div class="why-block why-yes">
+            <span class="why-icon">+</span>
+            <div><div class="why-label">${whyLabel}</div><p class="why-text">${signal==='GREEN'?info.why_green:signal==='RED'?info.why_red:(info.why_green||'Neutral signal — no strong directional case either way.')}</p></div>
+          </div>
+          <div class="why-block why-no">
+            <span class="why-icon">−</span>
+            <div><div class="why-label">The catch</div><p class="why-text">${info.catch||'All crypto is high risk. Signal accuracy in crypto is lower than in stocks — treat this as one data point, not a decision.'}</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="cfooter">Brisk Crypto · Rank #${c.rank} by market cap</div>
+    </div>`;
+  }).join('');
+
+  const totalMcap=ALL.reduce((s,c)=>s+(c.mcap||0),0);
+  document.getElementById('s-total').textContent=ALL.length;
+  document.getElementById('s-green').textContent=ALL.filter(c=>c.signal==='GREEN').length;
+  document.getElementById('s-red').textContent=ALL.filter(c=>c.signal==='RED').length;
+  document.getElementById('s-mcap').textContent=fmtMcap(totalMcap);
+
+  document.querySelectorAll('.cc,.expand-btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+}
+
+function sigFilter(btn,type){
+  SIGACTIVE=type;
+  document.querySelectorAll('.fb').forEach(b=>b.className='fb');
+  btn.className='fb '+(type==='GREEN'?'fa':type==='RED'?'fr':type==='YELLOW'?'fy':'fa');
+  render();
+}
+
+function ecoFilter(btn,type){
+  ECOACTIVE=type;
+  document.querySelectorAll('.eco-pill').forEach(b=>{b.className='eco-pill';});
+  btn.classList.add('ep-'+(type==='all'?'all':type));
+  render();
+}
+
+function showSkeleton(){
+  document.getElementById('grid').innerHTML=Array(12).fill(0).map(()=>`<div class="cc ccy" style="pointer-events:none"><div class="cctop" style="margin-bottom:14px"><div class="ccleft"><div class="skel" style="width:36px;height:36px;border-radius:50%"></div><div><div class="skel" style="width:52px;height:22px;margin-bottom:6px"></div><div class="skel" style="width:90px;height:10px"></div></div></div><div class="skel" style="width:64px;height:24px;border-radius:100px"></div></div><div class="skel" style="width:100%;height:38px;margin-bottom:14px"></div><div class="skel" style="width:100%;height:32px"></div></div>`).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// LIVE DATA FROM COINGECKO FREE API (no key needed)
+// Fetches top 50 crypto by market cap
+// Rate limit: 10-30 calls/min on free tier — fine for a page load
+// ─────────────────────────────────────────────────────────────
+async function load(){
+  showSkeleton();
+  document.getElementById('gmsg').textContent='';
+  try{
+    const res=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false&price_change_percentage=24h,7d');
+    if(!res.ok)throw new Error('API error: '+res.status);
+    const data=await res.json();
+
+    ALL=data.map((c,i)=>{
+      const info=CRYPTO_INFO[c.id]||{};
+      const eco=info.eco||'infra';
+      const change7d=c.price_change_percentage_7d_in_currency||0;
+      const change24h=c.price_change_percentage_24h||0;
+      const signal=cryptoSignal(change7d,change24h,eco);
+      const reason=cryptoReason(signal,c.symbol.toUpperCase(),change7d,change24h,eco);
+      return{
+        id:c.id, sym:c.symbol.toUpperCase(), name:c.name,
+        price:c.current_price, mcap:c.market_cap,
+        change24h, change7d, signal, reason, eco, rank:i+1
+      };
+    });
+    render();
+  }catch(e){
+    console.warn('CoinGecko API error:',e);
+    document.getElementById('gmsg').textContent='Could not load live crypto data. CoinGecko may be rate-limiting — refresh in 60 seconds.';
+    document.getElementById('grid').innerHTML='';
+  }
+}
+
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'));});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+load();
+</script>
+</body>
+</html>
