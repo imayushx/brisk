@@ -183,6 +183,27 @@
     .chk-yes{background:rgba(0,232,122,0.06)}.chk-yes span{color:var(--green)}
     .chk-no{background:rgba(255,85,85,0.06)}.chk-no span{color:var(--red)}
     .chk-mid{background:rgba(251,191,36,0.06)}.chk-mid span{color:var(--yellow)}
+    /* V2 — MOAT BADGE & WIDE MOAT HIGHLIGHT */
+    .moat-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:8px;letter-spacing:1.5px;padding:3px 8px;border-radius:100px;margin-left:6px;vertical-align:middle;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);color:#fbbf24}
+    .sc.wide-moat{border-color:rgba(251,191,36,0.3)}
+    .sc.wide-moat::before{content:'';position:absolute;inset:0;border-radius:16px;border:1px solid rgba(251,191,36,0.2);pointer-events:none}
+    .sc.wide-moat:hover{border-color:rgba(251,191,36,0.5);box-shadow:0 10px 36px rgba(251,191,36,0.08)}
+
+    /* V2 — LIVE DATA LOADING STATES */
+    .live-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;margin-bottom:2px}
+    .live-chip{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--muted);display:inline-flex;align-items:center;gap:5px;transition:all .3s}
+    .live-chip.loading{animation:chipPulse 1.4s ease infinite}
+    @keyframes chipPulse{0%,100%{opacity:0.4}50%{opacity:1}}
+    .live-chip.loaded-g{border-color:rgba(0,232,122,.3);color:var(--green);background:var(--gdim)}
+    .live-chip.loaded-r{border-color:rgba(255,85,85,.3);color:var(--red);background:var(--rdim)}
+    .live-chip.loaded-y{border-color:rgba(251,191,36,.3);color:var(--yellow);background:var(--ydim)}
+    .live-chip.loaded-n{border-color:var(--border);color:var(--muted)}
+    .live-chip-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+
+    /* V2 — WINDSHIELD INDICATOR */
+    .windshield{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--green);display:inline-flex;align-items:center;gap:4px;margin-top:6px}
+    .windshield.down{color:var(--red)}
+
     .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:6px}
     @keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
 
@@ -434,7 +455,7 @@
       <div class="reveal">
         <div class="founder">
           <div class="fav">AP</div>
-          <div><div class="fname">Ayush Pathak</div><div class="frole">Founder, Brisk </div><div class="ftag">FINTECH PRODUCT STRATEGIST</div></div>
+          <div><div class="fname">Ayush Pathak</div><div class="frole">Founder, Brisk — Delhi, India</div><div class="ftag">FINTECH PRODUCT STRATEGIST</div></div>
         </div>
         <div class="atext">
           <p><strong>I build apps. Brisk is one of them.</strong> I got frustrated that every finance tool out there assumes you already speak the language — RSI, MACD, moving averages. They hand you a chart and expect you to figure it out.</p>
@@ -465,7 +486,7 @@
     <div>
       <div class="fblogo">BRISK<span>.</span></div>
       <p class="fbdesc">The market, translated. No noise, no charts, no condescension.</p>
-      <p class="fbby">BUILT BY <span>AYUSH PATHAK</span> · </p>
+      <p class="fbby">BUILT BY <span>AYUSH PATHAK</span> · DELHI, INDIA</p>
     </div>
     <div class="fcol">
       <h5>Product</h5>
@@ -497,7 +518,72 @@
 </footer>
 
 <script>
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZJ33i7SKj5olvSzSjDNYUAyGYpb2QMppi30-iXIzpWJQAkUYexusEYFygXKvJRBklOkGRxRdndxHu/pub?gid=0&single=true&output=csv';
+// ─────────────────────────────────────────────────────────────
+// BRISK V2 — PASTE YOUR GOOGLE SHEET URL BELOW
+// How to get this: Google Sheet → File → Share → Publish to web
+// → Stocks tab → CSV format → Publish → copy URL
+// ─────────────────────────────────────────────────────────────
+const SHEET_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+
+// ─────────────────────────────────────────────────────────────
+// V2 FIX: SESSION CACHE
+// This is how we fix the RSI rate-limit bug.
+// Instead of hitting the API every single page load, we store
+// the Yahoo Finance data in the browser's session memory.
+// It clears when the tab is closed. Result: the API is only
+// called ONCE per session per ticker, not on every page load.
+// ─────────────────────────────────────────────────────────────
+const CACHE_KEY = 'brisk_live_v2';
+function getCache(ticker) {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY + '_' + ticker);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    // Cache is valid for 6 hours
+    if (Date.now() - ts < 6 * 60 * 60 * 1000) return data;
+    sessionStorage.removeItem(CACHE_KEY + '_' + ticker);
+    return null;
+  } catch { return null; }
+}
+function setCache(ticker, data) {
+  try { sessionStorage.setItem(CACHE_KEY + '_' + ticker, JSON.stringify({ data, ts: Date.now() })); } catch {}
+}
+
+// ─────────────────────────────────────────────────────────────
+// V2 MOAT SCORES — Manual field, updated by you as needed
+// Score 1–5: 5 = Exceptional moat (Google, Apple, Visa)
+//            4 = Wide moat (solid competitive advantage)
+//            3 = Moderate moat
+//            2 = Narrow moat
+//            1 = No real moat
+// Wide Moat badge shows for scores 4 and 5
+// Gold border highlight shows for score 5 only
+// ─────────────────────────────────────────────────────────────
+const MOAT_SCORES = {
+  'AAPL':5,'MSFT':5,'GOOGL':5,'AMZN':4,'NVDA':4,'META':4,'TSLA':2,
+  'BRK.B':5,'JPM':4,'V':5,'MA':5,'UNH':3,'JNJ':4,'XOM':3,'WMT':4,
+  'PG':4,'HD':3,'CVX':3,'LLY':4,'MRK':3,'ABBV':3,'KO':5,'PEP':4,
+  'COST':4,'TMO':3,'MCD':5,'ABT':3,'ACN':3,'DHR':3,'NKE':4,'TXN':4,
+  'PM':3,'UPS':3,'MS':3,'GS':3,'BAC':3,'C':2,'WFC':3,'INTC':2,
+  'AMD':3,'QCOM':3,'IBM':3,'ORCL':4,'CRM':4,'ADBE':4,'NFLX':3,
+  'DIS':4,'VOO':5,'QQQ':4,'SPY':5,
+};
+
+// ─────────────────────────────────────────────────────────────
+// V2 HISTORICAL P/E AVERAGES (5-year average trailing P/E)
+// Used for the Historical Valuation check.
+// Update these once a year — just search "[ticker] historical PE ratio"
+// ─────────────────────────────────────────────────────────────
+const HIST_PE = {
+  'AAPL':27,'MSFT':30,'GOOGL':22,'AMZN':70,'NVDA':50,'META':20,
+  'TSLA':120,'BRK.B':21,'JPM':13,'V':30,'MA':32,'UNH':18,'JNJ':16,
+  'XOM':14,'WMT':25,'PG':24,'HD':21,'CVX':14,'LLY':35,'MRK':15,
+  'ABBV':18,'KO':25,'PEP':22,'COST':42,'TMO':28,'MCD':24,'ABT':22,
+  'ACN':26,'DHR':35,'NKE':30,'TXN':22,'PM':17,'UPS':20,'MS':13,
+  'GS':12,'BAC':12,'C':10,'WFC':13,'INTC':18,'AMD':40,'QCOM':15,
+  'IBM':16,'ORCL':22,'CRM':65,'ADBE':38,'NFLX':50,'DIS':30,
+  'VOO':20,'QQQ':28,'SPY':20,
+};
 
 // ─────────────────────────────────────────────────────────────
 // STOCK CONTEXT DATABASE
@@ -870,11 +956,18 @@ function render(){
     const id='card-'+i;
     const info=ctx(s.t||s.ticker);
     const fs=fundScore(s.t||s.ticker);
+    const moatScore = MOAT_SCORES[s.t||s.ticker] || 0;
+    const isWideMoat = moatScore >= 4;
+    const isExceptional = moatScore === 5;
+    const moatLabel = moatScore === 5 ? 'EXCEPTIONAL MOAT' : moatScore === 4 ? 'WIDE MOAT' : null;
     const whyLabel=v==='GREEN'?'Why it got green':v==='RED'?'Why it got red':'Why it\'s yellow';
 
-    return`<div class="sc ${cc(v)}" id="${id}" style="animation-delay:${i*.04}s" onclick="toggleCard('${id}')">
+    return`<div class="sc ${cc(v)}${isExceptional?' wide-moat':''}" id="${id}" style="animation-delay:${i*.04}s" onclick="toggleCard('${id}')">
       <div class="ct">
-        <div><div class="ctick">${s.t||s.ticker||'—'}</div><div class="cname">${s.n||s.name||NAMES[s.t||s.ticker]||''}</div></div>
+        <div>
+          <div class="ctick">${s.t||s.ticker||'—'}${moatLabel ? `<span class="moat-badge">${moatLabel}</span>` : ''}</div>
+          <div class="cname">${s.n||s.name||NAMES[s.t||s.ticker]||''}</div>
+        </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
           <div class="cbadge ${bc(v)}"><span class="bd ${dc(v)}"></span>${v}</div>
           <div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:${fs.color};opacity:0.8">F: ${fs.label}</div>
@@ -886,6 +979,15 @@ function render(){
         <div class="cmet"><span class="ml">TREND</span><span class="mv" style="font-size:11px;color:${tc(s.tr||s.trend)}">${trend}</span></div>
         <div class="cmet"><span class="ml">SAFETY</span><span class="mv">${s.sf||s.safety||'—'}<span style="font-size:10px;opacity:.4">/10</span></span></div>
       </div>
+
+      <!-- V2: Live data chips — start loading immediately, resolve async -->
+      <div class="live-row">
+        <span class="live-chip loading chip-fpe">FWD PE...</span>
+        <span class="live-chip loading chip-fcf">FCF...</span>
+        <span class="live-chip loading chip-hist">PE vs hist...</span>
+        <span class="live-chip loading chip-target">Target...</span>
+      </div>
+
       <p class="creason">"${s.r||s.reason||'Loading signal...'}"</p>
       <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${id}')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -908,7 +1010,7 @@ function render(){
           ${fundPanel(s.t||s.ticker)}
         </div>
       </div>
-      <div class="cfooter">Brisk · Updated today</div>
+      <div class="cfooter">Brisk V2 · Updated today · Live data loading...</div>
     </div>`;
   }).join('');
 
@@ -922,6 +1024,13 @@ function render(){
   document.querySelectorAll('.sc,.expand-btn').forEach(el=>{
     el.addEventListener('mouseenter',()=>cur.classList.add('big'));
     el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+
+  // V2: Enrich cards with live Yahoo Finance data — staggered by 300ms each
+  // to avoid hitting rate limits. Cards update in place as data arrives.
+  list.forEach((s, i) => {
+    const cardId = 'card-' + i;
+    setTimeout(() => enrichCard(s, cardId), i * 300);
   });
 }
 
@@ -939,6 +1048,180 @@ function doFilter(btn,type){
 
 function showSkeleton(){
   document.getElementById('grid').innerHTML=Array(8).fill(0).map(()=>`<div class="sc ccy" style="pointer-events:none"><div class="ct" style="margin-bottom:14px"><div><div class="skel" style="width:72px;height:28px;margin-bottom:6px"></div><div class="skel" style="width:110px;height:10px"></div></div><div class="skel" style="width:64px;height:24px;border-radius:100px"></div></div><div class="skel" style="width:100%;height:38px;margin-bottom:14px"></div><div class="skel" style="width:100%;height:48px"></div></div>`).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// V2 VERDICT ENGINE
+// Technicals (RSI + trend from Google Sheet) are the BASE signal.
+// Live Yahoo Finance data then runs these checks ON TOP:
+//
+// WINDSHIELD TEST: Forward P/E < Trailing P/E = earnings growing
+//   → Bullish bonus. Can upgrade YELLOW → GREEN if other signals ok.
+//
+// FCF DURABILITY: FCF Margin < 5% = company burning cash
+//   → Downgrades any GREEN → YELLOW. No exceptions.
+//
+// HISTORICAL VALUATION: Current P/E vs 5-year average
+//   → If current > 1.3x historical average, flag as expensive
+//   → Won't block GREEN entirely, but adds caution note.
+//
+// These run asynchronously — cards render first with base signal,
+// then update live when Yahoo Finance data arrives.
+// ─────────────────────────────────────────────────────────────
+function v2Verdict(baseVerdict, liveData) {
+  if (!liveData || liveData.error) return { verdict: baseVerdict, reason: null, flags: [] };
+
+  let verdict = baseVerdict;
+  let flags = [];
+  let reason = null;
+
+  const { forwardPE, trailingPE, fcfMargin } = liveData;
+
+  // WINDSHIELD TEST
+  const windshieldPass = forwardPE && trailingPE && forwardPE < trailingPE;
+  if (windshieldPass) {
+    flags.push({ type: 'windshield', label: 'FWD P/E < TRAIL P/E', positive: true });
+    if (verdict === 'YELLOW') {
+      verdict = 'GREEN';
+      reason = 'Earnings are expected to outpace current valuation next year.';
+    }
+  }
+
+  // FCF DURABILITY CHECK — always runs, overrides windshield
+  const fcfWeak = fcfMargin !== null && fcfMargin < 5;
+  if (fcfWeak) {
+    flags.push({ type: 'fcf', label: 'FCF < 5%', positive: false });
+    if (verdict === 'GREEN') {
+      verdict = 'YELLOW';
+      reason = 'Growing fast, but cash flow is too weak to be a safe bet right now.';
+    }
+  }
+
+  // HISTORICAL VALUATION CHECK
+  return { verdict, reason, flags, windshieldPass, fcfWeak };
+}
+
+// ─────────────────────────────────────────────────────────────
+// FETCH LIVE DATA from our Vercel API route
+// With session caching — only hits Yahoo Finance once per session
+// ─────────────────────────────────────────────────────────────
+async function fetchLiveData(ticker) {
+  const cached = getCache(ticker);
+  if (cached) return cached;
+  try {
+    const res = await fetch(`/api/quote?ticker=${ticker}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    setCache(ticker, data);
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// UPDATE A SINGLE CARD with live Yahoo Finance data
+// Called after the card is already rendered — this is what
+// makes the loading chips appear then resolve gracefully
+// ─────────────────────────────────────────────────────────────
+async function enrichCard(s, cardId) {
+  const ticker = s.t || s.ticker;
+  const liveData = await fetchLiveData(ticker);
+  const baseV = s.v || verd(s.verdict || '');
+  const v2 = v2Verdict(baseV, liveData);
+
+  const card = document.getElementById(cardId);
+  if (!card) return;
+
+  // Update verdict if V2 logic changed it
+  if (v2.verdict !== baseV) {
+    // Remove old color class, add new one
+    card.classList.remove('ccg','ccr','ccy');
+    card.classList.add(cc(v2.verdict));
+
+    // Update badge
+    const badge = card.querySelector('.cbadge');
+    if (badge) {
+      badge.className = 'cbadge ' + bc(v2.verdict);
+      badge.innerHTML = `<span class="bd ${dc(v2.verdict)}"></span>${v2.verdict}`;
+    }
+
+    // Update reason text if V2 provided one
+    if (v2.reason) {
+      const reasonEl = card.querySelector('.creason');
+      if (reasonEl) reasonEl.textContent = '"' + v2.reason + '"';
+    }
+  }
+
+  // Render live data chips
+  const liveRow = card.querySelector('.live-row');
+  if (!liveRow || !liveData) return;
+
+  const fpe = liveData.forwardPE;
+  const tpe = liveData.trailingPE;
+  const fcf = liveData.fcfMargin;
+  const target = liveData.analystTarget;
+  const currentPx = parseFloat(s.px || s.price || 0);
+  const histPE = HIST_PE[ticker];
+
+  // Windshield chip
+  if (fpe && tpe) {
+    const windOk = fpe < tpe;
+    const cls = windOk ? 'loaded-g' : 'loaded-r';
+    const dot = windOk ? 'dg' : 'dr';
+    liveRow.querySelector('.chip-fpe').className = `live-chip ${cls}`;
+    liveRow.querySelector('.chip-fpe').innerHTML = `<span class="live-chip-dot ${dot}"></span>FWD PE: ${fpe}x ${windOk ? '▼' : '▲'} ${tpe}x`;
+  } else if (fpe) {
+    liveRow.querySelector('.chip-fpe').className = 'live-chip loaded-n';
+    liveRow.querySelector('.chip-fpe').innerHTML = `FWD PE: ${fpe}x`;
+  } else {
+    liveRow.querySelector('.chip-fpe').className = 'live-chip loaded-n';
+    liveRow.querySelector('.chip-fpe').textContent = 'FWD PE: N/A';
+  }
+
+  // FCF chip
+  if (fcf !== null) {
+    const fcfOk = fcf >= 5;
+    const cls = fcfOk ? 'loaded-g' : 'loaded-r';
+    const dot = fcfOk ? 'dg' : 'dr';
+    liveRow.querySelector('.chip-fcf').className = `live-chip ${cls}`;
+    liveRow.querySelector('.chip-fcf').innerHTML = `<span class="live-chip-dot ${dot}"></span>FCF: ${fcf.toFixed(1)}%`;
+  } else {
+    liveRow.querySelector('.chip-fcf').className = 'live-chip loaded-n';
+    liveRow.querySelector('.chip-fcf').textContent = 'FCF: N/A';
+  }
+
+  // Historical PE chip
+  if (tpe && histPE) {
+    const ratio = tpe / histPE;
+    const cheap = ratio < 0.9;
+    const expensive = ratio > 1.3;
+    const cls = cheap ? 'loaded-g' : expensive ? 'loaded-r' : 'loaded-y';
+    const dot = cheap ? 'dg' : expensive ? 'dr' : 'dy';
+    liveRow.querySelector('.chip-hist').className = `live-chip ${cls}`;
+    liveRow.querySelector('.chip-hist').innerHTML = `<span class="live-chip-dot ${dot}"></span>PE vs hist: ${ratio.toFixed(2)}x`;
+  } else {
+    liveRow.querySelector('.chip-hist').className = 'live-chip loaded-n';
+    liveRow.querySelector('.chip-hist').textContent = 'Hist PE: N/A';
+  }
+
+  // Analyst target chip
+  if (target && currentPx > 0) {
+    const upside = ((target - currentPx) / currentPx) * 100;
+    const cls = upside > 10 ? 'loaded-g' : upside < -5 ? 'loaded-r' : 'loaded-y';
+    const dot = upside > 10 ? 'dg' : upside < -5 ? 'dr' : 'dy';
+    liveRow.querySelector('.chip-target').className = `live-chip ${cls}`;
+    liveRow.querySelector('.chip-target').innerHTML = `<span class="live-chip-dot ${dot}"></span>Target: $${target} (${upside > 0 ? '+' : ''}${upside.toFixed(0)}%)`;
+  } else {
+    liveRow.querySelector('.chip-target').className = 'live-chip loaded-n';
+    liveRow.querySelector('.chip-target').textContent = 'Target: N/A';
+  }
+
+  // Also update fund panel live data
+  const fpeEl = card.querySelector('.fund-fpe-live');
+  const fcfEl = card.querySelector('.fund-fcf-live');
+  if (fpeEl && fpe) fpeEl.textContent = fpe + 'x';
+  if (fcfEl && fcf !== null) fcfEl.textContent = fcf.toFixed(1) + '%';
 }
 
 async function load(){
