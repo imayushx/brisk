@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Sign In — Brisk</title>
+  <meta name="description"
+    content="Sign in to your Brisk account to access your personal dashboard and portfolio tools." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bg': '#080b0e',
+            'bg2': '#0d1117',
+            'bg3': '#141a21',
+            'green': '#00e87a',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'sans-serif'],
+            'body': ['"DM Sans"', 'sans-serif'],
+            'mono': ['"DM Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      cursor: none;
+    }
+
+    #cursor {
+      width: 8px;
+      height: 8px;
+      background: #00e87a;
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .18s, height .18s;
+      mix-blend-mode: difference;
+    }
+
+    #cursor.big {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media(hover:none) {
+      #cursor {
+        display: none
+      }
+
+      body {
+        cursor: auto
+      }
+    }
+
+    /* Subtle grid overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.017) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.017) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient green glow behind card */
+    .card-glow::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(0, 232, 122, 0.07) 0%, transparent 70%);
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* Input focus */
+    .brisk-input {
+      transition: border-color .2s;
+    }
+
+    .brisk-input:focus {
+      border-color: #00e87a !important;
+      box-shadow: 0 0 0 3px rgba(0, 232, 122, 0.08);
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp .5s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    /* Loading spinner */
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      animation: spin .7s linear infinite;
+      display: inline-block;
+    }
+
+    /* Tab underline indicator */
+    .tab-active {
+      color: #00e87a !important;
+      border-bottom-color: #00e87a !important;
+    }
+
+    .tab-inactive {
+      color: rgba(255, 255, 255, 0.3);
+      border-bottom-color: transparent;
+    }
+
+    .tab-inactive:hover {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  </style>
+</head>
+
+<body class="bg-bg min-h-screen font-body text-white">
+  <div id="cursor"></div>
+
+  <div class="relative min-h-screen flex flex-col items-center justify-center px-4 py-12 z-10">
+
+    <!-- Back to screener -->
+    <a href="/"
+      class="mb-8 flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-white/30 hover:text-white/60 transition-colors cursor-none uppercase fade-up">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 5l-7 7 7 7" />
+      </svg>
+      Back to Brisk
+    </a>
+
+    <!-- Logo -->
+    <a href="/"
+      class="font-display text-4xl tracking-[0.25em] text-green mb-2 hover:opacity-80 transition-opacity cursor-none fade-up"
+      style="animation-delay:.05s">
+      BRISK<span class="text-white/20">.</span>
+    </a>
+    <p class="font-mono text-[10px] tracking-[0.25em] text-white/30 mb-10 uppercase fade-up"
+      style="animation-delay:.1s">Your Intelligence Edge</p>
+
+    <!-- Auth card -->
+    <div class="card-glow relative w-full max-w-md fade-up" style="animation-delay:.15s">
+      <div class="bg-bg2 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+
+        <!-- Top accent glow line -->
+        <div class="h-px bg-gradient-to-r from-transparent via-green to-transparent opacity-60"></div>
+
+        <!-- Tab headers -->
+        <div class="flex border-b border-white/10">
+          <button id="tab-signin" onclick="switchTab('signin')"
+            class="tab-active flex-1 py-4 font-display text-sm tracking-[0.2em] border-b-2 transition-all duration-200 cursor-none">
+            SIGN IN
+          </button>
+          <button id="tab-register" onclick="switchTab('register')"
+            class="tab-inactive flex-1 py-4 font-display text-sm tracking-[0.2em] border-b-2 transition-all duration-200 cursor-none">
+            CREATE ACCOUNT
+          </button>
+        </div>
+
+        <!-- ── SIGN IN PANEL ───────────────────────────────────── -->
+        <div id="panel-signin" class="p-8 space-y-5">
+
+          <!-- Google button -->
+          <button onclick="signInGoogle()"
+            class="w-full flex items-center justify-center gap-3 bg-bg3 hover:bg-white/5 border border-white/10 hover:border-white/20 text-white rounded-xl py-3.5 font-mono text-[11px] tracking-[0.1em] uppercase transition-all duration-200 cursor-none">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 flex-shrink-0">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4" />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853" />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05" />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335" />
+            </svg>
+            Continue with Google
+          </button>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-4">
+            <div class="flex-1 h-px bg-white/10"></div>
+            <span class="font-mono text-[9px] text-white/25 tracking-[0.2em]">OR</span>
+            <div class="flex-1 h-px bg-white/10"></div>
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-1.5">
+            <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Email Address</label>
+            <input id="si-email" type="email" placeholder="you@example.com" autocomplete="email"
+              class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 text-sm font-body outline-none" />
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Password</label>
+              <button onclick="showForgot()"
+                class="font-mono text-[9px] tracking-[0.1em] text-green/60 hover:text-green transition-colors cursor-none">Forgot?</button>
+            </div>
+            <div class="relative">
+              <input id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+                class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 pr-12 text-sm font-body outline-none" />
+              <button onclick="toggleVis('si-pass')"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/50 transition-colors cursor-none"
+                tabindex="-1">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div id="si-err"
+            class="hidden font-mono text-xs text-red-400/80 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          </div>
+
+          <!-- CTA -->
+          <button id="si-btn" onclick="signInEmail()"
+            class="w-full bg-green hover:opacity-90 active:scale-[0.98] text-black font-body font-medium text-sm rounded-xl py-3.5 transition-all duration-150 cursor-none">
+            Sign In to Brisk
+          </button>
+
+          <p class="text-center font-mono text-[10px] text-white/30 tracking-wide">
+            No account?
+            <button onclick="switchTab('register')" class="text-green hover:underline cursor-none ml-1">Create one free
+              →</button>
+          </p>
+        </div>
+
+        <!-- ── REGISTER PANEL ──────────────────────────────────── -->
+        <div id="panel-register" class="p-8 space-y-5 hidden">
+
+          <!-- Email -->
+          <div class="space-y-1.5">
+            <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Email Address</label>
+            <input id="reg-email" type="email" placeholder="you@example.com" autocomplete="email"
+              class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 text-sm font-body outline-none" />
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-1.5">
+            <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Create Password</label>
+            <div class="relative">
+              <input id="reg-pass" type="password" placeholder="Min. 8 characters" autocomplete="new-password"
+                class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 pr-12 text-sm font-body outline-none" />
+              <button onclick="toggleVis('reg-pass')"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/50 transition-colors cursor-none"
+                tabindex="-1">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm -->
+          <div class="space-y-1.5">
+            <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Confirm Password</label>
+            <input id="reg-confirm" type="password" placeholder="••••••••" autocomplete="new-password"
+              class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 text-sm font-body outline-none" />
+          </div>
+
+          <!-- Error -->
+          <div id="reg-err"
+            class="hidden font-mono text-xs text-red-400/80 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          </div>
+          <!-- Success -->
+          <div id="reg-ok"
+            class="hidden font-mono text-xs text-green/80 bg-green/5 border border-green/20 rounded-xl px-4 py-3"></div>
+
+          <button id="reg-btn" onclick="signUpEmail()"
+            class="w-full bg-green hover:opacity-90 active:scale-[0.98] text-black font-body font-medium text-sm rounded-xl py-3.5 transition-all duration-150 cursor-none">
+            Create My Account
+          </button>
+
+          <p class="font-mono text-[9px] text-white/20 tracking-wide text-center leading-relaxed">
+            By registering you confirm that Brisk is for informational purposes only and is not financial advice.
+          </p>
+
+          <p class="text-center font-mono text-[10px] text-white/30">
+            Already have an account?
+            <button onclick="switchTab('signin')" class="text-green hover:underline cursor-none ml-1">Sign in →</button>
+          </p>
+        </div>
+
+        <!-- ── FORGOT PASSWORD PANEL ───────────────────────────── -->
+        <div id="panel-forgot" class="p-8 space-y-5 hidden">
+          <div>
+            <h2 class="font-display text-2xl tracking-widest text-white mb-1">RESET PASSWORD</h2>
+            <p class="text-sm text-white/40 font-light">We'll send a reset link to your email.</p>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Email Address</label>
+            <input id="fg-email" type="email" placeholder="you@example.com"
+              class="brisk-input w-full bg-bg3 border border-white/10 text-white placeholder-white/20 rounded-xl px-4 py-3.5 text-sm font-body outline-none" />
+          </div>
+
+          <div id="fg-err"
+            class="hidden font-mono text-xs text-red-400/80 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          </div>
+          <div id="fg-ok"
+            class="hidden font-mono text-xs text-green/80 bg-green/5 border border-green/20 rounded-xl px-4 py-3"></div>
+
+          <button onclick="sendReset()"
+            class="w-full bg-green hover:opacity-90 active:scale-[0.98] text-black font-body font-medium text-sm rounded-xl py-3.5 transition-all duration-150 cursor-none">
+            Send Reset Link
+          </button>
+
+          <p class="text-center font-mono text-[10px] text-white/30">
+            <button onclick="switchTab('signin')" class="text-green hover:underline cursor-none">← Back to Sign
+              In</button>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Legal note -->
+    <p class="mt-8 font-mono text-[9px] text-white/20 text-center max-w-xs leading-relaxed tracking-wide fade-up"
+      style="animation-delay:.25s">
+      Brisk is for informational purposes only. Not financial advice.
+    </p>
+
+  </div>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════
+    //  👇  PASTE YOUR SUPABASE KEYS HERE  (see the Setup Guide)
+    // ════════════════════════════════════════════════════════════════
+    const SUPABASE_URL = 'httphttps://bkhvundocabwldmtnrsl.supabase.co';
+    const SUPABASE_ANON = 'sb_publishable_vaceGfP7AQkRuhCl61TRCA_ft143ZKo';
+    // ════════════════════════════════════════════════════════════════
+
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    const DASHBOARD = 'https://brisk-tau.vercel.app/dashboard';
+
+    // ── If already logged in → skip to dashboard ─────────────────
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) window.location.replace(DASHBOARD);
+    })();
+
+    // ── Custom cursor ─────────────────────────────────────────────
+    const cur = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cur.style.left = e.clientX + 'px';
+      cur.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, input').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('big'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+    });
+
+    // ── Tab switching ─────────────────────────────────────────────
+    function switchTab(tab) {
+      ['signin', 'register', 'forgot'].forEach(p => {
+        document.getElementById('panel-' + p).classList.add('hidden');
+      });
+      document.getElementById('panel-' + tab).classList.remove('hidden');
+
+      const active = 'tab-active flex-1 py-4 font-display text-sm tracking-[0.2em] border-b-2 transition-all duration-200 cursor-none';
+      const inactive = 'tab-inactive flex-1 py-4 font-display text-sm tracking-[0.2em] border-b-2 transition-all duration-200 cursor-none';
+      ['signin', 'register'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.className = (t === tab) ? active : inactive;
+      });
+    }
+
+    function showForgot() {
+      ['signin', 'register'].forEach(p => document.getElementById('panel-' + p).classList.add('hidden'));
+      document.getElementById('panel-forgot').classList.remove('hidden');
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────
+    function toggleVis(id) {
+      const el = document.getElementById(id);
+      el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.disabled = loading;
+      btn.innerHTML = loading
+        ? '<span class="spinner inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full align-middle mr-2"></span>Please wait…'
+        : btn.dataset.label;
+      if (!loading && btn.dataset.label) btn.innerHTML = btn.dataset.label;
+    }
+
+    function showErr(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+    function hideErr(id) { document.getElementById(id).classList.add('hidden'); }
+    function showOk(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+
+    // Store button labels on load
+    ['si-btn', 'reg-btn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.dataset.label = el.innerHTML;
+    });
+
+    // ── Google Sign-In ────────────────────────────────────────────
+    async function signInGoogle() {
+      hideErr('si-err');
+      await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: DASHBOARD }
+      });
+    }
+
+    // ── Email Sign-In ─────────────────────────────────────────────
+    async function signInEmail() {
+      hideErr('si-err');
+      const email = document.getElementById('si-email').value.trim();
+      const pass = document.getElementById('si-pass').value;
+      if (!email || !pass) { showErr('si-err', 'Please fill in both fields.'); return; }
+
+      document.getElementById('si-btn').disabled = true;
+      document.getElementById('si-btn').textContent = 'Signing in…';
+
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if (error) {
+        showErr('si-err', error.message);
+        document.getElementById('si-btn').disabled = false;
+        document.getElementById('si-btn').innerHTML = document.getElementById('si-btn').dataset.label || 'Sign In to Brisk';
+      } else {
+        window.location.replace(DASHBOARD);
+      }
+    }
+
+    // ── Email Sign-Up ─────────────────────────────────────────────
+    async function signUpEmail() {
+      hideErr('reg-err');
+      hideErr('reg-ok');
+      const email = document.getElementById('reg-email').value.trim();
+      const pass = document.getElementById('reg-pass').value;
+      const confirm = document.getElementById('reg-confirm').value;
+
+      if (!email || !pass) { showErr('reg-err', 'Please fill in all fields.'); return; }
+      if (pass.length < 8) { showErr('reg-err', 'Password must be at least 8 characters.'); return; }
+      if (pass !== confirm) { showErr('reg-err', 'Passwords do not match.'); return; }
+
+      document.getElementById('reg-btn').disabled = true;
+      document.getElementById('reg-btn').textContent = 'Creating account…';
+
+      const { error } = await sb.auth.signUp({
+        email, password: pass,
+        options: { emailRedirectTo: DASHBOARD }
+      });
+      document.getElementById('reg-btn').disabled = false;
+      document.getElementById('reg-btn').innerHTML = document.getElementById('reg-btn').dataset.label || 'Create My Account';
+
+      if (error) {
+        showErr('reg-err', error.message);
+      } else {
+        showOk('reg-ok', '✓ Check your email for a confirmation link, then come back and sign in.');
+      }
+    }
+
+    // ── Password Reset ─────────────────────────────────────────────
+    async function sendReset() {
+      hideErr('fg-err');
+      hideErr('fg-ok');
+      const email = document.getElementById('fg-email').value.trim();
+      if (!email) { showErr('fg-err', 'Please enter your email address.'); return; }
+
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: DASHBOARD
+      });
+      if (error) {
+        showErr('fg-err', error.message);
+      } else {
+        showOk('fg-ok', '✓ Reset link sent! Check your inbox (and spam folder).');
+      }
+    }
+
+    // ── Enter key to submit ───────────────────────────────────────
+    document.getElementById('si-pass').addEventListener('keydown', e => { if (e.key === 'Enter') signInEmail(); });
+    document.getElementById('reg-confirm').addEventListener('keydown', e => { if (e.key === 'Enter') signUpEmail(); });
+    document.getElementById('fg-email').addEventListener('keydown', e => { if (e.key === 'Enter') sendReset(); });
+  </script>
+</body>
+
+</html>

@@ -5,11 +5,15 @@
       "maxDuration": 10
     }
   },
+  "rewrites": [
+    { "source": "/login",     "destination": "/login.html"     },
+    { "source": "/dashboard", "destination": "/dashboard.html" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Origin",  "value": "*"   },
         { "key": "Access-Control-Allow-Methods", "value": "GET" }
       ]
     }

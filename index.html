@@ -142,6 +142,8 @@
     .expand-btn svg{transition:transform .25s;flex-shrink:0}
     .sc.open .expand-btn svg{transform:rotate(180deg)}
     .expand-btn .elbl{transition:color .18s}
+    .tv-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);background:none;border:1px solid transparent;cursor:none;padding:4px 10px;border-radius:6px;text-decoration:none;flex-shrink:0;transition:color .18s,border-color .18s,background .18s}
+    .tv-btn:hover{color:var(--green);border-color:rgba(0,232,122,.25);background:rgba(0,232,122,.05)}
 
     /* Expandable deep-dive panel */
     .deep{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
@@ -989,10 +991,16 @@ function render(){
       </div>
 
       <p class="creason">"${s.r||s.reason||'Loading signal...'}"</p>
-      <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${id}')">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="elbl">WHY THIS SIGNAL + FUNDAMENTALS</span>
-      </button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${id}')">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="elbl">WHY THIS SIGNAL + FUNDAMENTALS</span>
+        </button>
+        <a href="https://www.tradingview.com/symbols/${s.t||s.ticker}/" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="tv-btn" title="Open TradingView chart">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          CHART ↗
+        </a>
+      </div>
       <div class="deep">
         <div class="deep-inner">
           <div class="why-block why-yes">
@@ -1021,7 +1029,7 @@ function render(){
   buildTape();
 
   // Re-attach cursor listeners for new cards
-  document.querySelectorAll('.sc,.expand-btn').forEach(el=>{
+  document.querySelectorAll('.sc,.expand-btn,.tv-btn').forEach(el=>{
     el.addEventListener('mouseenter',()=>cur.classList.add('big'));
     el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
   });

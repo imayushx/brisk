@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Dashboard — Brisk</title>
+  <meta name="description" content="Your personal Brisk dashboard. Portfolio tools, stock screener, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bg': '#080b0e',
+            'bg2': '#0d1117',
+            'bg3': '#141a21',
+            'green': '#00e87a',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'sans-serif'],
+            'body': ['"DM Sans"', 'sans-serif'],
+            'mono': ['"DM Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      cursor: none;
+      overflow: hidden;
+    }
+
+    #cursor {
+      width: 8px;
+      height: 8px;
+      background: #00e87a;
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .18s, height .18s;
+      mix-blend-mode: difference;
+    }
+
+    #cursor.big {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media(hover:none) {
+      #cursor {
+        display: none
+      }
+
+      body {
+        cursor: auto
+      }
+    }
+
+    /* Subtle grid on main area */
+    #main-content::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Nav item active/inactive */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.4);
+      background: none;
+      border: none;
+      cursor: none;
+      text-align: left;
+      transition: background .18s, color .18s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .nav-item.active {
+      background: rgba(0, 232, 122, 0.08);
+      color: #00e87a;
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .nav-item.active .nav-icon {
+      opacity: 1;
+      color: #00e87a;
+    }
+
+    /* Risk toggle buttons */
+    .risk-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.35);
+      cursor: none;
+      transition: all .18s;
+    }
+
+    .risk-btn:hover {
+      color: rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .risk-btn.selected {
+      background: rgba(0, 232, 122, 0.1);
+      border-color: rgba(0, 232, 122, 0.4);
+      color: #00e87a;
+    }
+
+    /* Form input */
+    .dash-input {
+      width: 100%;
+      background: #141a21;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .dash-input:focus {
+      border-color: #00e87a;
+      box-shadow: 0 0 0 3px rgba(0, 232, 122, 0.07);
+    }
+
+    .dash-input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    select.dash-input option {
+      background: #141a21;
+    }
+
+    /* Prompt output box */
+    .prompt-box {
+      background: #141a21;
+      border: 1px solid rgba(0, 232, 122, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Section fade-in */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .section-show {
+      animation: fadeIn .35s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    /* Pulse copy button */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .6
+      }
+    }
+
+    .copy-success {
+      color: #00e87a !important;
+    }
+
+    /* Mobile sidebar */
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+
+      #sidebar.open {
+        transform: translateX(0);
+      }
+
+      #main {
+        margin-left: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-bg font-body text-white">
+  <div id="cursor"></div>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────────────── -->
+  <aside id="sidebar"
+    class="fixed top-0 left-0 h-full w-64 bg-bg2 border-r border-white/10 flex flex-col z-40 transition-transform duration-300">
+
+    <!-- Logo -->
+    <div class="px-6 py-5 border-b border-white/10 flex-shrink-0">
+      <a href="/" class="font-display text-2xl tracking-[0.25em] text-green cursor-none">BRISK<span
+          class="text-white/20">.</span></a>
+      <p class="font-mono text-[9px] text-white/25 tracking-[0.25em] mt-0.5">DASHBOARD</p>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+
+      <button id="nav-portfolio" onclick="showSection('portfolio')" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        My Portfolio
+      </button>
+
+      <a href="/" class="nav-item" style="text-decoration:none">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+        Stock Screener ↗
+      </a>
+
+      <button id="nav-about" onclick="showSection('about')" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        About Brisk
+      </button>
+
+      <button id="nav-privacy" onclick="showSection('privacy')" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        Privacy Policy
+      </button>
+
+      <button id="nav-disclaimer" onclick="showSection('disclaimer')" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        Disclaimer
+      </button>
+
+    </nav>
+
+    <!-- User section -->
+    <div class="p-4 border-t border-white/10 flex-shrink-0">
+      <div class="flex items-center gap-3 mb-3">
+        <div id="user-avatar"
+          class="w-8 h-8 rounded-full bg-green/20 border border-green/30 flex items-center justify-center font-display text-sm text-green flex-shrink-0">
+          ?</div>
+        <div class="min-w-0">
+          <div id="user-email" class="font-mono text-[10px] text-white/50 tracking-wide truncate">Loading…</div>
+          <div class="font-mono text-[9px] text-green/50 tracking-widest">MEMBER</div>
+        </div>
+      </div>
+      <button onclick="signOut()"
+        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/10 hover:border-white/20 font-mono text-[10px] tracking-[0.1em] text-white/40 hover:text-white/70 transition-all cursor-none uppercase">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div id="overlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden">
+  </div>
+
+  <!-- ── MAIN AREA ─────────────────────────────────────────────────── -->
+  <div id="main" class="ml-64 flex flex-col h-screen">
+
+    <!-- Top bar -->
+    <header
+      class="flex-shrink-0 h-14 border-b border-white/10 bg-bg2/80 backdrop-blur-xl flex items-center justify-between px-6 z-20 relative">
+      <!-- Hamburger + page title -->
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()"
+          class="md:hidden text-white/40 hover:text-white transition-colors cursor-none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <span id="page-title" class="font-display text-lg tracking-widest text-white">MY PORTFOLIO</span>
+        </div>
+      </div>
+      <!-- Live badge -->
+      <div
+        class="flex items-center gap-2 font-mono text-[9px] tracking-[0.2em] text-green border border-green/25 px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 rounded-full bg-green animate-pulse"></span>
+        BRISK LIVE
+      </div>
+    </header>
+
+    <!-- Content area -->
+    <main id="main-content" class="flex-1 overflow-y-auto relative">
+      <div class="relative z-10 max-w-3xl mx-auto px-6 py-8">
+
+        <!-- ══ PORTFOLIO SECTION ══════════════════════════════════════ -->
+        <section id="section-portfolio" class="section-show">
+
+          <!-- Header -->
+          <div class="mb-8">
+            <div class="font-mono text-[10px] tracking-[0.3em] text-green mb-2">// AI PORTFOLIO TOOL</div>
+            <h1 class="font-display text-5xl tracking-widest text-white mb-3">AI PORTFOLIO<br>AUDITOR</h1>
+            <p class="text-white/50 text-sm font-light leading-relaxed max-w-lg">
+              Fill in your profile below. We'll generate a master prompt you can paste directly into ChatGPT or Claude
+              for a comprehensive portfolio review — written at the level of a senior financial strategist.
+            </p>
+          </div>
+
+          <!-- Form card -->
+          <div class="bg-bg2 border border-white/10 rounded-2xl p-6 space-y-5 mb-6">
+
+            <!-- Row 1: Age + Goal -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Your Age</label>
+                <input id="f-age" type="number" min="18" max="100" placeholder="e.g. 27" class="dash-input"
+                  oninput="clearOutput()" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Investment Goal</label>
+                <select id="f-goal" class="dash-input" onchange="clearOutput()">
+                  <option value="" disabled selected>Select a goal…</option>
+                  <option value="Long-Term Wealth Growth">Long-Term Wealth Growth</option>
+                  <option value="Retirement (10+ years away)">Retirement (10+ years away)</option>
+                  <option value="Early Retirement / FIRE">Early Retirement / FIRE</option>
+                  <option value="Passive Income / Dividends">Passive Income / Dividends</option>
+                  <option value="Capital Preservation">Capital Preservation</option>
+                  <option value="Short-Term Savings (3–5 years)">Short-Term Savings (3–5 years)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 2: Risk Tolerance -->
+            <div class="space-y-2">
+              <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Risk Tolerance</label>
+              <div class="flex gap-2">
+                <button class="risk-btn" id="risk-low" onclick="setRisk('Low')">Low</button>
+                <button class="risk-btn" id="risk-medium" onclick="setRisk('Medium')">Medium</button>
+                <button class="risk-btn" id="risk-high" onclick="setRisk('High')">High</button>
+              </div>
+            </div>
+
+            <!-- Row 3: Monthly contribution -->
+            <div class="space-y-1.5">
+              <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Monthly Contribution
+                (USD)</label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm text-white/30">$</span>
+                <input id="f-monthly" type="number" min="0" placeholder="e.g. 500" class="dash-input pl-8"
+                  oninput="clearOutput()" />
+              </div>
+            </div>
+
+            <!-- Row 4: Holdings -->
+            <div class="space-y-1.5">
+              <label class="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">Portfolio Holdings</label>
+              <textarea id="f-holdings" rows="5"
+                placeholder="List your holdings and approximate percentages.&#10;Example:&#10;AAPL 25%, VOO 30%, MSFT 15%, NVDA 10%, Cash 20%"
+                class="dash-input resize-none" oninput="clearOutput()"></textarea>
+              <p class="font-mono text-[9px] text-white/25 tracking-wide">Include ticker, fund name, or asset class +
+                rough % of portfolio</p>
+            </div>
+
+          </div>
+
+          <!-- Generate button -->
+          <button onclick="generatePrompt()" id="gen-btn"
+            class="w-full py-4 rounded-xl font-display text-lg tracking-[0.2em] text-black transition-all duration-200 cursor-none active:scale-[0.98]"
+            style="background: linear-gradient(135deg, #00e87a 0%, #00c563 100%); box-shadow: 0 8px 32px rgba(0,232,122,0.2);">
+            GENERATE AUDIT PROMPT
+          </button>
+
+          <!-- Output area (hidden until generated) -->
+          <div id="output-area" class="hidden mt-6 space-y-3">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-mono text-[9px] tracking-[0.2em] text-green uppercase mb-0.5">// Your Audit Prompt Is
+                  Ready</div>
+                <p class="text-xs text-white/40 font-light">Copy this and paste it into ChatGPT or Claude for your full
+                  portfolio review.</p>
+              </div>
+              <button id="copy-btn" onclick="copyPrompt()"
+                class="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/15 hover:border-green/40 bg-white/5 hover:bg-green/5 font-mono text-[10px] tracking-[0.1em] text-white/60 hover:text-green transition-all cursor-none uppercase">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <!-- Prompt box -->
+            <div id="prompt-output" class="prompt-box"></div>
+
+            <!-- Disclaimer -->
+            <p class="font-mono text-[9px] text-white/20 tracking-wide leading-relaxed">
+              ⚠ The AI response to this prompt is not financial advice. Always verify with a qualified financial
+              professional before making investment decisions.
+            </p>
+          </div>
+
+        </section>
+
+        <!-- ══ ABOUT SECTION ══════════════════════════════════════════ -->
+        <section id="section-about" class="hidden">
+          <div class="mb-8">
+            <div class="font-mono text-[10px] tracking-[0.3em] text-green mb-2">// WHO'S BEHIND THIS</div>
+            <h1 class="font-display text-5xl tracking-widest text-white mb-3">BUILT BY A<br>REAL PERSON.</h1>
+          </div>
+
+          <div class="bg-bg2 border border-white/10 rounded-2xl p-6 mb-4 flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-green/10 border border-green/25 flex items-center justify-center font-display text-xl text-green flex-shrink-0">
+              AP</div>
+            <div>
+              <div class="font-medium text-white">Ayush Pathak</div>
+              <div class="text-sm text-white/40 font-light">Founder, Brisk — Delhi, India</div>
+              <span
+                class="inline-block mt-1 font-mono text-[9px] text-green bg-green/10 border border-green/20 px-2.5 py-0.5 rounded-full tracking-widest">FINTECH
+                PRODUCT STRATEGIST</span>
+            </div>
+          </div>
+
+          <div class="space-y-4 text-[14px] text-white/55 font-light leading-relaxed">
+            <p><strong class="text-white font-medium">I build apps. Brisk is one of them.</strong> I got frustrated that
+              every finance tool out there assumes you already speak the language — RSI, MACD, moving averages. They
+              hand you a chart and expect you to figure it out.</p>
+            <p>Most people don't have time for that. They just want to know: <em class="text-green not-italic">is this
+                worth looking at right now, or not?</em></p>
+            <p>So I built Brisk. It does all the analysis behind the scenes and gives you one clear answer — with the
+              honest reason, and the catch. No jargon, no noise, no condescension.</p>
+            <p><strong class="text-white font-medium">It's early. It's independent. And it's built to actually be
+                useful</strong> — not to impress other developers.</p>
+            <p class="font-mono text-[10px] text-green tracking-[0.15em]">— Ayush Pathak</p>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-bg2 border border-white/10 rounded-xl p-4 flex gap-3 items-start">
+              <div class="font-mono text-xs text-green font-medium flex-shrink-0">50+</div>
+              <div>
+                <div class="text-sm font-medium text-white mb-1">US stocks tracked daily</div>
+                <p class="font-mono text-[10px] text-white/35">From Apple to Berkshire. Every card includes the reason
+                  and the risk.</p>
+              </div>
+            </div>
+            <div class="bg-bg2 border border-white/10 rounded-xl p-4 flex gap-3 items-start">
+              <div class="font-mono text-xs text-green font-medium flex-shrink-0">0</div>
+              <div>
+                <div class="text-sm font-medium text-white mb-1">Jargon. Absolutely zero.</div>
+                <p class="font-mono text-[10px] text-white/35">Real technical analysis under the hood. You'll never see
+                  a formula.</p>
+              </div>
+            </div>
+            <div class="bg-bg2 border border-white/10 rounded-xl p-4 flex gap-3 items-start">
+              <div class="font-mono text-xs text-green font-medium flex-shrink-0">2</div>
+              <div>
+                <div class="text-sm font-medium text-white mb-1">Sides to every signal</div>
+                <p class="font-mono text-[10px] text-white/35">Why it got this color, and what could still go wrong.
+                  Both, every time.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ PRIVACY POLICY SECTION ═════════════════════════════════ -->
+        <section id="section-privacy" class="hidden">
+          <div class="mb-8">
+            <div class="font-mono text-[10px] tracking-[0.3em] text-green mb-2">// LEGAL</div>
+            <h1 class="font-display text-5xl tracking-widest text-white mb-2">PRIVACY POLICY</h1>
+            <p class="font-mono text-[10px] text-white/30 tracking-wide">Effective Date: January 1, 2025 · Last Updated:
+              March 2025</p>
+          </div>
+
+          <div
+            class="bg-bg2 border border-white/10 rounded-2xl p-6 space-y-6 text-[14px] text-white/55 font-light leading-relaxed">
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">OVERVIEW</h2>
+              <p>Brisk ("we," "us," or "our") is committed to protecting your privacy. This policy explains what
+                information we collect when you use Brisk at <span
+                  class="font-mono text-green/70">brisk-tau.vercel.app</span>, how we use it, and what choices you have.
+                By using Brisk, you agree to the practices described here.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">INFORMATION WE COLLECT</h2>
+              <ul class="space-y-2 list-none">
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span><strong
+                      class="text-white/80">Account Information:</strong> When you create an account, we collect your
+                    email address. If you sign in with Google, we receive your name and email from Google.</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span><strong
+                      class="text-white/80">Usage Data:</strong> We may collect anonymised data on how you interact with
+                    the app (pages visited, features used) to improve the product. This data is not linked to your
+                    personal identity.</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span><strong
+                      class="text-white/80">Portfolio Inputs:</strong> Any text you enter into the AI Portfolio Auditor
+                    form is processed locally in your browser to generate a prompt. This data is <em
+                      class="text-white/80 not-italic">not stored on our servers</em>.</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">HOW WE USE YOUR INFORMATION</h2>
+              <ul class="space-y-2 list-none">
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span>To create
+                    and manage your account</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span>To deliver
+                    the features of the Brisk platform</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span>To send
+                    important service announcements (e.g. password reset)</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0 mt-0.5">→</span><span>To improve
+                    and develop new features based on anonymised usage patterns</span></li>
+              </ul>
+              <p class="mt-3">We do not sell, rent, or share your personal information with third parties for their
+                marketing purposes.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">DATA STORAGE & SECURITY</h2>
+              <p>Your account data is stored securely by <strong class="text-white/80">Supabase</strong>, our
+                authentication and database provider. Supabase applies industry-standard security practices including
+                encryption at rest and in transit. For details, see <a href="https://supabase.com/privacy"
+                  target="_blank"
+                  class="text-green/70 hover:text-green transition-colors underline cursor-none">supabase.com/privacy</a>.
+              </p>
+              <p class="mt-2">While we take reasonable steps to protect your data, no internet transmission is 100%
+                secure. You are responsible for keeping your password confidential.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">THIRD-PARTY SERVICES</h2>
+              <p>Brisk uses the following third-party services, each with their own privacy policies:</p>
+              <ul class="mt-2 space-y-1.5 list-none">
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0">→</span><span><strong
+                      class="text-white/80">Supabase</strong> — authentication and data storage</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0">→</span><span><strong
+                      class="text-white/80">Google OAuth</strong> — optional sign-in via Google account</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0">→</span><span><strong
+                      class="text-white/80">Vercel</strong> — web hosting and deployment</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0">→</span><span><strong
+                      class="text-white/80">Yahoo Finance API</strong> — live market data (no personal data is
+                    sent)</span></li>
+                <li class="flex gap-3"><span class="text-green font-mono flex-shrink-0">→</span><span><strong
+                      class="text-white/80">TradingView</strong> — external chart links (no data is shared when you open
+                    a chart)</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">YOUR RIGHTS</h2>
+              <p>You may request deletion of your account and associated data at any time by emailing us. Upon request,
+                we will delete your account from our systems within 30 days. You may also revoke Google sign-in access
+                via your Google account settings.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">COOKIES</h2>
+              <p>Brisk uses only strictly necessary session cookies required for authentication. We do not use tracking
+                cookies or advertising cookies.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">CHANGES TO THIS POLICY</h2>
+              <p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting
+                a notice on the app. Continued use of Brisk after changes constitutes your acceptance of the updated
+                policy.</p>
+            </div>
+
+            <div class="border-t border-white/10 pt-4">
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">CONTACT</h2>
+              <p>Questions about this policy? Reach us at <a href="mailto:hello@brisk.app"
+                  class="text-green/70 hover:text-green transition-colors underline cursor-none">hello@brisk.app</a></p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ══ DISCLAIMER SECTION ═════════════════════════════════════ -->
+        <section id="section-disclaimer" class="hidden">
+          <div class="mb-8">
+            <div class="font-mono text-[10px] tracking-[0.3em] text-green mb-2">// LEGAL</div>
+            <h1 class="font-display text-5xl tracking-widest text-white mb-2">DISCLAIMER</h1>
+            <p class="font-mono text-[10px] text-white/30 tracking-wide">Please read this carefully before using Brisk.
+            </p>
+          </div>
+
+          <!-- Warning banner -->
+          <div class="bg-yellow-500/5 border border-yellow-500/25 rounded-xl p-4 mb-6 flex gap-3">
+            <svg class="flex-shrink-0 mt-0.5 text-yellow-400" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <p class="font-mono text-[11px] text-yellow-400/80 leading-relaxed tracking-wide">Brisk is an informational
+              tool, not a licensed financial service. Nothing on this platform constitutes financial, investment, legal,
+              or tax advice. You are solely responsible for your own investment decisions.</p>
+          </div>
+
+          <div
+            class="bg-bg2 border border-white/10 rounded-2xl p-6 space-y-6 text-[14px] text-white/55 font-light leading-relaxed">
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">NOT FINANCIAL ADVICE</h2>
+              <p>All content, signals, analysis, data, ratings, and tools provided by Brisk are for <strong
+                  class="text-white/80">informational and educational purposes only</strong>. Nothing on this platform
+                should be construed as a recommendation to buy, sell, or hold any security, asset, or financial
+                instrument. Brisk does not provide personalised financial advice.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">NOT A REGISTERED INVESTMENT ADVISOR</h2>
+              <p>Brisk and its creator(s) are <strong class="text-white/80">not registered investment advisors, brokers,
+                  dealers, or financial planners</strong> with any regulatory body, including but not limited to the
+                Securities and Exchange Commission (SEC), the Financial Industry Regulatory Authority (FINRA), or any
+                equivalent body in any other jurisdiction. Use of Brisk does not create an advisor-client relationship
+                of any kind.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">AI PORTFOLIO AUDITOR — IMPORTANT NOTE
+              </h2>
+              <p>The AI Portfolio Auditor tool generates a prompt for use with third-party AI services (such as ChatGPT
+                or Claude). The output of those AI systems is <strong class="text-white/80">not provided, reviewed, or
+                  endorsed by Brisk</strong>. AI-generated financial commentary does not constitute professional
+                financial advice. You should always consult a qualified, licensed financial professional before making
+                investment decisions.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">PAST PERFORMANCE</h2>
+              <p>Past market performance, historical data, and signal track records displayed on Brisk do not guarantee
+                future results. Investing involves risk. The value of investments can go down as well as up. You may
+                lose some or all of your invested capital.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">ACCURACY OF INFORMATION</h2>
+              <p>While Brisk endeavours to provide accurate and up-to-date market data, we do not warrant the
+                completeness, accuracy, or timeliness of any information on this platform. Market data may be delayed.
+                Signals are based on technical indicators only and do not account for all factors that may affect a
+                stock's price.</p>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">RISK WARNING</h2>
+              <p>Stock markets are volatile. Before investing:</p>
+              <ul class="mt-2 space-y-1.5 list-none">
+                <li class="flex gap-3"><span class="text-yellow-400 font-mono flex-shrink-0">→</span><span>Understand
+                    that you can lose money, including your entire investment</span></li>
+                <li class="flex gap-3"><span class="text-yellow-400 font-mono flex-shrink-0">→</span><span>Only invest
+                    money you can afford to lose</span></li>
+                <li class="flex gap-3"><span class="text-yellow-400 font-mono flex-shrink-0">→</span><span>Consider your
+                    personal financial situation, goals, and risk tolerance</span></li>
+                <li class="flex gap-3"><span class="text-yellow-400 font-mono flex-shrink-0">→</span><span>Consult a
+                    qualified, registered financial advisor before acting</span></li>
+                <li class="flex gap-3"><span class="text-yellow-400 font-mono flex-shrink-0">→</span><span>Consider the
+                    tax implications of any investment in your jurisdiction</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="font-display text-xl tracking-widest text-white mb-2">LIMITATION OF LIABILITY</h2>
+              <p>To the fullest extent permitted by law, Brisk and its creator(s) shall not be liable for any direct,
+                indirect, incidental, special, or consequential damages arising from your use of this platform or
+                reliance on any information provided, including but not limited to financial losses suffered as a result
+                of investment decisions made based on Brisk signals or content.</p>
+            </div>
+
+            <div class="border-t border-white/10 pt-4">
+              <p class="font-mono text-[10px] text-white/30 tracking-wide">By using Brisk, you acknowledge that you have
+                read, understood, and agree to this disclaimer in its entirety. If you do not agree, please discontinue
+                use of the platform immediately.</p>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- /max-w-3xl -->
+    </main>
+
+  </div><!-- /main -->
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════
+    //  👇  PASTE YOUR SUPABASE KEYS HERE  (same keys as login.html)
+    // ════════════════════════════════════════════════════════════════
+    const SUPABASE_URL = 'https://bkhvundocabwldmtnrsl.supabase.co';
+    const SUPABASE_ANON = 'sb_publishable_vaceGfP7AQkRuhCl61TRCA_ft143ZKo';
+    // ════════════════════════════════════════════════════════════════
+
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // ── Auth guard ────────────────────────────────────────────────
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) {
+        window.location.replace('/login');
+        return;
+      }
+      const email = session.user.email || '';
+      document.getElementById('user-email').textContent = email;
+      document.getElementById('user-avatar').textContent = email.charAt(0).toUpperCase();
+    })();
+
+    async function signOut() {
+      await sb.auth.signOut();
+      window.location.replace('/login');
+    }
+
+    // ── Custom cursor ─────────────────────────────────────────────
+    const cur = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cur.style.left = e.clientX + 'px';
+      cur.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('button, a, input, textarea, select').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('big'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+    });
+
+    // ── Section navigation ────────────────────────────────────────
+    const SECTIONS = ['portfolio', 'about', 'privacy', 'disclaimer'];
+    const TITLES = { portfolio: 'MY PORTFOLIO', about: 'ABOUT BRISK', privacy: 'PRIVACY POLICY', disclaimer: 'DISCLAIMER' };
+
+    function showSection(name) {
+      SECTIONS.forEach(s => {
+        document.getElementById('section-' + s).classList.add('hidden');
+        document.getElementById('section-' + s).classList.remove('section-show');
+        const nav = document.getElementById('nav-' + s);
+        if (nav) nav.classList.remove('active');
+      });
+      const el = document.getElementById('section-' + name);
+      el.classList.remove('hidden');
+      // Trigger animation
+      requestAnimationFrame(() => el.classList.add('section-show'));
+
+      const nav = document.getElementById('nav-' + name);
+      if (nav) nav.classList.add('active');
+
+      document.getElementById('page-title').textContent = TITLES[name] || name.toUpperCase();
+      document.getElementById('main-content').scrollTop = 0;
+
+      // Close mobile sidebar
+      closeSidebar();
+    }
+
+    // ── Mobile sidebar ─────────────────────────────────────────────
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.add('hidden');
+    }
+
+    // ── Risk toggle ───────────────────────────────────────────────
+    let selectedRisk = '';
+    function setRisk(level) {
+      selectedRisk = level;
+      ['Low', 'Medium', 'High'].forEach(l => {
+        document.getElementById('risk-' + l.toLowerCase()).classList.toggle('selected', l === level);
+      });
+      clearOutput();
+    }
+
+    // ── Clear output when inputs change ──────────────────────────
+    function clearOutput() {
+      document.getElementById('output-area').classList.add('hidden');
+    }
+
+    // ── Generate Audit Prompt ─────────────────────────────────────
+    function generatePrompt() {
+      const age = document.getElementById('f-age').value.trim();
+      const goal = document.getElementById('f-goal').value;
+      const risk = selectedRisk;
+      const monthly = document.getElementById('f-monthly').value.trim();
+      const holdings = document.getElementById('f-holdings').value.trim();
+
+      if (!holdings) { alert('Please enter your portfolio holdings.'); return; }
+      if (!age) { alert('Please enter your age.'); return; }
+      if (!goal) { alert('Please select an investment goal.'); return; }
+      if (!risk) { alert('Please select your risk tolerance.'); return; }
+
+      const monthlyStr = monthly ? '$' + Number(monthly).toLocaleString() + '/month' : 'Not specified';
+
+      const prompt = `Step 1: The Context & Data
+Portfolio Holdings: ${holdings}
+Investor Profile: Age: ${age} | Goal: ${goal} | Risk: ${risk} | Monthly: ${monthlyStr}
+
+Step 2: The Master Prompt
+Role: You are a Senior Portfolio Strategist and Fiduciary Advisor specializing in retail investing.
+Task: Conduct a comprehensive audit of the portfolio provided above. Provide a "plain English" review that is objective, data-driven, and focused on long-term sustainability.
+Analysis Requirements:
+- Asset Allocation: Break down the percentage split. State if it aligns with the user's age and goals.
+- Diversification: Identify "Single-Point Failures."
+- Risk Assessment: Estimate volatility in a 20% market drop.
+- Efficiency Check: Look for high-cost funds or overlapping ETFs.
+- Critical Warnings: Flag any "Red Flags".
+Output Format:
+- The "Snapshot": A 3-sentence summary.
+- The Good, The Bad, & The Ugly: Bullet points.
+- 3 Actionable Steps: Prioritized "Next Steps".
+Constraint: No "Get Rich Quick" advice. Focus on Modern Portfolio Theory.`;
+
+      document.getElementById('prompt-output').textContent = prompt;
+      document.getElementById('output-area').classList.remove('hidden');
+      // Scroll to output
+      setTimeout(() => {
+        document.getElementById('output-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    // ── Copy to clipboard ─────────────────────────────────────────
+    async function copyPrompt() {
+      const text = document.getElementById('prompt-output').textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copy-btn');
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        btn.classList.add('copy-success');
+        setTimeout(() => {
+          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+          btn.classList.remove('copy-success');
+        }, 2500);
+      } catch {
+        alert('Please manually select and copy the text above.');
+      }
+    }
+  </script>
+</body>
+
+</html>
