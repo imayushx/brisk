@@ -336,13 +336,23 @@
         <!-- ── REGISTER PANEL ──────────────────────────────────── -->
         <div id="panel-register" class="panel hidden">
 
+          <!-- Full Name -->
+          <div class="field">
+            <label class="field-label">Full Name</label>
+            <input id="reg-name" type="text" placeholder="e.g. Ayush Sharma" autocomplete="name" class="brisk-input" />
+          </div>
+
+          <!-- Location -->
+          <div class="field">
+            <label class="field-label">Place of Residence</label>
+            <input id="reg-location" type="text" placeholder="e.g. Mumbai, India" autocomplete="address-level2" class="brisk-input" />
+          </div>
+
           <!-- Email -->
           <div class="field">
             <label class="field-label">Email Address</label>
             <input id="reg-email" type="email" placeholder="you@example.com" autocomplete="email" class="brisk-input" />
-          </div>
-
-          <!-- Password -->
+          </div>          <!-- Password -->
           <div class="field">
             <label class="field-label">Create Password</label>
             <div class="pass-wrap">
@@ -488,10 +498,14 @@
     async function signUpEmail() {
       hideErr('reg-err');
       hideErr('reg-ok');
+      const name = document.getElementById('reg-name').value.trim();
+      const location = document.getElementById('reg-location').value.trim();
       const email = document.getElementById('reg-email').value.trim();
       const pass = document.getElementById('reg-pass').value;
       const confirm = document.getElementById('reg-confirm').value;
 
+      if (!name) { showErr('reg-err', 'Please enter your full name.'); return; }
+      if (!location) { showErr('reg-err', 'Please enter your place of residence.'); return; }
       if (!email || !pass) { showErr('reg-err', 'Please fill in all fields.'); return; }
       if (pass.length < 8) { showErr('reg-err', 'Password must be at least 8 characters.'); return; }
       if (pass !== confirm) { showErr('reg-err', 'Passwords do not match.'); return; }
@@ -500,7 +514,11 @@
       btn.innerHTML = '<span class="spinner">↻</span> Creating…';
       btn.disabled = true;
 
-      const { error } = await sb.auth.signUp({ email, password: pass });
+      const { error } = await sb.auth.signUp({ 
+        email, 
+        password: pass,
+        options: { data: { full_name: name, location: location } }
+      });
       if (error) {
         showErr('reg-err', error.message);
         btn.textContent = 'Create My Account';
