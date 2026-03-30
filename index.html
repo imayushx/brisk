@@ -104,6 +104,44 @@
     .fb.fy{background:var(--yellow);border-color:var(--yellow);color:#000}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
 
+    /* SECTOR FILTER PILLS */
+    .sec-fltrs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+    .sf-pill{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+    .sf-pill:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    .sf-pill.sf-active{background:rgba(0,232,122,.08);border-color:rgba(0,232,122,.3);color:var(--green)}
+
+    /* SEE MORE BUTTON */
+    .see-more-wrap{text-align:center;margin-top:32px}
+    .see-more-btn{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:14px 40px;border-radius:10px;border:1px solid var(--border2);background:var(--bg2);color:var(--muted2);cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:8px}
+    .see-more-btn:hover{color:var(--green);border-color:rgba(0,232,122,.3);background:rgba(0,232,122,.04);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,232,122,.08)}
+    .see-more-btn svg{transition:transform .2s}
+    .see-more-btn:hover svg{transform:translateY(2px)}
+
+    /* DIVERSIFICATION SECTION */
+    .div-section{position:relative;z-index:2;border-top:1px solid var(--border)}
+    .div-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+    .div-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:all .25s;position:relative;overflow:hidden}
+    .div-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+    .div-card::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;pointer-events:none;opacity:.5}
+    .div-card.dc-tech::before{background:radial-gradient(circle,rgba(59,130,246,.12),transparent 70%)}
+    .div-card.dc-health::before{background:radial-gradient(circle,rgba(6,182,212,.12),transparent 70%)}
+    .div-card.dc-fin::before{background:radial-gradient(circle,rgba(234,179,8,.12),transparent 70%)}
+    .div-card.dc-energy::before{background:radial-gradient(circle,rgba(239,68,68,.12),transparent 70%)}
+    .div-card.dc-consumer::before{background:radial-gradient(circle,rgba(34,197,94,.12),transparent 70%)}
+    .div-card.dc-etf::before{background:radial-gradient(circle,rgba(0,232,122,.12),transparent 70%)}
+    .div-emoji{font-size:28px;margin-bottom:12px}
+    .div-name{font-family:var(--display);font-size:22px;letter-spacing:1px;margin-bottom:4px}
+    .div-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:inline-block;padding:3px 8px;border-radius:100px}
+    .div-desc{font-size:13px;color:var(--muted2);line-height:1.7;font-weight:300}
+    .div-why{background:var(--bg3);border-radius:10px;padding:14px 18px;margin-top:48px}
+    .div-why-title{font-family:var(--display);font-size:28px;letter-spacing:1px;margin-bottom:12px}
+    .div-why-text{font-size:13px;color:var(--muted2);line-height:1.75;font-weight:300;margin-bottom:10px}
+    .div-stat{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+    .div-stat-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;flex:1;min-width:160px}
+    .div-stat-num{font-family:var(--display);font-size:32px;color:var(--green);line-height:1;margin-bottom:4px}
+    .div-stat-lbl{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+    @media(max-width:900px){.div-grid{grid-template-columns:1fr}.div-stat{flex-direction:column}}
+
     .sc{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;overflow:hidden;transition:border-color .22s,transform .22s,box-shadow .22s;cursor:pointer;animation:cardIn .45s ease both}
     @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .sc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;opacity:0;transition:opacity .22s}
@@ -213,14 +251,16 @@
     .tip-wrap{position:relative;display:inline-flex;align-items:center;cursor:help}
     .tip-wrap .tip-icon{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:var(--muted);margin-left:4px;flex-shrink:0;transition:border-color .2s,color .2s}
     .tip-wrap:hover .tip-icon{border-color:var(--green);color:var(--green)}
-    .tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-family:var(--body);font-size:11px;font-weight:300;color:var(--muted2);line-height:1.6;width:240px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-    .tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--border2)}
+    .tip-box{position:absolute;bottom:calc(100% + 8px);right:-10px;transform:none;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-family:var(--body);font-size:11px;font-weight:300;color:var(--muted2);line-height:1.6;width:260px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .tip-box::after{content:'';position:absolute;top:100%;right:16px;transform:none;border:5px solid transparent;border-top-color:var(--border2)}
     .tip-wrap:hover .tip-box{opacity:1;visibility:visible;pointer-events:auto}
     .tip-wrap.tip-open .tip-box{opacity:1;visibility:visible;pointer-events:auto}
     .tip-title{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
+    /* Left-side tooltips (inside fund-metrics first columns) */
+    .fund-met:nth-child(1) .tip-box,.fund-met:nth-child(2) .tip-box{right:auto;left:-10px}
+    .fund-met:nth-child(1) .tip-box::after,.fund-met:nth-child(2) .tip-box::after{right:auto;left:16px}
     @media(max-width:900px){
-      .tip-box{left:auto;right:-10px;transform:none;width:220px}
-      .tip-box::after{left:auto;right:20px;transform:none}
+      .tip-box{width:240px}
     }
 
     /* B LOGO ICON */
@@ -318,6 +358,7 @@
   <div class="nav-l">
     <a href="#signals">Signals</a>
     <a href="#watchlist">Watchlist</a>
+    <a href="#diversify">Diversify</a>
     <a href="#how">Method</a>
     <a href="#fundamentals">Fundamentals</a>
     <a href="#about">About</a>
@@ -337,6 +378,7 @@
 <div id="mob-drawer" class="mob-drawer">
   <a href="#signals" onclick="document.getElementById('mob-drawer').classList.remove('open')">Signals</a>
   <a href="#watchlist" onclick="document.getElementById('mob-drawer').classList.remove('open')">Watchlist</a>
+  <a href="#diversify" onclick="document.getElementById('mob-drawer').classList.remove('open')">Diversify</a>
   <a href="#how" onclick="document.getElementById('mob-drawer').classList.remove('open')">Method</a>
   <a href="#fundamentals" onclick="document.getElementById('mob-drawer').classList.remove('open')">Fundamentals</a>
   <a href="#about" onclick="document.getElementById('mob-drawer').classList.remove('open')">About</a>
@@ -349,7 +391,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="eyebrow">50+ US stocks · updated daily</div>
+  <div class="eyebrow">35+ US stocks across 6 sectors · updated daily</div>
   <h1><em>READ</em><span>THE MARKET.</span><span class="dim">NOT THE MANUAL.</span></h1>
   <p class="hero-sub">No charts. No jargon. No BS.<br>Brisk tells you if a stock is worth your attention right now — in the same way your most financially switched-on friend would.<br><br><span style="font-size:14px;color:var(--green)">Tap any card to see the full why behind the signal.</span></p>
   <div class="ctas">
@@ -401,8 +443,84 @@
         <button class="fb" onclick="doFilter(this,'RED')">RED</button>
       </div>
     </div>
+    <div class="sec-fltrs" id="sec-fltrs">
+      <button class="sf-pill sf-active" onclick="doSectorFilter(this,'ALL')">All Sectors</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'Technology')">💻 Tech</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'Financial')">🏦 Financial</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'Healthcare')">💊 Healthcare</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'Energy')">⛽ Energy</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'Consumer')">🛍️ Consumer</button>
+      <button class="sf-pill" onclick="doSectorFilter(this,'ETF')">📈 ETFs</button>
+    </div>
     <div class="grid" id="grid"></div>
+    <div class="see-more-wrap" id="see-more-wrap" style="display:none">
+      <button class="see-more-btn" onclick="showMore()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+        Show More Stocks
+      </button>
+    </div>
     <p id="gmsg" style="text-align:center;margin-top:40px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;"></p>
+  </div>
+</div>
+
+<!-- DIVERSIFICATION EDUCATION -->
+<div class="div-section">
+  <div class="sec" id="diversify">
+    <div class="reveal">
+      <div class="slbl">// why this matters more than picking stocks</div>
+      <h2 class="stitle">DON'T PUT ALL<br>YOUR EGGS IN ONE BASKET.</h2>
+      <p class="ssub">The biggest mistake new investors make isn't picking the wrong stock — it's putting all their money in the same type of company. Here's why sectors matter and which ones to know about.</p>
+    </div>
+
+    <div class="div-why reveal" style="margin-bottom:36px">
+      <div class="div-why-title">WHY DIVERSIFY BY SECTOR?</div>
+      <div class="div-why-text">Think of sectors like different rooms in a house. When a kitchen pipe bursts, the bedroom is fine. <strong style="color:var(--text)">When tech stocks crash, healthcare and consumer staples usually hold up.</strong> That's because different industries react differently to the same economic events.</div>
+      <div class="div-why-text">In 2022, tech stocks dropped 33% while energy stocks went <strong style="color:var(--green)">up 59%</strong>. If you only owned tech, you got crushed. If you owned both, the energy gains cushioned your fall. That's diversification working in the real world.</div>
+      <div class="div-stat">
+        <div class="div-stat-item"><div class="div-stat-num">11</div><div class="div-stat-lbl">Sectors in the US stock market</div></div>
+        <div class="div-stat-item"><div class="div-stat-num">3–5</div><div class="div-stat-lbl">Minimum sectors for a healthy portfolio</div></div>
+        <div class="div-stat-item"><div class="div-stat-num">90%</div><div class="div-stat-lbl">Of returns come from asset allocation, not stock picking</div></div>
+      </div>
+    </div>
+
+    <div class="div-grid reveal">
+      <div class="div-card dc-tech">
+        <div class="div-emoji">💻</div>
+        <div class="div-name">TECHNOLOGY</div>
+        <div class="div-tag" style="color:var(--blue,#3b82f6);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2)">High Growth · Higher Risk</div>
+        <p class="div-desc">The engine of the modern economy. Apple, Microsoft, NVIDIA — these companies grow fast but can crash just as fast. In 2000, the NASDAQ lost 78%. It took 15 years to recover. <strong style="color:var(--text)">Great to own, dangerous to own exclusively.</strong></p>
+      </div>
+      <div class="div-card dc-health">
+        <div class="div-emoji">💊</div>
+        <div class="div-name">HEALTHCARE</div>
+        <div class="div-tag" style="color:#06b6d4;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2)">Defensive · Steady Growth</div>
+        <p class="div-desc">People need medicine whether the economy is booming or crashing. Companies like UnitedHealth and J&J tend to hold up during downturns. <strong style="color:var(--text)">The perfect counterbalance to your tech stocks.</strong></p>
+      </div>
+      <div class="div-card dc-fin">
+        <div class="div-emoji">🏦</div>
+        <div class="div-name">FINANCIAL</div>
+        <div class="div-tag" style="color:#eab308;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.2)">Rate Sensitive · Value Plays</div>
+        <p class="div-desc">Banks, payment networks, insurance. JPMorgan, Visa, and Berkshire Hathaway live here. They benefit when interest rates are high. <strong style="color:var(--text)">Often undervalued and pay solid dividends.</strong></p>
+      </div>
+      <div class="div-card dc-consumer">
+        <div class="div-emoji">🛒</div>
+        <div class="div-name">CONSUMER STAPLES</div>
+        <div class="div-tag" style="color:#22c55e;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2)">Recession-Proof · Boring = Beautiful</div>
+        <p class="div-desc">Coca-Cola, Procter & Gamble, Costco. People buy toothpaste and groceries no matter what. <strong style="color:var(--text)">These stocks are the seatbelt of your portfolio</strong> — they won't make you rich fast, but they protect you when everything else is falling.</p>
+      </div>
+      <div class="div-card dc-energy">
+        <div class="div-emoji">⛽</div>
+        <div class="div-name">ENERGY</div>
+        <div class="div-tag" style="color:#ef4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2)">Cyclical · High Dividends</div>
+        <p class="div-desc">Exxon, Chevron — the oil and gas giants. They move opposite to tech: when tech crashes, energy often booms (and vice versa). <strong style="color:var(--text)">Adding even a small energy position can smooth your ride significantly.</strong></p>
+      </div>
+      <div class="div-card dc-etf">
+        <div class="div-emoji">📈</div>
+        <div class="div-name">ETFs</div>
+        <div class="div-tag" style="color:var(--green);background:rgba(0,232,122,.1);border:1px solid rgba(0,232,122,.2)">Instant Diversification</div>
+        <p class="div-desc">An ETF like VOO or SPY lets you own 500 companies in one purchase. <strong style="color:var(--text)">It's diversification on easy mode.</strong> Many financial experts say just buying VOO and holding it for 20+ years beats 90% of professional fund managers.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -973,23 +1091,66 @@ function fundPanel(ticker) {
 // DEMO DATA
 // ─────────────────────────────────────────────────────────────
 const DEMO = [
-  {t:'AAPL', n:'Apple Inc.',           px:'252.62',rsi:'38',tr:'Above Average',sf:'4',v:'YELLOW',r:"Not a screaming deal, but not overpriced either. The long-term direction is holding up. Just keep watching."},
-  {t:'MSFT', n:'Microsoft Corp.',      px:'371.04',rsi:'52',tr:'Above Average',sf:'5',v:'YELLOW',r:"Sitting in the middle. No strong signal either way right now."},
-  {t:'GOOGL',n:'Alphabet Inc.',        px:'160.93',rsi:'40',tr:'Above Average',sf:'4',v:'YELLOW',r:"Not cheap enough to get excited, but the long-term direction is solid."},
-  {t:'AMZN', n:'Amazon.com Inc.',      px:'195.40',rsi:'48',tr:'Above Average',sf:'5',v:'YELLOW',r:"Holding steady but no clear entry point yet. Wait for a cleaner signal."},
-  {t:'NVDA', n:'NVIDIA Corp.',         px:'118.68',rsi:'44',tr:'Below Average',sf:'3',v:'YELLOW',r:"Has cooled off from its highs. The direction is softer — no rush."},
-  {t:'META', n:'Meta Platforms',       px:'573.20',rsi:'62',tr:'Above Average',sf:'6',v:'YELLOW',r:"Trending well but getting pricier. No clear call right now."},
-  {t:'TSLA', n:'Tesla Inc.',           px:'248.30',rsi:'74',tr:'Above Average',sf:'2',v:'RED',   r:"Everyone's already in. When a stock gets this hot this fast, the easy money is usually already made."},
-  {t:'NFLX', n:'Netflix Inc.',         px:'890.50',rsi:'72',tr:'Above Average',sf:'2',v:'RED',   r:"Been on a big run. Chasing a stock this hot is how people get burned."},
-  {t:'JPM',  n:'JPMorgan Chase',       px:'236.10',rsi:'31',tr:'Above Average',sf:'7',v:'GREEN', r:"On sale right now and the company is rock solid. Patient investors tend to show up at setups like this."},
-  {t:'BRK.B',n:'Berkshire Hathaway',  px:'452.00',rsi:'29',tr:'Above Average',sf:'8',v:'GREEN', r:"Buffett's fund at a discount. Boring, reliable, currently dipped. That combination doesn't come around often."},
-  {t:'VOO',  n:'Vanguard S&P 500 ETF',px:'505.66',rsi:'33',tr:'Below Average',sf:'4',v:'YELLOW',r:"The whole US market slightly beaten down. Long-term thinkers have bought dips like this before."},
-  {t:'V',    n:'Visa Inc.',            px:'315.80',rsi:'45',tr:'Above Average',sf:'5',v:'YELLOW',r:"Steady as ever. Makes money every time someone taps a card. Nothing alarming, nothing exciting."},
+  // ── Technology ──
+  {t:'AAPL', n:'Apple Inc.',           px:'252.62',rsi:'38',tr:'Above Average',sf:'4',v:'YELLOW',r:"Not a screaming deal, but not overpriced either. The long-term direction is holding up. Just keep watching.",sec:'Technology'},
+  {t:'MSFT', n:'Microsoft Corp.',      px:'371.04',rsi:'52',tr:'Above Average',sf:'5',v:'YELLOW',r:"Sitting in the middle. No strong signal either way right now.",sec:'Technology'},
+  {t:'NVDA', n:'NVIDIA Corp.',         px:'118.68',rsi:'44',tr:'Below Average',sf:'3',v:'YELLOW',r:"Has cooled off from its highs. The direction is softer — no rush.",sec:'Technology'},
+  {t:'GOOGL',n:'Alphabet Inc.',        px:'160.93',rsi:'40',tr:'Above Average',sf:'4',v:'YELLOW',r:"Not cheap enough to get excited, but the long-term direction is solid.",sec:'Technology'},
+  {t:'AMD',  n:'Advanced Micro Devices',px:'102.40',rsi:'34',tr:'Below Average',sf:'3',v:'YELLOW',r:"Pulled back nicely but the direction is still wobbly. Close to interesting territory.",sec:'Technology'},
+  {t:'ADBE', n:'Adobe Inc.',           px:'398.20',rsi:'32',tr:'Above Average',sf:'6',v:'GREEN', r:"Creative software monopoly at a reasonable price. Dips like this are usually opportunities for patient investors.",sec:'Technology'},
+  {t:'INTC', n:'Intel Corp.',          px:'22.40', rsi:'28',tr:'Below Average',sf:'2',v:'GREEN', r:"Very beaten down. A turnaround bet — could pay big if the foundry strategy works, or go further down if it doesn't.",sec:'Technology'},
+  {t:'CRM',  n:'Salesforce Inc.',      px:'245.80',rsi:'48',tr:'Above Average',sf:'5',v:'YELLOW',r:"Cloud software king sitting at a fair price. No urgency to act but the business is rock solid.",sec:'Technology'},
+  // ── Financial ──
+  {t:'JPM',  n:'JPMorgan Chase',       px:'236.10',rsi:'31',tr:'Above Average',sf:'7',v:'GREEN', r:"On sale right now and the company is rock solid. Patient investors tend to show up at setups like this.",sec:'Financial'},
+  {t:'BRK.B',n:'Berkshire Hathaway',  px:'452.00',rsi:'29',tr:'Above Average',sf:'8',v:'GREEN', r:"Buffett's fund at a discount. Boring, reliable, currently dipped. That combination doesn't come around often.",sec:'Financial'},
+  {t:'V',    n:'Visa Inc.',            px:'315.80',rsi:'45',tr:'Above Average',sf:'5',v:'YELLOW',r:"Steady as ever. Makes money every time someone taps a card. Nothing alarming, nothing exciting.",sec:'Financial'},
+  {t:'MA',   n:'Mastercard Inc.',      px:'502.40',rsi:'50',tr:'Above Average',sf:'5',v:'YELLOW',r:"Near-identical business to Visa. Premium valuation for a premium business. No rush either way.",sec:'Financial'},
+  {t:'BAC',  n:'Bank of America',      px:'38.90', rsi:'35',tr:'Above Average',sf:'5',v:'YELLOW',r:"A decent bank at a decent price. Rate-sensitive — benefits when interest rates stay up.",sec:'Financial'},
+  {t:'GS',   n:'Goldman Sachs',        px:'492.60',rsi:'33',tr:'Above Average',sf:'6',v:'GREEN', r:"Wall Street's elite bank at a pull-back price. Investment banking activity is picking back up.",sec:'Financial'},
+  // ── Healthcare ──
+  {t:'UNH',  n:'UnitedHealth Group',   px:'502.30',rsi:'30',tr:'Above Average',sf:'7',v:'GREEN', r:"Healthcare giant at a dip. Aging population is a long-term tailwind. This one tends to reward patient buyers.",sec:'Healthcare'},
+  {t:'JNJ',  n:'Johnson & Johnson',    px:'158.40',rsi:'42',tr:'Above Average',sf:'6',v:'YELLOW',r:"Classic defensive stock. Won't make you rich but won't keep you up at night either.",sec:'Healthcare'},
+  {t:'LLY',  n:'Eli Lilly & Co.',      px:'780.20',rsi:'72',tr:'Above Average',sf:'3',v:'RED',   r:"The Ozempic/Mounjaro hype has this trading at nose-bleed levels. Great company, risky price.",sec:'Healthcare'},
+  {t:'PFE',  n:'Pfizer Inc.',          px:'26.40', rsi:'28',tr:'Below Average',sf:'4',v:'GREEN', r:"Very beaten down post-COVID. Cheap on fundamentals. If you believe in their pipeline, this could be a value play.",sec:'Healthcare'},
+  {t:'MRK',  n:'Merck & Co.',          px:'100.80',rsi:'36',tr:'Above Average',sf:'6',v:'GREEN', r:"Keytruda is a cash machine. Reasonable valuation for a pharmaceutical giant with a deep pipeline.",sec:'Healthcare'},
+  // ── Consumer ──
+  {t:'AMZN', n:'Amazon.com Inc.',      px:'195.40',rsi:'48',tr:'Above Average',sf:'5',v:'YELLOW',r:"Holding steady but no clear entry point yet. Wait for a cleaner signal.",sec:'Consumer'},
+  {t:'TSLA', n:'Tesla Inc.',           px:'248.30',rsi:'74',tr:'Above Average',sf:'2',v:'RED',   r:"Everyone's already in. When a stock gets this hot this fast, the easy money is usually already made.",sec:'Consumer'},
+  {t:'HD',   n:'Home Depot Inc.',      px:'352.40',rsi:'40',tr:'Above Average',sf:'5',v:'YELLOW',r:"Housing market is soft but Home Depot is well-run. Hold territory — not exciting, not dangerous.",sec:'Consumer'},
+  {t:'NKE',  n:'Nike Inc.',            px:'72.60', rsi:'26',tr:'Below Average',sf:'3',v:'GREEN', r:"The swoosh is seriously on sale. Turnaround in progress. High risk, but the brand is forever.",sec:'Consumer'},
+  {t:'COST', n:'Costco Wholesale',     px:'920.40',rsi:'55',tr:'Above Average',sf:'5',v:'YELLOW',r:"Membership renewal at 93%. Amazing business — just never cheap. Fair price for exceptional quality.",sec:'Consumer'},
+  {t:'KO',   n:'Coca-Cola Co.',        px:'62.80', rsi:'44',tr:'Above Average',sf:'6',v:'YELLOW',r:"Buffett's favorite. 2 billion servings daily worldwide. The definition of boring-but-beautiful investing.",sec:'Consumer'},
+  {t:'WMT',  n:'Walmart Inc.',         px:'82.60', rsi:'58',tr:'Above Average',sf:'5',v:'YELLOW',r:"Recession-proof and reinventing itself. Not cheap anymore but the business quality keeps improving.",sec:'Consumer'},
+  {t:'PEP',  n:'PepsiCo Inc.',         px:'148.20',rsi:'38',tr:'Above Average',sf:'6',v:'YELLOW',r:"Snacks + soda = steady cash flow. Dividend king that's been paying out for decades. Safe harbor.",sec:'Consumer'},
+  // ── Energy ──
+  {t:'XOM',  n:'Exxon Mobil Corp.',    px:'108.60',rsi:'42',tr:'Above Average',sf:'5',v:'YELLOW',r:"Oil giant with huge dividends. Does well when oil is up, struggles when it's down. Good sector diversifier.",sec:'Energy'},
+  {t:'CVX',  n:'Chevron Corp.',        px:'156.40',rsi:'38',tr:'Above Average',sf:'5',v:'YELLOW',r:"Very similar to Exxon — solid dividend, tied to commodity prices. Pick one for energy exposure.",sec:'Energy'},
+  {t:'COP',  n:'ConocoPhillips',       px:'102.80',rsi:'30',tr:'Below Average',sf:'5',v:'GREEN', r:"Pulled back with oil prices. Lean operator with strong free cash flow. Interesting if you want energy exposure.",sec:'Energy'},
+  // ── ETFs ──
+  {t:'VOO',  n:'Vanguard S&P 500 ETF',px:'505.66',rsi:'33',tr:'Below Average',sf:'4',v:'YELLOW',r:"The whole US market slightly beaten down. Long-term thinkers have bought dips like this before.",sec:'ETF'},
+  {t:'QQQ',  n:'Invesco QQQ ETF',     px:'478.20',rsi:'46',tr:'Above Average',sf:'4',v:'YELLOW',r:"Top 100 tech stocks in one basket. Higher risk than VOO but historically higher returns too.",sec:'ETF'},
+  {t:'SPY',  n:'SPDR S&P 500 ETF',    px:'504.80',rsi:'34',tr:'Below Average',sf:'4',v:'YELLOW',r:"The original index fund. Same thing as VOO, slightly higher fee. A classic for a reason.",sec:'ETF'},
+  {t:'SCHD', n:'Schwab Dividend ETF',  px:'78.40', rsi:'36',tr:'Above Average',sf:'6',v:'YELLOW',r:"Dividend-focused ETF. Great for people who want regular income from their investments. Lower risk than tech-heavy funds.",sec:'ETF'},
+  // ── Communication ──
+  {t:'META', n:'Meta Platforms',       px:'573.20',rsi:'62',tr:'Above Average',sf:'6',v:'YELLOW',r:"Trending well but getting pricier. No clear call right now.",sec:'Technology'},
+  {t:'NFLX', n:'Netflix Inc.',         px:'890.50',rsi:'72',tr:'Above Average',sf:'2',v:'RED',   r:"Been on a big run. Chasing a stock this hot is how people get burned.",sec:'Technology'},
+  {t:'DIS',  n:'Walt Disney Co.',      px:'102.40',rsi:'38',tr:'Below Average',sf:'4',v:'YELLOW',r:"Iconic brand in transition. Parks are strong but streaming is still finding its feet. Hold territory.",sec:'Technology'},
 ];
 
 const NAMES={'AAPL':'Apple Inc.','MSFT':'Microsoft Corp.','GOOGL':'Alphabet Inc.','AMZN':'Amazon.com Inc.','NVDA':'NVIDIA Corp.','META':'Meta Platforms','TSLA':'Tesla Inc.','BRK.B':'Berkshire Hathaway','JPM':'JPMorgan Chase','V':'Visa Inc.','MA':'Mastercard Inc.','UNH':'UnitedHealth Group','JNJ':'Johnson & Johnson','XOM':'Exxon Mobil','WMT':'Walmart Inc.','PG':'Procter & Gamble','HD':'Home Depot','CVX':'Chevron Corp.','LLY':'Eli Lilly','MRK':'Merck & Co.','ABBV':'AbbVie Inc.','KO':'Coca-Cola Co.','PEP':'PepsiCo Inc.','COST':'Costco Wholesale','TMO':'Thermo Fisher','MCD':"McDonald's Corp.",'ABT':'Abbott Labs','ACN':'Accenture plc','DHR':'Danaher Corp.','NKE':'Nike Inc.','TXN':'Texas Instruments','PM':'Philip Morris','UPS':'UPS Inc.','MS':'Morgan Stanley','GS':'Goldman Sachs','BAC':'Bank of America','C':'Citigroup Inc.','WFC':'Wells Fargo','INTC':'Intel Corp.','AMD':'Advanced Micro Devices','QCOM':'Qualcomm Inc.','IBM':'IBM Corp.','ORCL':'Oracle Corp.','CRM':'Salesforce Inc.','ADBE':'Adobe Inc.','NFLX':'Netflix Inc.','DIS':'Walt Disney Co.','VOO':'Vanguard S&P 500 ETF','QQQ':'Invesco QQQ ETF','SPY':'SPDR S&P 500 ETF'};
 
-let ALL=[],ACTIVE='ALL';
+let ALL=[],ACTIVE='ALL',ACTIVE_SECTOR='ALL',SHOW_COUNT=12;
+
+// Sector assignment for each ticker
+const TICKER_SECTORS={'AAPL':'Technology','MSFT':'Technology','NVDA':'Technology','GOOGL':'Technology','META':'Technology','AMD':'Technology','ADBE':'Technology','INTC':'Technology','CRM':'Technology','NFLX':'Technology','DIS':'Technology','ORCL':'Technology','IBM':'Technology','QCOM':'Technology','TXN':'Technology',
+'JPM':'Financial','BRK.B':'Financial','V':'Financial','MA':'Financial','BAC':'Financial','GS':'Financial','MS':'Financial','C':'Financial','WFC':'Financial',
+'UNH':'Healthcare','JNJ':'Healthcare','LLY':'Healthcare','PFE':'Healthcare','MRK':'Healthcare','ABBV':'Healthcare','TMO':'Healthcare','ABT':'Healthcare','DHR':'Healthcare',
+'AMZN':'Consumer','TSLA':'Consumer','HD':'Consumer','NKE':'Consumer','COST':'Consumer','KO':'Consumer','WMT':'Consumer','PEP':'Consumer','PG':'Consumer','MCD':'Consumer',
+'XOM':'Energy','CVX':'Energy','COP':'Energy',
+'VOO':'ETF','QQQ':'ETF','SPY':'ETF','SCHD':'ETF',
+'UPS':'Industrials','ACN':'Technology','PM':'Consumer'};
+
+function getStockSector(ticker){return TICKER_SECTORS[ticker]||'Other';}
 
 function verd(r){if(!r)return'YELLOW';if(r.includes('GREEN'))return'GREEN';if(r.includes('RED'))return'RED';return'YELLOW';}
 function cc(v){return v==='GREEN'?'ccg':v==='RED'?'ccr':'ccy';}
@@ -1000,6 +1161,30 @@ function tc(t){if(!t)return'var(--muted)';const c=t.replace('📈 ','').replace(
 function ct(t){if(!t)return'—';return t.replace('📈 ','').replace('📉 ','');}
 function fmtpx(p){if(!p||p==='N/A')return'—';const n=parseFloat(p);return isNaN(n)?'—':'$'+n.toFixed(2);}
 function ctx(ticker){return STOCK_CONTEXT[ticker]||STOCK_CONTEXT['DEFAULT'];}
+
+function doSectorFilter(btn,sector){
+  ACTIVE_SECTOR=sector;
+  SHOW_COUNT=12;
+  document.querySelectorAll('.sf-pill').forEach(b=>b.classList.remove('sf-active'));
+  btn.classList.add('sf-active');
+  render();
+}
+
+function showMore(){
+  SHOW_COUNT+=12;
+  render();
+}
+
+function getFilteredList(){
+  let list=ACTIVE==='ALL'?ALL:ALL.filter(s=>verd(s.v||s.verdict||'')===ACTIVE);
+  if(ACTIVE_SECTOR!=='ALL'){
+    list=list.filter(s=>{
+      const sec=s.sec||getStockSector(s.t||s.ticker);
+      return sec===ACTIVE_SECTOR;
+    });
+  }
+  return list;
+}
 
 // Tooltip descriptions for metrics
 const TIPS = {
@@ -1029,9 +1214,13 @@ function toggleCard(id){
 
 function render(){
   const grid=document.getElementById('grid'),msg=document.getElementById('gmsg');
-  const list=ACTIVE==='ALL'?ALL:ALL.filter(s=>verd(s.v||s.verdict||'')===ACTIVE);
-  if(!list.length){grid.innerHTML='';msg.textContent='No '+ACTIVE+' signals right now. Check back tomorrow.';return;}
+  const fullList=getFilteredList();
+  if(!fullList.length){grid.innerHTML='';msg.textContent='No '+(ACTIVE_SECTOR!=='ALL'?ACTIVE_SECTOR+' ':'')+(ACTIVE!=='ALL'?ACTIVE+' ':'')+'signals right now. Check back tomorrow.';document.getElementById('see-more-wrap').style.display='none';return;}
   msg.textContent='';
+  const list=fullList.slice(0,SHOW_COUNT);
+  const moreBtn=document.getElementById('see-more-wrap');
+  moreBtn.style.display=fullList.length>SHOW_COUNT?'block':'none';
+  if(fullList.length>SHOW_COUNT)moreBtn.querySelector('.see-more-btn').textContent='Show More ('+( fullList.length-SHOW_COUNT)+' remaining)';
 
   grid.innerHTML=list.map((s,i)=>{
     const v=s.v||verd(s.verdict||'');
@@ -1131,6 +1320,7 @@ function buildTape(){
 
 function doFilter(btn,type){
   ACTIVE=type;
+  SHOW_COUNT=12;
   document.querySelectorAll('.fb').forEach(b=>b.className='fb');
   btn.className='fb '+(type==='GREEN'?'fa':type==='RED'?'fr':type==='YELLOW'?'fy':'fa');
   render();
