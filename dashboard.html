@@ -116,22 +116,51 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 .empty-state .icon{font-size:40px;margin-bottom:16px;opacity:.4}
 .empty-state p{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
 
-/* AI AUDITOR (kept from V1) */
-.audit-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
-.audit-label{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.audit-input{background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:11px 14px;font-size:13px;font-family:var(--body);outline:none;transition:border-color .2s;width:100%}
-.audit-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,232,122,.08)}
-.audit-select{background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:11px 14px;font-size:13px;font-family:var(--body);outline:none;width:100%;appearance:none;-webkit-appearance:none}
-.audit-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.risk-btns{display:flex;gap:8px}
-.risk-btn{flex:1;padding:10px;border:1px solid var(--border2);border-radius:10px;background:none;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:all .15s}
-.risk-btn.sel{border-color:var(--green);color:var(--green);background:rgba(0,232,122,.06)}
-.audit-textarea{background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:14px;font-size:13px;font-family:var(--body);outline:none;width:100%;min-height:100px;resize:vertical;transition:border-color .2s}
-.audit-textarea:focus{border-color:var(--green)}
-.audit-out{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;font-family:var(--mono);font-size:11px;color:var(--muted2);line-height:1.7;white-space:pre-wrap;max-height:400px;overflow-y:auto}
-.copy-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:all .15s;margin-top:10px}
-.copy-btn:hover{color:var(--green);border-color:rgba(0,232,122,.3)}
-.copy-btn.ok{color:var(--green);border-color:rgba(0,232,122,.3)}
+/* PORTFOLIO INTELLIGENCE */
+.intel-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.intel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.intel-grade{display:flex;align-items:center;gap:14px}
+.grade-badge{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;letter-spacing:2px;color:#000;font-weight:700}
+.grade-badge.a{background:var(--green)}.grade-badge.b{background:#22c55e}.grade-badge.c{background:var(--yellow)}.grade-badge.d{background:#f97316}.grade-badge.f{background:var(--red)}
+.grade-detail{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.grade-title{font-family:var(--display);font-size:24px;letter-spacing:2px;margin-bottom:2px}
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.intel-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.intel-card-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.intel-card-head .ico{font-size:18px}
+.intel-card-head .lbl{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.intel-card p{font-size:12.5px;color:var(--muted2);line-height:1.65;font-weight:300}
+.intel-card p strong{color:var(--text);font-weight:500}
+.intel-card .metric{font-family:var(--display);font-size:28px;letter-spacing:2px;line-height:1;margin:6px 0}
+.intel-card .sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.intel-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.intel-actions p{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300;flex:1;min-width:200px}
+.action-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:default}
+.action-chip.green{background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18);color:var(--green)}
+.action-chip.yellow{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);color:var(--yellow)}
+.action-chip.red{background:rgba(255,85,85,.06);border:1px solid rgba(255,85,85,.18);color:var(--red)}
+.intel-checklist{display:flex;flex-direction:column;gap:6px}
+.chk{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:12px;color:var(--muted2);font-weight:300}
+.chk .mark{font-family:var(--mono);font-size:12px;font-weight:500;width:14px;flex-shrink:0}
+.chk.pass{background:rgba(0,232,122,.04)}.chk.pass .mark{color:var(--green)}
+.chk.fail{background:rgba(255,85,85,.04)}.chk.fail .mark{color:var(--red)}
+.chk.mid{background:rgba(251,191,36,.04)}.chk.mid .mark{color:var(--yellow)}
+.chk strong{color:var(--text);font-weight:500}
+
+/* HOLDING CARD ACTIONS */
+.hold-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.hold-act{padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:none;color:var(--muted);font-family:var(--mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;transition:all .15s;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.hold-act:hover{color:var(--green);border-color:rgba(0,232,122,.3);background:rgba(0,232,122,.04)}
+.hold-act.danger:hover{color:var(--red);border-color:rgba(255,85,85,.3);background:rgba(255,85,85,.04)}
+
+/* HOLDING DETAIL PANEL */
+.hold-detail{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+.hold-detail.open{max-height:1000px;opacity:1}
+.hold-detail-inner{border-top:1px solid var(--border);margin-top:10px;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.hd-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.hd-item .hd-lbl{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.hd-item p{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300}
+.hd-item p strong{color:var(--text);font-weight:500}
 
 /* ABOUT & DISCLAIMER */
 .info-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
@@ -187,7 +216,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 .sug-card .sug-action{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--green);text-transform:uppercase}
 
 /* RESPONSIVE */
-@media(max-width:900px){.stats-row{grid-template-columns:1fr}.widgets{grid-template-columns:1fr}.add-row{grid-template-columns:1fr}.holdings-grid{grid-template-columns:1fr}.audit-row{grid-template-columns:1fr}.stat-value{font-size:32px}.sug-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.stats-row{grid-template-columns:1fr}.widgets{grid-template-columns:1fr}.add-row{grid-template-columns:1fr}.holdings-grid{grid-template-columns:1fr}.intel-grid{grid-template-columns:1fr}.stat-value{font-size:32px}.sug-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -203,7 +232,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
   <div class="side-logo"><div class="b">B</div><span>BRISK<span class="dot">.</span></span></div>
   <nav class="side-nav">
     <button class="side-btn active" id="nav-portfolio" onclick="showSec('portfolio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Portfolio</button>
-    <button class="side-btn" id="nav-auditor" onclick="showSec('auditor')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/></svg>Portfolio Reviewer</button>
+    <button class="side-btn" id="nav-auditor" onclick="showSec('auditor')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/></svg>Portfolio Intel</button>
     <button class="side-btn" id="nav-about" onclick="showSec('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>About</button>
     <button class="side-btn" id="nav-disclaimer" onclick="showSec('disclaimer')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Disclaimer</button>
   </nav>
@@ -267,17 +296,15 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 </div>
 </div>
 
-<!-- ═══ AI AUDITOR SECTION ═══ -->
+<!-- ═══ PORTFOLIO INTELLIGENCE SECTION ═══ -->
 <div class="section" id="sec-auditor">
-<div class="sec-title">BRISK PORTFOLIO REVIEWER</div>
-<div class="sec-sub">Generate a prompt you can paste into ChatGPT or Claude for a comprehensive review</div>
-<div class="audit-card">
-  <div class="audit-row"><div class="add-field"><div class="audit-label">Investment Goal</div><select id="f-goal" class="audit-select"><option value="">Select a goal...</option><option>Retirement</option><option>Wealth Building</option><option>House Down Payment</option><option>Financial Independence</option><option>College Fund</option></select></div><div class="add-field"><div class="audit-label">Monthly Contribution (USD)</div><input id="f-monthly" class="audit-input" placeholder="e.g. 500" type="number"/></div></div>
-  <div class="add-field" style="margin-bottom:16px"><div class="audit-label">Portfolio Holdings</div><textarea id="f-holdings" class="audit-textarea" placeholder="e.g. AAPL 30%, MSFT 25%, VOO 45%"></textarea></div>
-  <div class="add-field" style="margin-bottom:16px"><div class="audit-label">Risk Tolerance — adjust this last to see how it changes your review</div><div class="risk-btns"><button class="risk-btn" id="risk-low" onclick="setRisk('Low')">🛡️ Low</button><button class="risk-btn" id="risk-medium" onclick="setRisk('Medium')">⚖️ Medium</button><button class="risk-btn" id="risk-high" onclick="setRisk('High')">🚀 High</button></div><div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:8px" id="risk-hint">Higher risk = potentially higher returns, but bigger swings. Choose what lets you sleep at night.</div></div>
-  <button class="add-btn" onclick="generatePrompt()">Generate Portfolio Review</button>
+<div class="sec-title">PORTFOLIO INTELLIGENCE</div>
+<div class="sec-sub">Everything you need to know about your investments — automatically</div>
+<div id="intel-empty" style="text-align:center;padding:60px 20px">
+  <div style="font-size:40px;margin-bottom:16px;opacity:.4">📊</div>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px">Add stocks to your portfolio first, then come back here for your full report.</p>
 </div>
-<div id="audit-out" style="display:none"><div class="audit-out" id="prompt-output"></div><button class="copy-btn" id="copy-btn" onclick="copyPrompt()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy</button></div>
+<div id="intel-output"></div>
 </div>
 
 <!-- ═══ ABOUT SECTION ═══ -->
@@ -375,7 +402,9 @@ async function signOut(){await sb.auth.signOut();window.location.replace('/login
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
 const SECS=['portfolio','auditor','about','disclaimer'];
-function showSec(name){SECS.forEach(s=>{document.getElementById('sec-'+s).classList.remove('show');const n=document.getElementById('nav-'+s);if(n)n.classList.remove('active');});document.getElementById('sec-'+name).classList.add('show');const n=document.getElementById('nav-'+name);if(n)n.classList.add('active');closeSidebar();}
+function showSec(name){SECS.forEach(s=>{document.getElementById('sec-'+s).classList.remove('show');const n=document.getElementById('nav-'+s);if(n)n.classList.remove('active');});document.getElementById('sec-'+name).classList.add('show');const n=document.getElementById('nav-'+name);if(n)n.classList.add('active');closeSidebar();if(name==='auditor')buildPortfolioIntel();}
+
+function toggleHoldDetail(id){const el=document.getElementById(id);if(!el)return;el.classList.toggle('open');}
 
 // ══════════════════════════════════════════════════════════
 // FETCH LIVE PRICE
@@ -440,7 +469,7 @@ async function loadDashboard(){
   // Fetch all prices in parallel
   const prices=await Promise.all(p.map(h=>fetchPrice(h.ticker)));
   
-  let totalValue=0,totalInvested=0,totalPL=0,dailyChange=0;
+  let totalValue=0,totalInvested=p.reduce((s,h)=>s+h.invested,0),totalPL=0,dailyChange=0;
   const cards=[];
   
   p.forEach((h,i)=>{
@@ -453,7 +482,6 @@ async function loadDashboard(){
     const dayChg=(pd?.change||0)*shares;
     
     totalValue+=currentVal;
-    totalInvested+=h.invested;
     totalPL+=pl;
     dailyChange+=dayChg;
     
@@ -464,7 +492,19 @@ async function loadDashboard(){
       <div class="hold-top"><div><div class="hold-ticker">${h.ticker}</div><div class="hold-name">${cp?'$'+cp.toFixed(2):'Loading...'}</div></div><div style="text-align:right"><div class="hold-price" style="color:${isProfit?'var(--green)':'var(--red)'}">${isProfit?'+':''}$${Math.abs(pl).toFixed(2)}</div><div class="hold-change" style="color:${isProfit?'var(--green)':'var(--red)'}">${isProfit?'+':''}${plPct.toFixed(1)}%</div></div></div>
       <div class="hold-pl"><div class="hold-metric"><div class="hold-ml">Invested</div><div class="hold-mv">$${h.invested.toLocaleString()}</div></div><div class="hold-metric"><div class="hold-ml">Shares</div><div class="hold-mv">${shares.toFixed(2)}</div></div><div class="hold-metric"><div class="hold-ml">Current Value</div><div class="hold-mv ${isProfit?'green':'red'}">$${currentVal.toFixed(2)}</div></div></div>
       <div class="hold-human"><span class="emoji">${info.e}</span><p>${info.t}</p></div>
-      <button class="hold-del" onclick="removeAsset('${h.ticker}')">✕ Remove</button>
+      <div class="hold-actions">
+        <button class="hold-act" onclick="toggleHoldDetail('hd-${i}')">📊 Details</button>
+        <a class="hold-act" href="https://www.tradingview.com/symbols/${h.ticker}/" target="_blank" rel="noopener" style="text-decoration:none">📈 Chart</a>
+        <button class="hold-act danger" onclick="removeAsset('${h.ticker}')">✕ Remove</button>
+      </div>
+      <div class="hold-detail" id="hd-${i}">
+        <div class="hold-detail-inner">
+          <div class="hd-item"><div class="hd-lbl">Sector</div><p><strong>${info.sector||'Other'}</strong> — ${info.sector==='Technology'?'High growth, higher volatility.':info.sector==='Healthcare'?'Defensive. Medicine in any economy.':info.sector==='Financial'?'Benefits from high rates.':info.sector==='Consumer'||info.sector==='Consumer Staples'?'Everyday spending. Recession-resilient.':info.sector==='Energy'?'Commodity-driven. Inverse to tech.':info.sector==='ETF'?'Diversified by nature.':info.sector==='Communication'?'Social, streaming, ads.':'Research this sector.'}</p></div>
+          <div class="hd-item"><div class="hd-lbl">Risk Level</div><p>${info.r<=2?'<strong style="color:var(--green)">Low Risk ✓</strong> — Reliable core position.':info.r===3?'<strong style="color:var(--yellow)">Moderate ~</strong> — Solid with some volatility.':'<strong style="color:var(--red)">High Risk ✗</strong> — Can swing big. Size accordingly.'}</p></div>
+          <div class="hd-item"><div class="hd-lbl">Weight</div><p><strong>${totalInvested>0?((h.invested/totalInvested)*100).toFixed(1):'0'}%</strong> of portfolio. ${totalInvested>0&&(h.invested/totalInvested*100)>40?'Heavy — consider spreading out.':totalInvested>0&&(h.invested/totalInvested*100)>25?'Significant. Watch as portfolio grows.':'Healthy allocation.'}</p></div>
+          <div class="hd-item"><div class="hd-lbl">Your Position</div><p>${isProfit?'Up <strong style="color:var(--green)">'+plPct.toFixed(1)+'%</strong>. ':'Down <strong style="color:var(--red)">'+Math.abs(plPct).toFixed(1)+'%</strong>. '}${Math.abs(plPct)>20?(isProfit?'Solid gain!':'Check if fundamentals changed.'):Math.abs(plPct)>5?(isProfit?'Nice progress. Stay patient.':'Normal fluctuation.'):'Early days. Give it time.'}</p></div>
+        </div>
+      </div>
     </div>`);
   });
   
@@ -481,6 +521,7 @@ async function loadDashboard(){
   renderSuggestions(suggestions);
   updateSwan(p,sectors);
   updateTimeMachine(totalValue);
+  buildPortfolioIntel();
 }
 
 function createEmpty(){const d=document.createElement('div');d.className='empty-state';d.id='empty-state';d.innerHTML='<div class="icon">📭</div><p>No holdings yet. Add your first stock above!</p>';return d;}
@@ -559,28 +600,119 @@ function updateTimeMachine(totalValue){
 }
 
 // ══════════════════════════════════════════════════════════
-// AI AUDITOR
+// PORTFOLIO INTELLIGENCE — auto-generated from holdings
 // ══════════════════════════════════════════════════════════
-let selectedRisk='';
-function setRisk(l){selectedRisk=l;['low','medium','high'].forEach(r=>{document.getElementById('risk-'+r).classList.toggle('sel',r===l.toLowerCase());});}
+function buildPortfolioIntel(){
+  const p=getPortfolio();
+  const emptyEl=document.getElementById('intel-empty');
+  const outEl=document.getElementById('intel-output');
+  if(!p.length){emptyEl.style.display='block';outEl.innerHTML='';return;}
+  emptyEl.style.display='none';
 
-function generatePrompt(){
-  const goal=document.getElementById('f-goal').value;
-  const monthly=document.getElementById('f-monthly').value.trim();
-  let holdings=document.getElementById('f-holdings').value.trim();
-  if(!holdings){const p=getPortfolio();if(p.length)holdings=p.map(h=>h.ticker+' $'+h.invested).join(', ');}
-  if(!holdings){alert('Please enter your portfolio holdings first.');return;}
-  if(!goal){alert('Please select an investment goal.');return;}
-  if(!selectedRisk){alert('Please select your risk tolerance at the bottom — it affects your review.');return;}
-  const ms=monthly?'$'+Number(monthly).toLocaleString()+'/month':'Not specified';
-  const prompt=`BRISK PORTFOLIO REVIEWER — Comprehensive Analysis\n\nPortfolio Holdings: ${holdings}\nInvestor Profile: Goal: ${goal} | Risk Tolerance: ${selectedRisk} | Monthly Contribution: ${ms}\n\nInstructions for AI:\nRole: You are a Senior Portfolio Strategist reviewing a beginner investor's portfolio.\nTask: Conduct a comprehensive, plain-English audit of the portfolio above.\n\nAnalysis Required:\n1. Asset Allocation: Break down the percentage split across sectors.\n2. Diversification Check: Identify any dangerous concentration (\"all eggs in one basket\").\n3. Risk vs. Tolerance Match: Does this portfolio match their stated ${selectedRisk} risk tolerance?\n4. Stress Test: Estimate what happens in a 20% market crash.\n5. Hidden Costs: Flag any overlapping ETFs or high-fee funds.\n6. Growth Potential: Based on ${selectedRisk} risk at ${ms} contributions, project 5-year and 10-year outcomes.\n\nOutput Format:\n📊 The Snapshot: 3-sentence portfolio summary.\n✅ The Good: What's working well.\n⚠️ The Bad: What needs attention.\n🚨 The Ugly: Critical risks to address now.\n📋 3 Action Steps: Prioritized next moves.\n\nTone: Explain like I'm smart but new to investing. No jargon without definitions. Be honest but encouraging.`;
-  document.getElementById('prompt-output').textContent=prompt;
-  document.getElementById('audit-out').style.display='block';
-  setTimeout(()=>document.getElementById('audit-out').scrollIntoView({behavior:'smooth'}),100);
-}
+  const totalInv=p.reduce((s,h)=>s+h.invested,0);
+  const sectors=buildSectorData(p);
+  const sectorNames=sectors.filter(s=>s.name!=='ETF').map(s=>s.name);
+  const uniqueSectors=new Set(sectorNames);
+  const hasETF=p.some(h=>getSector(h.ticker)==='ETF');
+  const maxPct=totalInv>0?Math.max(...p.map(h=>(h.invested/totalInv)*100)):100;
+  const highRisk=p.filter(h=>(HUMAN[h.ticker]||HUMAN.DEFAULT).r>=4);
+  const lowRisk=p.filter(h=>(HUMAN[h.ticker]||HUMAN.DEFAULT).r<=2);
 
-async function copyPrompt(){
-  try{await navigator.clipboard.writeText(document.getElementById('prompt-output').textContent);const b=document.getElementById('copy-btn');b.innerHTML='✓ Copied!';b.classList.add('ok');setTimeout(()=>{b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy';b.classList.remove('ok');},2500);}catch{alert('Please manually copy the text.');}
+  // Calculate grade
+  let grade=50;
+  if(p.length>=3)grade+=10;if(p.length>=5)grade+=8;if(p.length>=8)grade+=5;
+  if(uniqueSectors.size>=4)grade+=12;else if(uniqueSectors.size>=3)grade+=6;else if(uniqueSectors.size===1&&p.length>=2)grade-=15;
+  if(maxPct>60)grade-=15;else if(maxPct>40)grade-=5;else grade+=8;
+  if(hasETF)grade+=8;
+  if(highRisk.length===p.length&&p.length>=2)grade-=12;
+  if(lowRisk.length>=Math.ceil(p.length/2))grade+=5;
+  grade=Math.max(0,Math.min(100,Math.round(grade)));
+
+  const gradeL=grade>=85?'A':grade>=70?'B':grade>=50?'C':grade>=35?'D':'F';
+  const gradeC=grade>=70?'a':grade>=50?'b':grade>=35?'c':'d';
+  const gradeMsg=grade>=85?'Excellent portfolio structure':grade>=70?'Good diversification, minor tweaks':grade>=50?'Decent start, room to improve':grade>=35?'Needs attention — too concentrated':'High risk — please diversify';
+
+  // Stress test (20% crash estimate)
+  const crashLoss=totalInv*0.20;
+  const defensivePct=p.filter(h=>(HUMAN[h.ticker]||HUMAN.DEFAULT).r<=2).reduce((s,h)=>s+h.invested,0)/totalInv*100;
+  const estimatedDrop=(20-(defensivePct*0.08)).toFixed(0);
+
+  // 5-year and 10-year projections
+  const p5=totalInv*Math.pow(1.08,5);
+  const p10=totalInv*Math.pow(1.08,10);
+
+  // Top holding
+  const topH=p.reduce((a,b)=>a.invested>b.invested?a:b);
+  const topPct=(topH.invested/totalInv*100).toFixed(0);
+
+  // Action steps
+  const actions=[];
+  if(p.length===1)actions.push({c:'yellow',t:'🎯 Add 2-4 more stocks from different sectors to spread your risk'});
+  if(uniqueSectors.size===1&&p.length>=2)actions.push({c:'red',t:'🎨 Diversify into other sectors — your portfolio is 100% '+sectorNames[0]});
+  if(!hasETF&&p.length<=3)actions.push({c:'green',t:'📈 Consider an ETF like VOO — own 500 companies in one purchase'});
+  if(maxPct>50&&p.length>1)actions.push({c:'red',t:'⚖️ Rebalance — '+topH.ticker+' is '+topPct+'% of your portfolio'});
+  if(!uniqueSectors.has('Healthcare')&&!uniqueSectors.has('Consumer Staples'))actions.push({c:'yellow',t:'🛡️ Add defensive stocks (KO, JNJ, PG) for crash protection'});
+  if(highRisk.length>=2&&lowRisk.length===0)actions.push({c:'yellow',t:'🧊 Balance volatility with a stable pick like V, BRK.B, or VOO'});
+  if(grade>=70&&p.length>=3)actions.push({c:'green',t:'💪 Keep it up — stay consistent with regular contributions'});
+  if(!actions.length)actions.push({c:'green',t:'✅ Your portfolio is in good shape. Stay the course!'});
+
+  // Checklist
+  const chks=[
+    {pass:p.length>=3,mid:p.length===2,label:'3+ stocks held',val:p.length+' stocks'},
+    {pass:uniqueSectors.size>=3,mid:uniqueSectors.size===2,label:'3+ different sectors',val:uniqueSectors.size+' sectors'},
+    {pass:maxPct<=35,mid:maxPct<=50,label:'No stock over 35%',val:'Top: '+topPct+'%'},
+    {pass:hasETF,mid:false,label:'Includes an ETF',val:hasETF?'Yes':'No'},
+    {pass:defensivePct>=20,mid:defensivePct>=10,label:'20%+ in defensive stocks',val:defensivePct.toFixed(0)+'%'},
+    {pass:highRisk.length<=Math.ceil(p.length/2),mid:true,label:'Balanced risk levels',val:highRisk.length+' high-risk'}
+  ];
+
+  let html=`<div class="intel-panel fade-in">
+    <div class="intel-header">
+      <div class="intel-grade"><div class="grade-badge ${gradeC}">${gradeL}</div><div><div class="grade-title">${gradeMsg.toUpperCase()}</div><div class="grade-detail">Portfolio Grade: ${gradeL} · Score: ${grade}/100</div></div></div>
+    </div>
+
+    <div class="intel-grid">
+      <div class="intel-card">
+        <div class="intel-card-head"><span class="ico">💰</span><span class="lbl">Your Money</span></div>
+        <div class="metric" style="color:var(--green)">$${totalInv.toLocaleString()}</div>
+        <div class="sub">Total invested across ${p.length} stocks</div>
+        <p style="margin-top:8px">Spread across <strong>${uniqueSectors.size} sector${uniqueSectors.size!==1?'s':''}</strong>${hasETF?' (includes ETF diversification)':''}. ${p.length===1?'Adding more stocks is the single best thing you can do right now.':p.length<=3?'Good start! A few more picks from different industries will strengthen this.':'Solid number of holdings.'}</p>
+      </div>
+
+      <div class="intel-card">
+        <div class="intel-card-head"><span class="ico">🔥</span><span class="lbl">Crash Test — What If Markets Drop 20%?</span></div>
+        <div class="metric" style="color:var(--red)">-$${crashLoss.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+        <div class="sub">Estimated loss in a market crash</div>
+        <p style="margin-top:8px">With <strong>${defensivePct.toFixed(0)}% in defensive stocks</strong>, your portfolio would likely drop around <strong>${estimatedDrop}%</strong> in a 20% market crash. ${defensivePct>=30?'That defensive cushion helps.':'Adding more stable, boring stocks can soften the blow significantly.'}</p>
+      </div>
+
+      <div class="intel-card">
+        <div class="intel-card-head"><span class="ico">🔮</span><span class="lbl">Growth Projection at 8%/year</span></div>
+        <div class="metric" style="color:var(--green)">$${p5.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+        <div class="sub">Projected in 5 years</div>
+        <p style="margin-top:8px">In 10 years at 8% annual growth: <strong>$${p10.toLocaleString(undefined,{maximumFractionDigits:0})}</strong>. That's $${(p10-totalInv).toLocaleString(undefined,{maximumFractionDigits:0})} in growth from doing nothing but holding. Time is your biggest advantage.</p>
+      </div>
+
+      <div class="intel-card">
+        <div class="intel-card-head"><span class="ico">📊</span><span class="lbl">Concentration Risk</span></div>
+        <div class="metric" style="color:${maxPct>50?'var(--red)':maxPct>35?'var(--yellow)':'var(--green)'}">${topPct}%</div>
+        <div class="sub">${topH.ticker} is your biggest position</div>
+        <p style="margin-top:8px">${maxPct>50?'<strong>That\'s a lot of trust in one company.</strong> If '+topH.ticker+' has a bad quarter, your whole portfolio takes a serious hit. Consider spreading things out.':maxPct>35?'Slightly heavy on '+topH.ticker+'. Not dangerous, but worth keeping an eye on as your portfolio grows.':'<strong>Well balanced.</strong> No single stock dominates — that\'s exactly what you want.'}</p>
+      </div>
+    </div>
+
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📋 Your Action Steps</div>
+    <div class="intel-actions" style="margin-bottom:20px">
+      ${actions.map(a=>`<span class="action-chip ${a.c}">${a.t}</span>`).join('')}
+    </div>
+
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">✅ Portfolio Health Checklist</div>
+    <div class="intel-checklist">
+      ${chks.map(c=>`<div class="chk ${c.pass?'pass':c.mid?'mid':'fail'}"><span class="mark">${c.pass?'✓':c.mid?'~':'✗'}</span><strong>${c.label}</strong><span style="margin-left:auto;font-family:var(--mono);font-size:10px">${c.val}</span></div>`).join('')}
+    </div>
+  </div>`;
+
+  outEl.innerHTML=html;
 }
 
 // ══════════════════════════════════════════════════════════
