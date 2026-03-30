@@ -144,8 +144,50 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn .4s cubic-bezier(.16,1,.3,1) both}
 
+/* STOCK SEARCH DROPDOWN */
+.ticker-wrap{position:relative}
+.ticker-drop{position:absolute;top:100%;left:0;right:0;background:var(--bg);border:1px solid var(--border2);border-top:none;border-radius:0 0 10px 10px;max-height:220px;overflow-y:auto;z-index:50;display:none}
+.ticker-drop.open{display:block}
+.ticker-opt{padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .1s;border-bottom:1px solid var(--border)}
+.ticker-opt:last-child{border-bottom:none}
+.ticker-opt:hover,.ticker-opt.highlighted{background:rgba(0,232,122,.06)}
+.ticker-opt .tk{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:1px;font-weight:500;min-width:50px}
+.ticker-opt .nm{font-size:12px;color:var(--muted2);flex:1;margin-left:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticker-opt .sc{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;background:var(--bg3);padding:2px 6px;border-radius:4px;margin-left:8px;white-space:nowrap}
+
+/* SECTOR BREAKDOWN */
+.sector-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:20px}
+.sector-panel-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.sector-bars{display:flex;flex-direction:column;gap:8px}
+.sector-row{display:flex;align-items:center;gap:10px}
+.sector-name{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.5px;min-width:110px;text-align:right}
+.sector-bar-bg{flex:1;height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.sector-pct{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:36px}
+
+/* RISK ALERTS */
+.alerts-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.risk-alert{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:12px;animation:fadeIn .4s both}
+.risk-alert.warn{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18)}
+.risk-alert.danger{background:rgba(255,85,85,.06);border:1px solid rgba(255,85,85,.18)}
+.risk-alert.good{background:rgba(0,232,122,.04);border:1px solid rgba(0,232,122,.12)}
+.risk-alert .ra-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.risk-alert .ra-text{font-size:12.5px;line-height:1.65;color:var(--muted2);font-weight:300}
+.risk-alert .ra-text strong{color:var(--text);font-weight:500}
+
+/* SUGGESTION CARDS */
+.suggestions-wrap{margin-bottom:28px}
+.suggestions-title{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.sug-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sug-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color .2s,transform .15s}
+.sug-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.sug-card .sug-icon{font-size:20px;margin-bottom:8px}
+.sug-card .sug-head{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.sug-card .sug-body{font-size:12px;color:var(--muted2);line-height:1.65;font-weight:300}
+.sug-card .sug-action{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--green);text-transform:uppercase}
+
 /* RESPONSIVE */
-@media(max-width:900px){.stats-row{grid-template-columns:1fr}.widgets{grid-template-columns:1fr}.add-row{grid-template-columns:1fr}.holdings-grid{grid-template-columns:1fr}.audit-row{grid-template-columns:1fr}.stat-value{font-size:32px}}
+@media(max-width:900px){.stats-row{grid-template-columns:1fr}.widgets{grid-template-columns:1fr}.add-row{grid-template-columns:1fr}.holdings-grid{grid-template-columns:1fr}.audit-row{grid-template-columns:1fr}.stat-value{font-size:32px}.sug-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -195,12 +237,27 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 <div class="add-card">
   <div class="add-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Asset to Portfolio</div>
   <div class="add-row">
-    <div class="add-field"><label class="add-label">Ticker Symbol</label><input id="add-ticker" class="add-input" placeholder="e.g. AAPL" maxlength="6" autocomplete="off"/></div>
+    <div class="add-field ticker-wrap"><label class="add-label">Ticker Symbol</label><input id="add-ticker" class="add-input" placeholder="Search stocks... e.g. Apple, AAPL" maxlength="10" autocomplete="off" oninput="onTickerInput(this.value)" onfocus="onTickerInput(this.value)" onkeydown="tickerKeydown(event)"/><div class="ticker-drop" id="ticker-drop"></div></div>
     <div class="add-field"><label class="add-label">Amount Invested ($)</label><input id="add-amount" class="add-input" type="number" placeholder="e.g. 5000" min="1"/></div>
     <div class="add-field"><label class="add-label">Avg Entry Price ($)</label><input id="add-entry" class="add-input" type="number" placeholder="e.g. 150.00" min="0.01" step="0.01"/></div>
     <button class="add-btn" onclick="addAsset()" id="add-btn">+ Add</button>
   </div>
   <div id="add-err" style="font-family:var(--mono);font-size:11px;color:var(--red);margin-top:10px;display:none"></div>
+</div>
+
+<!-- SECTOR BREAKDOWN -->
+<div class="sector-panel" id="sector-panel" style="display:none">
+  <div class="sector-panel-title"><span class="emoji">🏗️</span>Where Your Money Lives — Sector Breakdown</div>
+  <div class="sector-bars" id="sector-bars"></div>
+</div>
+
+<!-- RISK ALERTS -->
+<div class="alerts-wrap" id="alerts-wrap"></div>
+
+<!-- SMART SUGGESTIONS -->
+<div class="suggestions-wrap" id="suggestions-wrap" style="display:none">
+  <div class="suggestions-title"><span class="emoji">💡</span>Things Worth Thinking About</div>
+  <div class="sug-grid" id="sug-grid"></div>
 </div>
 
 <!-- HOLDINGS -->
@@ -242,6 +299,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:inherit}
 </div><!-- /main -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/stocks-db.js"></script>
 <script>
 // ══════════════════════════════════════════════════════════
 // CONFIG
@@ -251,40 +309,40 @@ const SUPABASE_ANON='sb_publishable_vaceGfP7AQkRuhCl61TRCA_ft143ZKo';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 
 // ══════════════════════════════════════════════════════════
-// HUMAN TRANSLATIONS — plain English stock descriptions
+// HUMAN TRANSLATIONS — plain English stock descriptions + sector
 // ══════════════════════════════════════════════════════════
 const HUMAN={
-AAPL:{e:'🍎',t:"Apple: The iPhone giant. High quality, low risk. A safe anchor for any portfolio.",r:2},
-MSFT:{e:'💻',t:"Microsoft: Cloud king + AI leader. Boring in the best way — steady growth forever.",r:2},
-GOOGL:{e:'🔍',t:"Google: They own search, YouTube, and Android. A money-printing machine with AI upside.",r:2},
-AMZN:{e:'📦',t:"Amazon: E-commerce + cloud (AWS). Massive and growing. High quality but pricey.",r:3},
-NVDA:{e:'🎮',t:"NVIDIA: The AI chip king. Explosive growth but volatile — not for the faint-hearted.",r:4},
-META:{e:'👤',t:"Meta: Facebook, Instagram, WhatsApp. Cash cow with risky metaverse bets.",r:3},
-TSLA:{e:'⚡',t:"Tesla: Elon's rocket ship. High risk, high reward. Exciting but bumpy ride.",r:5},
-'BRK.B':{e:'🏛️',t:"Berkshire: Warren Buffett's company. The ultimate 'set and forget' investment.",r:1},
-JPM:{e:'🏦',t:"JPMorgan: America's biggest bank. Rock-solid, great dividend. A financial fortress.",r:2},
-V:{e:'💳',t:"Visa: They process almost every card swipe on Earth. Recession-resistant and growing.",r:1},
-MA:{e:'💳',t:"Mastercard: Like Visa's twin. Pure profit from every transaction worldwide.",r:1},
-JNJ:{e:'💊',t:"J&J: Healthcare giant. Baby powder to cancer drugs. Defensive and dividend-paying.",r:2},
-KO:{e:'🥤',t:"Coca-Cola: Buffett's favorite. The world drinks 2 billion servings daily. Boring = beautiful.",r:1},
-PEP:{e:'🥤',t:"PepsiCo: Not just soda — Frito-Lay snacks too. Steady, reliable, dividend king.",r:1},
-DIS:{e:'🏰',t:"Disney: Theme parks, movies, streaming. Iconic brand but navigating a tough transition.",r:3},
-NFLX:{e:'🎬',t:"Netflix: Streaming king. Finally profitable and growing again. Content is king.",r:3},
-AMD:{e:'💾',t:"AMD: NVIDIA's rival in chips. Riding the AI wave. Good growth, moderate risk.",r:4},
-COST:{e:'🛒',t:"Costco: Membership magic. People pay to shop there. One of the most beloved stocks.",r:2},
-WMT:{e:'🏪',t:"Walmart: The store that America runs on. Recession-proof. Steady as a rock.",r:1},
-VOO:{e:'📈',t:"Vanguard S&P 500 ETF: Own a slice of the 500 biggest US companies. The 'just do this' investment.",r:1},
-QQQ:{e:'📊',t:"Invesco QQQ: The top 100 tech stocks in one basket. Higher risk, higher reward than VOO.",r:2},
-SPY:{e:'📈',t:"SPDR S&P 500 ETF: The original index fund. Same as VOO, just older. A classic choice.",r:1},
-XOM:{e:'⛽',t:"Exxon: Oil giant. Huge dividends. Great when oil is up, rough when it's down.",r:3},
-UNH:{e:'🏥',t:"UnitedHealth: Biggest health insurer. Steady growth, aging population = tailwind.",r:2},
-HD:{e:'🔨',t:"Home Depot: America renovates, HD profits. Housing market play with great management.",r:2},
-CRM:{e:'☁️',t:"Salesforce: Cloud software leader. Every big company uses their CRM tools.",r:3},
-ADBE:{e:'🎨',t:"Adobe: Photoshop, PDF, creative tools. Subscription money machine. AI upside.",r:3},
-INTC:{e:'🔧',t:"Intel: Trying hard to catch up to NVIDIA and AMD. Cheap but risky turnaround bet.",r:4},
-BAC:{e:'🏦',t:"Bank of America: Buffett loves it. Big bank, decent dividend. Interest rate sensitive.",r:3},
-NKE:{e:'👟',t:"Nike: The swoosh is global. Brand power is unmatched. Cyclical but long-term winner.",r:2},
-DEFAULT:{e:'📊',t:"A publicly traded stock. Research this company before investing. Know what you own.",r:3}
+AAPL:{e:'🍎',t:"Apple: The iPhone giant. High quality, low risk. A safe anchor for any portfolio.",r:2,sector:'Technology'},
+MSFT:{e:'💻',t:"Microsoft: Cloud king + AI leader. Boring in the best way — steady growth forever.",r:2,sector:'Technology'},
+GOOGL:{e:'🔍',t:"Google: They own search, YouTube, and Android. A money-printing machine with AI upside.",r:2,sector:'Communication'},
+AMZN:{e:'📦',t:"Amazon: E-commerce + cloud (AWS). Massive and growing. High quality but pricey.",r:3,sector:'Consumer'},
+NVDA:{e:'🎮',t:"NVIDIA: The AI chip king. Explosive growth but volatile — not for the faint-hearted.",r:4,sector:'Technology'},
+META:{e:'👤',t:"Meta: Facebook, Instagram, WhatsApp. Cash cow with risky metaverse bets.",r:3,sector:'Communication'},
+TSLA:{e:'⚡',t:"Tesla: Elon's rocket ship. High risk, high reward. Exciting but bumpy ride.",r:5,sector:'Consumer'},
+'BRK.B':{e:'🏛️',t:"Berkshire: Warren Buffett's company. The ultimate 'set and forget' investment.",r:1,sector:'Financial'},
+JPM:{e:'🏦',t:"JPMorgan: America's biggest bank. Rock-solid, great dividend. A financial fortress.",r:2,sector:'Financial'},
+V:{e:'💳',t:"Visa: They process almost every card swipe on Earth. Recession-resistant and growing.",r:1,sector:'Financial'},
+MA:{e:'💳',t:"Mastercard: Like Visa's twin. Pure profit from every transaction worldwide.",r:1,sector:'Financial'},
+JNJ:{e:'💊',t:"J&J: Healthcare giant. Baby powder to cancer drugs. Defensive and dividend-paying.",r:2,sector:'Healthcare'},
+KO:{e:'🥤',t:"Coca-Cola: Buffett's favorite. The world drinks 2 billion servings daily. Boring = beautiful.",r:1,sector:'Consumer Staples'},
+PEP:{e:'🥤',t:"PepsiCo: Not just soda — Frito-Lay snacks too. Steady, reliable, dividend king.",r:1,sector:'Consumer Staples'},
+DIS:{e:'🏰',t:"Disney: Theme parks, movies, streaming. Iconic brand but navigating a tough transition.",r:3,sector:'Communication'},
+NFLX:{e:'🎬',t:"Netflix: Streaming king. Finally profitable and growing again. Content is king.",r:3,sector:'Communication'},
+AMD:{e:'💾',t:"AMD: NVIDIA's rival in chips. Riding the AI wave. Good growth, moderate risk.",r:4,sector:'Technology'},
+COST:{e:'🛒',t:"Costco: Membership magic. People pay to shop there. One of the most beloved stocks.",r:2,sector:'Consumer Staples'},
+WMT:{e:'🏪',t:"Walmart: The store that America runs on. Recession-proof. Steady as a rock.",r:1,sector:'Consumer Staples'},
+VOO:{e:'📈',t:"Vanguard S&P 500 ETF: Own a slice of the 500 biggest US companies. The 'just do this' investment.",r:1,sector:'ETF'},
+QQQ:{e:'📊',t:"Invesco QQQ: The top 100 tech stocks in one basket. Higher risk, higher reward than VOO.",r:2,sector:'ETF'},
+SPY:{e:'📈',t:"SPDR S&P 500 ETF: The original index fund. Same as VOO, just older. A classic choice.",r:1,sector:'ETF'},
+XOM:{e:'⛽',t:"Exxon: Oil giant. Huge dividends. Great when oil is up, rough when it's down.",r:3,sector:'Energy'},
+UNH:{e:'🏥',t:"UnitedHealth: Biggest health insurer. Steady growth, aging population = tailwind.",r:2,sector:'Healthcare'},
+HD:{e:'🔨',t:"Home Depot: America renovates, HD profits. Housing market play with great management.",r:2,sector:'Consumer'},
+CRM:{e:'☁️',t:"Salesforce: Cloud software leader. Every big company uses their CRM tools.",r:3,sector:'Technology'},
+ADBE:{e:'🎨',t:"Adobe: Photoshop, PDF, creative tools. Subscription money machine. AI upside.",r:3,sector:'Technology'},
+INTC:{e:'🔧',t:"Intel: Trying hard to catch up to NVIDIA and AMD. Cheap but risky turnaround bet.",r:4,sector:'Technology'},
+BAC:{e:'🏦',t:"Bank of America: Buffett loves it. Big bank, decent dividend. Interest rate sensitive.",r:3,sector:'Financial'},
+NKE:{e:'👟',t:"Nike: The swoosh is global. Brand power is unmatched. Cyclical but long-term winner.",r:2,sector:'Consumer'},
+DEFAULT:{e:'📊',t:"A publicly traded stock. Research this company before investing. Know what you own.",r:3,sector:'Other'}
 };
 
 // ══════════════════════════════════════════════════════════
@@ -377,8 +435,7 @@ function removeAsset(ticker){
 async function loadDashboard(){
   const p=getPortfolio();
   const grid=document.getElementById('holdings-grid');
-  const empty=document.getElementById('empty-state');
-  if(!p.length){grid.innerHTML='';grid.appendChild(createEmpty());updateStats(0,0,0,p);return;}
+  if(!p.length){grid.innerHTML='';grid.appendChild(createEmpty());updateStats(0,0,0,p);renderSectorChart([]);renderAlerts([]);renderSuggestions([]);document.getElementById('sector-panel').style.display='none';document.getElementById('suggestions-wrap').style.display='none';return;}
   
   // Fetch all prices in parallel
   const prices=await Promise.all(p.map(h=>fetchPrice(h.ticker)));
@@ -414,7 +471,15 @@ async function loadDashboard(){
   grid.innerHTML=cards.join('');
   updateStats(totalValue,totalInvested,totalPL,p);
   updateDaily(dailyChange,totalValue);
-  updateSwan(p);
+  
+  // Portfolio analysis
+  const sectors=buildSectorData(p);
+  renderSectorChart(sectors);
+  const alerts=buildRiskAlerts(p,sectors);
+  renderAlerts(alerts);
+  const suggestions=buildSuggestions(p,sectors);
+  renderSuggestions(suggestions);
+  updateSwan(p,sectors);
   updateTimeMachine(totalValue);
 }
 
@@ -445,7 +510,7 @@ function updateDaily(change,total){
 // ══════════════════════════════════════════════════════════
 // SWAN METER — Sleep Well At Night
 // ══════════════════════════════════════════════════════════
-function updateSwan(portfolio){
+function updateSwan(portfolio,sectors){
   if(!portfolio.length){document.getElementById('swan-score').textContent='0';document.getElementById('swan-label').textContent='Add stocks to see your score';document.getElementById('swan-bar').style.width='0%';return;}
   let score=50;
   const n=portfolio.length;
@@ -454,6 +519,17 @@ function updateSwan(portfolio){
   const maxPct=totalInv>0?Math.max(...portfolio.map(h=>h.invested/totalInv))*100:100;
   if(maxPct>60)score-=15;else if(maxPct>40)score-=5;else score+=5;
   portfolio.forEach(h=>{const info=HUMAN[h.ticker]||HUMAN.DEFAULT;if(info.r<=2)score+=3;else if(info.r>=4)score-=3;});
+  // Sector diversity bonus/penalty
+  if(sectors&&sectors.length){
+    const nonETF=sectors.filter(s=>s.name!=='ETF');
+    if(nonETF.length>=4)score+=10;
+    else if(nonETF.length>=3)score+=5;
+    else if(nonETF.length===1&&n>=2)score-=10;
+    const topSector=nonETF[0];
+    if(topSector&&topSector.pct>=65)score-=12;
+    else if(topSector&&topSector.pct>=50)score-=5;
+    if(portfolio.some(h=>getSector(h.ticker)==='ETF'))score+=5;
+  }
   score=Math.max(0,Math.min(100,Math.round(score)));
   const bar=document.getElementById('swan-bar');
   const label=document.getElementById('swan-label');
@@ -506,6 +582,187 @@ function generatePrompt(){
 async function copyPrompt(){
   try{await navigator.clipboard.writeText(document.getElementById('prompt-output').textContent);const b=document.getElementById('copy-btn');b.innerHTML='✓ Copied!';b.classList.add('ok');setTimeout(()=>{b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy';b.classList.remove('ok');},2500);}catch{alert('Please manually copy the text.');}
 }
+
+// ══════════════════════════════════════════════════════════
+// TICKER SEARCH DROPDOWN
+// ══════════════════════════════════════════════════════════
+let tickerHL=-1;
+function onTickerInput(val){
+  const drop=document.getElementById('ticker-drop');
+  const q=val.trim().toUpperCase();
+  if(!q||q.length<1){drop.classList.remove('open');drop.innerHTML='';tickerHL=-1;return;}
+  const results=STOCKS_DB.filter(s=>s.t.includes(q)||s.n.toUpperCase().includes(q)).slice(0,8);
+  if(!results.length){drop.classList.remove('open');drop.innerHTML='';tickerHL=-1;return;}
+  drop.innerHTML=results.map((s,i)=>`<div class="ticker-opt${i===tickerHL?' highlighted':''}" onmousedown="selectTicker('${s.t}')" data-idx="${i}"><span class="tk">${s.t}</span><span class="nm">${s.n}</span><span class="sc">${s.s}</span></div>`).join('');
+  drop.classList.add('open');
+}
+function tickerKeydown(e){
+  const drop=document.getElementById('ticker-drop');
+  const opts=drop.querySelectorAll('.ticker-opt');
+  if(!opts.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();tickerHL=Math.min(tickerHL+1,opts.length-1);highlightOpt(opts);}
+  else if(e.key==='ArrowUp'){e.preventDefault();tickerHL=Math.max(tickerHL-1,0);highlightOpt(opts);}
+  else if(e.key==='Enter'&&tickerHL>=0){e.preventDefault();const tk=opts[tickerHL].querySelector('.tk').textContent;selectTicker(tk);}
+  else if(e.key==='Escape'){drop.classList.remove('open');tickerHL=-1;}
+}
+function highlightOpt(opts){opts.forEach((o,i)=>{o.classList.toggle('highlighted',i===tickerHL);if(i===tickerHL)o.scrollIntoView({block:'nearest'});});}
+async function selectTicker(tk){
+  document.getElementById('add-ticker').value=tk;
+  document.getElementById('ticker-drop').classList.remove('open');
+  tickerHL=-1;
+  // Auto-fill current price as entry price
+  const entryInput=document.getElementById('add-entry');
+  if(!entryInput.value){
+    entryInput.placeholder='Fetching price...';
+    const pd=await fetchPrice(tk);
+    if(pd&&pd.price){entryInput.value=pd.price.toFixed(2);entryInput.placeholder='e.g. 150.00';}
+    else{entryInput.placeholder='e.g. 150.00';}
+  }
+  document.getElementById('add-amount').focus();
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.ticker-wrap'))document.getElementById('ticker-drop').classList.remove('open');});
+
+// ══════════════════════════════════════════════════════════
+// SECTOR ANALYSIS — builds bar chart + calculates concentration
+// ══════════════════════════════════════════════════════════
+const SECTOR_COLORS={'Technology':'#3b82f6','Communication':'#8b5cf6','Consumer':'#f97316','Consumer Staples':'#22c55e','Healthcare':'#06b6d4','Financial':'#eab308','Energy':'#ef4444','Industrials':'#64748b','Utilities':'#14b8a6','Real Estate':'#ec4899','Materials':'#a855f7','ETF':'#00e87a','Other':'#6b7280'};
+
+function buildSectorData(portfolio){
+  const totalInv=portfolio.reduce((s,h)=>s+h.invested,0);
+  if(!totalInv)return[];
+  const sectorMap={};
+  portfolio.forEach(h=>{
+    const sec=getSector(h.ticker);
+    if(!sectorMap[sec])sectorMap[sec]={name:sec,amount:0,tickers:[]};
+    sectorMap[sec].amount+=h.invested;
+    sectorMap[sec].tickers.push(h.ticker);
+  });
+  return Object.values(sectorMap).map(s=>({...s,pct:(s.amount/totalInv)*100})).sort((a,b)=>b.pct-a.pct);
+}
+
+function renderSectorChart(sectors){
+  const panel=document.getElementById('sector-panel');
+  const bars=document.getElementById('sector-bars');
+  if(!sectors.length){panel.style.display='none';return;}
+  panel.style.display='block';
+  const maxPct=Math.max(...sectors.map(s=>s.pct));
+  bars.innerHTML=sectors.map(s=>`<div class="sector-row"><span class="sector-name">${s.name}</span><div class="sector-bar-bg"><div class="sector-bar-fill" style="width:${(s.pct/maxPct)*100}%;background:${SECTOR_COLORS[s.name]||SECTOR_COLORS.Other}"></div></div><span class="sector-pct">${s.pct.toFixed(0)}%</span></div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// RISK ALERTS — concentration & sector warnings
+// ══════════════════════════════════════════════════════════
+function buildRiskAlerts(portfolio,sectors){
+  const alerts=[];
+  const totalInv=portfolio.reduce((s,h)=>s+h.invested,0);
+  if(!totalInv||!portfolio.length)return alerts;
+
+  // Single stock concentration
+  portfolio.forEach(h=>{
+    const pct=(h.invested/totalInv)*100;
+    if(pct>=50&&portfolio.length>1){
+      alerts.push({type:'danger',icon:'🚨',text:`<strong>${h.ticker} makes up ${pct.toFixed(0)}% of your entire portfolio.</strong> That's a lot of trust in one company. If something unexpected happens to ${h.ticker}, it could hit your whole portfolio hard. Unless you've done deep research and you're comfortable with that kind of risk, it might be worth spreading things out a bit.`});
+    }else if(pct>=35&&portfolio.length>1){
+      alerts.push({type:'warn',icon:'⚠️',text:`<strong>${h.ticker} is ${pct.toFixed(0)}% of your portfolio</strong> — that's a pretty big chunk. Not necessarily bad if you really believe in this company, but just keep in mind: if ${h.ticker} has a rough quarter, you'll feel it. Something to think about.`});
+    }
+  });
+
+  // Sector concentration
+  sectors.forEach(s=>{
+    if(s.name==='ETF')return; // ETFs are diversified by nature
+    if(s.pct>=65){
+      alerts.push({type:'danger',icon:'🏗️',text:`<strong>${s.pct.toFixed(0)}% of your money is in ${s.name} stocks</strong> (${s.tickers.join(', ')}). That's almost everything in one sector. When ${s.name} has a bad stretch — and every sector does eventually — your whole portfolio takes the hit. Mixing in stocks from other industries can really help smooth things out.`});
+    }else if(s.pct>=45&&sectors.length<3){
+      alerts.push({type:'warn',icon:'📊',text:`<strong>Your portfolio leans heavily into ${s.name}</strong> (${s.pct.toFixed(0)}%). It's a great sector, but having most of your eggs in one industry basket is risky. A few picks from healthcare, consumer staples, or financials could make your portfolio much more resilient.`});
+    }
+  });
+
+  // Too few stocks
+  if(portfolio.length===1){
+    alerts.push({type:'warn',icon:'☝️',text:`You've got <strong>just one stock</strong> right now. That's totally fine as a starting point! But when you're ready, adding 3-5 more stocks from different sectors can really lower your risk without lowering your potential returns. It's one of the few "free lunches" in investing.`});
+  }
+
+  // All high-risk
+  const highRisk=portfolio.filter(h=>(HUMAN[h.ticker]||HUMAN.DEFAULT).r>=4);
+  if(highRisk.length>=2&&highRisk.length===portfolio.length){
+    alerts.push({type:'warn',icon:'🎢',text:`<strong>All your picks are high-volatility stocks</strong> (${highRisk.map(h=>h.ticker).join(', ')}). These are exciting names, but they can swing 5-10% in a single day. If you're in it for the long haul and can stomach the dips, that's your call — but a steady base like VOO or SPY can help you sleep at night.`});
+  }
+
+  // Good portfolio
+  if(!alerts.length&&portfolio.length>=3){
+    const uniqueSectors=new Set(portfolio.map(h=>getSector(h.ticker)));
+    if(uniqueSectors.size>=3){
+      alerts.push({type:'good',icon:'✅',text:`<strong>Your portfolio looks well-balanced!</strong> You've got stocks across ${uniqueSectors.size} different sectors — that's exactly how you build a portfolio that can handle whatever the market throws at it. Keep it up!`});
+    }
+  }
+  return alerts;
+}
+
+function renderAlerts(alerts){
+  const wrap=document.getElementById('alerts-wrap');
+  if(!alerts.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=alerts.map(a=>`<div class="risk-alert ${a.type} fade-in"><span class="ra-icon">${a.icon}</span><div class="ra-text">${a.text}</div></div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// SMART SUGGESTIONS — contextual beginner-friendly tips
+// ══════════════════════════════════════════════════════════
+function buildSuggestions(portfolio,sectors){
+  const cards=[];
+  if(!portfolio.length)return cards;
+  const totalInv=portfolio.reduce((s,h)=>s+h.invested,0);
+  const hasETF=portfolio.some(h=>getSector(h.ticker)==='ETF');
+  const sectorNames=sectors.filter(s=>s.name!=='ETF').map(s=>s.name);
+  const uniqueSectors=new Set(sectorNames);
+
+  if(!hasETF&&portfolio.length<=3){
+    cards.push({icon:'🧺',head:'Ever heard of ETFs?',body:'An ETF like VOO or SPY lets you own a piece of 500 companies at once — it\'s basically diversification on easy mode. Many experienced investors use them as the foundation of their portfolio.',action:'Popular: VOO · SPY · QQQ · SCHD'});
+  }
+
+  if(portfolio.length>=2&&uniqueSectors.size===1&&sectorNames[0]){
+    const missing=[];
+    if(!uniqueSectors.has('Healthcare'))missing.push('Healthcare');
+    if(!uniqueSectors.has('Consumer Staples'))missing.push('Consumer Staples');
+    if(!uniqueSectors.has('Financial'))missing.push('Financial');
+    cards.push({icon:'🎨',head:`Big fan of ${sectorNames[0]}!`,body:`All your stocks are in the same sector. When that sector dips, everything dips together. Try mixing in stocks from ${missing.slice(0,2).join(' or ')} — they often move differently, which helps protect you.`,action:'Think: different industries = smoother ride'});
+  }
+
+  if(totalInv>0&&portfolio.length>=2){
+    const maxPct=Math.max(...portfolio.map(h=>(h.invested/totalInv)*100));
+    if(maxPct<30&&uniqueSectors.size>=2){
+      cards.push({icon:'💪',head:'Solid foundation',body:'No single stock dominates your portfolio, and you\'ve spread across multiple sectors. That\'s exactly what the pros recommend. Stay consistent with regular contributions and let time do the heavy lifting.',action:'Keep it up — consistency wins'});
+    }
+  }
+
+  if(!uniqueSectors.has('Consumer Staples')&&!uniqueSectors.has('Healthcare')&&portfolio.length>=2){
+    cards.push({icon:'🛡️',head:'Add some "boring" stocks?',body:'Companies like Coca-Cola, Procter & Gamble, or Johnson & Johnson aren\'t flashy — but they keep making money no matter what the economy does. They\'re like the seatbelt for your portfolio.',action:'Defensive picks: KO · PG · JNJ · PEP'});
+  }
+
+  if(portfolio.length>=4&&hasETF){
+    const overlap=portfolio.filter(h=>{
+      const sec=getSector(h.ticker);
+      return sec!=='ETF'&&sec==='Technology';
+    });
+    if(overlap.length>=2){
+      cards.push({icon:'🔍',head:'Watch for overlap',body:'Your ETFs like VOO or QQQ already include big tech stocks. Having individual tech stocks on top means you\'re doubling down on tech — which is fine if that\'s intentional, but worth knowing about.',action:'Not bad — just be aware of it'});
+    }
+  }
+
+  if(portfolio.length<=2&&!hasETF){
+    cards.push({icon:'🌱',head:'Great start!',body:'Everyone starts somewhere. As you add more stocks, try to pick from different industries — tech, healthcare, finance, consumer goods. It\'s the single best thing you can do to protect yourself while still growing your money.',action:'Aim for 5-8 stocks across 3+ sectors'});
+  }
+
+  return cards.slice(0,4); // Max 4 cards
+}
+
+function renderSuggestions(cards){
+  const wrap=document.getElementById('suggestions-wrap');
+  const grid=document.getElementById('sug-grid');
+  if(!cards.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  grid.innerHTML=cards.map(c=>`<div class="sug-card fade-in"><div class="sug-icon">${c.icon}</div><div class="sug-head">${c.head}</div><div class="sug-body">${c.body}</div><div class="sug-action">${c.action}</div></div>`).join('');
+}
+
 </script>
 </body>
 </html>
