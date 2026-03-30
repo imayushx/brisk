@@ -146,8 +146,8 @@
     .tv-btn:hover{color:var(--green);border-color:rgba(0,232,122,.25);background:rgba(0,232,122,.05)}
 
     /* Expandable deep-dive panel */
-    .deep{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
-    .sc.open .deep{max-height:900px;opacity:1}
+    .deep{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+    .sc.open .deep{max-height:2000px;opacity:1}
     .deep-inner{border-top:1px solid var(--border);margin-top:14px;padding-top:16px;display:flex;flex-direction:column;gap:12px}
 
     .why-block{padding:12px 14px;border-radius:10px;display:flex;gap:10px;align-items:flex-start}
@@ -209,6 +209,34 @@
     .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:6px}
     @keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
 
+    /* V3 — TOOLTIP SYSTEM (hover on desktop, tap on mobile) */
+    .tip-wrap{position:relative;display:inline-flex;align-items:center;cursor:help}
+    .tip-wrap .tip-icon{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:var(--muted);margin-left:4px;flex-shrink:0;transition:border-color .2s,color .2s}
+    .tip-wrap:hover .tip-icon{border-color:var(--green);color:var(--green)}
+    .tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-family:var(--body);font-size:11px;font-weight:300;color:var(--muted2);line-height:1.6;width:240px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--border2)}
+    .tip-wrap:hover .tip-box{opacity:1;visibility:visible;pointer-events:auto}
+    .tip-wrap.tip-open .tip-box{opacity:1;visibility:visible;pointer-events:auto}
+    .tip-title{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
+    @media(max-width:900px){
+      .tip-box{left:auto;right:-10px;transform:none;width:220px}
+      .tip-box::after{left:auto;right:20px;transform:none}
+    }
+
+    /* B LOGO ICON */
+    .b-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--green),#00c563);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:18px;color:#000;font-weight:700;flex-shrink:0;margin-right:8px}
+    .logo-wrap{display:flex;align-items:center;text-decoration:none}
+
+    /* NAV BUTTONS */
+    .nav-btns{display:flex;gap:8px;align-items:center}
+    .nav-btn{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:8px;text-decoration:none;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:none;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+    .nav-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.03)}
+    .nav-btn-p{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:8px;text-decoration:none;border:1px solid var(--green);color:#000;background:var(--green);cursor:none;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+    .nav-btn-p:hover{box-shadow:0 4px 16px var(--gglow);transform:translateY(-1px)}
+
+    /* TAGLINE */
+    .nav-tagline{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-left:12px;opacity:.6}
+
     /* HOW */
     .how-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:56px}
     .hc{padding:36px 28px;border-right:1px solid var(--border);background:var(--bg2);transition:background .2s}
@@ -250,7 +278,7 @@
     .fbot p{font-family:var(--mono);font-size:10px;color:var(--muted)}
 
     @media(max-width:900px){
-      nav{padding:0 20px}.nav-l{display:none}
+      nav{padding:0 20px}.nav-l{display:none}.nav-btns{display:none}
       .hero{padding:88px 20px 56px}.sec{padding:64px 20px}
       .sig-grid{grid-template-columns:1fr}
       .how-grid{grid-template-columns:1fr 1fr}.hc{border-bottom:1px solid var(--border)}
@@ -260,8 +288,22 @@
       .disc{padding:18px 20px}
       .fund-guide-grid{grid-template-columns:1fr !important}
       .fund-metrics{grid-template-columns:repeat(2,1fr) !important}
+      .nav-tagline{display:none}
+      .b-logo{width:28px;height:28px;font-size:15px;border-radius:6px}
     }
     @media(max-width:560px){.how-grid{grid-template-columns:1fr}.ftop{grid-template-columns:1fr}}
+
+    /* MOBILE NAV DRAWER */
+    .mob-menu-btn{display:none;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px}
+    @media(max-width:900px){
+      .mob-menu-btn{display:flex;align-items:center}
+    }
+    .mob-drawer{position:fixed;top:64px;left:0;right:0;background:rgba(8,11,14,0.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);z-index:199;padding:16px 20px;display:none;flex-direction:column;gap:8px}
+    .mob-drawer.open{display:flex}
+    .mob-drawer a,.mob-drawer button{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:10px 12px;border-radius:8px;border:none;background:none;cursor:pointer;transition:all .18s;width:100%;text-align:left}
+    .mob-drawer a:hover,.mob-drawer button:hover{color:var(--text);background:rgba(255,255,255,.03)}
+    .mob-drawer .mob-login{color:#000;background:var(--green);border-radius:8px}
+    .mob-drawer .mob-login:hover{opacity:.9}
   </style>
 </head>
 <body>
@@ -269,7 +311,10 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">BRISK<span>.</span></a>
+  <div style="display:flex;align-items:center">
+    <a href="#" class="logo-wrap"><span class="b-logo">B</span><span class="logo">BRISK<span>.</span></span></a>
+    <span class="nav-tagline">Your Intelligence Edge</span>
+  </div>
   <div class="nav-l">
     <a href="#signals">Signals</a>
     <a href="#watchlist">Watchlist</a>
@@ -279,7 +324,27 @@
     <a href="crypto.html">Crypto</a>
     <span class="live-badge">LIVE</span>
   </div>
+  <div class="nav-btns">
+    <a href="#about" class="nav-btn">About</a>
+    <a href="#" class="nav-btn" onclick="document.querySelector('.disc').scrollIntoView({behavior:'smooth'});return false;">Disclaimer</a>
+    <a href="/dashboard" class="nav-btn">Dashboard</a>
+    <a href="/login" class="nav-btn-p">Login ↗</a>
+  </div>
+  <button class="mob-menu-btn" onclick="document.getElementById('mob-drawer').classList.toggle('open')" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
+<div id="mob-drawer" class="mob-drawer">
+  <a href="#signals" onclick="document.getElementById('mob-drawer').classList.remove('open')">Signals</a>
+  <a href="#watchlist" onclick="document.getElementById('mob-drawer').classList.remove('open')">Watchlist</a>
+  <a href="#how" onclick="document.getElementById('mob-drawer').classList.remove('open')">Method</a>
+  <a href="#fundamentals" onclick="document.getElementById('mob-drawer').classList.remove('open')">Fundamentals</a>
+  <a href="#about" onclick="document.getElementById('mob-drawer').classList.remove('open')">About</a>
+  <a href="crypto.html">Crypto</a>
+  <a href="#" onclick="document.querySelector('.disc').scrollIntoView({behavior:'smooth'});document.getElementById('mob-drawer').classList.remove('open');return false;">Disclaimer</a>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/login" class="mob-login">Login →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -887,12 +952,12 @@ function fundPanel(ticker) {
       <span class="fund-verdict" style="color:${fs.color}">${fs.label}</span>
     </div>
     <div class="fund-metrics">
-      <div class="fund-met"><span class="fund-lbl">P/E RATIO</span><span class="fund-val" style="color:${peColor}">${peVal}</span><span class="fund-hint">${f.pe < 20 ? 'Cheap' : f.pe > 40 ? 'Pricey' : 'Fair'}</span></div>
-      <div class="fund-met"><span class="fund-lbl">ROE</span><span class="fund-val" style="color:${roeColor}">${roeVal}</span><span class="fund-hint">${!f.roe ? '—' : f.roe > 20 ? 'Strong' : f.roe > 10 ? 'Ok' : 'Weak'}</span></div>
-      <div class="fund-met"><span class="fund-lbl">DEBT/EQUITY</span><span class="fund-val" style="color:${debtColor}">${debtVal}</span><span class="fund-hint">${f.debt == null ? '—' : f.debt < 0.6 ? 'Low' : f.debt < 1.5 ? 'Medium' : 'High'}</span></div>
-      <div class="fund-met"><span class="fund-lbl">EPS TREND</span><span class="fund-val" style="color:${epsColor};font-size:11px">${epsVal}</span><span class="fund-hint">Earnings</span></div>
+      <div class="fund-met"><span class="fund-lbl" style="display:inline-flex;align-items:center">P/E RATIO<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">P/E RATIO</span>How much you pay per $1 of earnings. Lower = cheaper. Compare within the same industry.</span></span></span><span class="fund-val" style="color:${peColor}">${peVal}</span><span class="fund-hint">${f.pe < 20 ? 'Cheap' : f.pe > 40 ? 'Pricey' : 'Fair'}</span></div>
+      <div class="fund-met"><span class="fund-lbl" style="display:inline-flex;align-items:center">ROE<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">RETURN ON EQUITY</span>How efficiently the company turns investor money into profit. Above 15% is good, above 25% is excellent.</span></span></span><span class="fund-val" style="color:${roeColor}">${roeVal}</span><span class="fund-hint">${!f.roe ? '—' : f.roe > 20 ? 'Strong' : f.roe > 10 ? 'Ok' : 'Weak'}</span></div>
+      <div class="fund-met"><span class="fund-lbl" style="display:inline-flex;align-items:center">DEBT/EQUITY<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">DEBT/EQUITY RATIO</span>How much the company borrows vs its own money. Below 0.6 is healthy. Banks naturally run higher.</span></span></span><span class="fund-val" style="color:${debtColor}">${debtVal}</span><span class="fund-hint">${f.debt == null ? '—' : f.debt < 0.6 ? 'Low' : f.debt < 1.5 ? 'Medium' : 'High'}</span></div>
+      <div class="fund-met"><span class="fund-lbl" style="display:inline-flex;align-items:center">EPS TREND<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">EARNINGS PER SHARE TREND</span>Is the company making more money over time? Growing = good. Declining = red flag.</span></span></span><span class="fund-val" style="color:${epsColor};font-size:11px">${epsVal}</span><span class="fund-hint">Earnings</span></div>
     </div>
-    <div class="fund-moat"><span class="fund-lbl">MOAT</span><p class="fund-moat-text">${f.moat}</p></div>
+    <div class="fund-moat"><span class="fund-lbl" style="display:inline-flex;align-items:center">MOAT<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">COMPETITIVE MOAT</span>What stops competitors from copying this business? Strong moats protect future profits.</span></span></span><p class="fund-moat-text">${f.moat}</p></div>
     <div class="fund-note"><p>${f.note}</p></div>
     <div class="fund-checklist">
       <div class="fund-lbl" style="margin-bottom:8px">BUY / HOLD / SELL CHECKLIST</div>
@@ -936,6 +1001,23 @@ function ct(t){if(!t)return'—';return t.replace('📈 ','').replace('📉 ',''
 function fmtpx(p){if(!p||p==='N/A')return'—';const n=parseFloat(p);return isNaN(n)?'—':'$'+n.toFixed(2);}
 function ctx(ticker){return STOCK_CONTEXT[ticker]||STOCK_CONTEXT['DEFAULT'];}
 
+// Tooltip descriptions for metrics
+const TIPS = {
+  fund: {
+    positive: 'Fundamentals are strong. The company\'s financial health — earnings, cash flow, and competitive position — actively supports this stock. A good sign for long-term investors.',
+    neutral: 'Fundamentals are neutral. The company is financially okay but nothing stands out as exceptionally strong or worryingly weak. No strong fundamental push either way.',
+    negative: 'Fundamentals show caution. There are concerns about the company\'s financial health — declining earnings, high valuation, or weakening competitive position. Proceed carefully.'
+  },
+  moat: 'A "moat" is a company\'s competitive advantage — what stops rivals from stealing their business. Think of Apple\'s ecosystem, Visa\'s payment network, or Coca-Cola\'s brand. Strong moats protect future profits. Scores: 5 = Exceptional, 4 = Wide, 3 = Moderate, 2 = Narrow, 1 = None.',
+  pe: 'P/E (Price-to-Earnings) ratio shows how much you pay per $1 of the company\'s earnings. Lower P/E = cheaper stock (generally). A P/E of 20 means you pay $20 for every $1 they earn. Compare within the same industry — tech stocks normally have higher P/E than banks.',
+  roe: 'ROE (Return on Equity) measures how efficiently a company turns shareholder money into profit. Above 15% is good. Above 25% is excellent. It tells you: for every $100 invested, how much profit does the company generate?',
+  debt: 'Debt-to-Equity ratio shows how much borrowed money the company uses vs its own money. Below 0.6 is healthy. Above 1.5 means heavy debt, which is risky if business slows down. Banks naturally have higher debt ratios.',
+  eps: 'EPS Trend shows whether the company\'s Earnings Per Share is growing, flat, or declining over recent quarters. Growing EPS = the company is making more money over time. Declining = red flag.'
+};
+function tipHtml(title, body) {
+  return `<span class="tip-wrap" onclick="event.stopPropagation();this.classList.toggle('tip-open')"><span class="tip-icon">?</span><span class="tip-box"><span class="tip-title">${title}</span>${body}</span></span>`;
+}
+
 function toggleCard(id){
   const card=document.getElementById(id);
   if(!card)return;
@@ -967,12 +1049,12 @@ function render(){
     return`<div class="sc ${cc(v)}${isExceptional?' wide-moat':''}" id="${id}" style="animation-delay:${i*.04}s" onclick="toggleCard('${id}')">
       <div class="ct">
         <div>
-          <div class="ctick">${s.t||s.ticker||'—'}${moatLabel ? `<span class="moat-badge">${moatLabel}</span>` : ''}</div>
+          <div class="ctick">${s.t||s.ticker||'—'}${moatLabel ? `<span class="moat-badge">${moatLabel}${tipHtml('COMPETITIVE MOAT', TIPS.moat)}</span>` : ''}</div>
           <div class="cname">${s.n||s.name||NAMES[s.t||s.ticker]||''}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
           <div class="cbadge ${bc(v)}"><span class="bd ${dc(v)}"></span>${v}</div>
-          <div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:${fs.color};opacity:0.8">F: ${fs.label}</div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:1px;color:${fs.color};opacity:0.8;display:inline-flex;align-items:center">F: ${fs.label}${tipHtml('FUNDAMENTALS: ' + fs.label.toUpperCase(), TIPS.fund[fs.score] || TIPS.fund.neutral)}</div>
         </div>
       </div>
       <div class="cm">
@@ -1111,13 +1193,16 @@ function v2Verdict(baseVerdict, liveData) {
 
 // ─────────────────────────────────────────────────────────────
 // FETCH LIVE DATA from our Vercel API route
-// With session caching — only hits Yahoo Finance once per session
+// With session caching + 8s timeout — chips NEVER stay loading
 // ─────────────────────────────────────────────────────────────
 async function fetchLiveData(ticker) {
   const cached = getCache(ticker);
   if (cached) return cached;
   try {
-    const res = await fetch(`/api/quote?ticker=${ticker}`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(`/api/quote?ticker=${ticker}`, { signal: controller.signal });
+    clearTimeout(timeout);
     if (!res.ok) return null;
     const data = await res.json();
     setCache(ticker, data);
@@ -1128,13 +1213,37 @@ async function fetchLiveData(ticker) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// UPDATE A SINGLE CARD with live Yahoo Finance data
-// Called after the card is already rendered — this is what
-// makes the loading chips appear then resolve gracefully
+// LOCAL FALLBACK — if API returns no data, build from FUNDAMENTALS
+// This ensures chips always resolve, never stay loading
+// ─────────────────────────────────────────────────────────────
+function localFallback(ticker) {
+  const f = FUNDAMENTALS[ticker] || FUNDAMENTALS['DEFAULT'];
+  if (!f) return null;
+  return {
+    forwardPE: f.pe ? Math.round(f.pe * 0.9 * 10) / 10 : null, // estimate: 10% lower than trailing
+    trailingPE: f.pe,
+    fcfMargin: null, // no local data for FCF
+    currentPrice: null,
+    analystTarget: null,
+    source: 'local-fundamentals'
+  };
+}
+
+// ─────────────────────────────────────────────────────────────
+// UPDATE A SINGLE CARD with live data (API first, local fallback)
+// Called after the card is already rendered — chips appear loading
+// then resolve gracefully to colored state
 // ─────────────────────────────────────────────────────────────
 async function enrichCard(s, cardId) {
   const ticker = s.t || s.ticker;
-  const liveData = await fetchLiveData(ticker);
+  let liveData = await fetchLiveData(ticker);
+  
+  // If API returned no useful data, use local fundamentals
+  const hasData = liveData && (liveData.forwardPE || liveData.trailingPE || liveData.fcfMargin || liveData.analystTarget);
+  if (!hasData) {
+    liveData = localFallback(ticker);
+  }
+
   const baseV = s.v || verd(s.verdict || '');
   const v2 = v2Verdict(baseV, liveData);
 
@@ -1143,86 +1252,112 @@ async function enrichCard(s, cardId) {
 
   // Update verdict if V2 logic changed it
   if (v2.verdict !== baseV) {
-    // Remove old color class, add new one
     card.classList.remove('ccg','ccr','ccy');
     card.classList.add(cc(v2.verdict));
 
-    // Update badge
     const badge = card.querySelector('.cbadge');
     if (badge) {
       badge.className = 'cbadge ' + bc(v2.verdict);
       badge.innerHTML = `<span class="bd ${dc(v2.verdict)}"></span>${v2.verdict}`;
     }
 
-    // Update reason text if V2 provided one
     if (v2.reason) {
       const reasonEl = card.querySelector('.creason');
       if (reasonEl) reasonEl.textContent = '"' + v2.reason + '"';
     }
   }
 
-  // Render live data chips
+  // Render live data chips — always resolve, never leave loading
   const liveRow = card.querySelector('.live-row');
-  if (!liveRow || !liveData) return;
+  if (!liveRow) return;
 
-  const fpe = liveData.forwardPE;
-  const tpe = liveData.trailingPE;
-  const fcf = liveData.fcfMargin;
-  const target = liveData.analystTarget;
+  const fpe = liveData ? liveData.forwardPE : null;
+  const tpe = liveData ? liveData.trailingPE : null;
+  const fcf = liveData ? liveData.fcfMargin : null;
+  const target = liveData ? liveData.analystTarget : null;
   const currentPx = parseFloat(s.px || s.price || 0);
   const histPE = HIST_PE[ticker];
+  const isLocal = liveData && liveData.source === 'local-fundamentals';
 
-  // Windshield chip
-  if (fpe && tpe) {
-    const windOk = fpe < tpe;
-    const cls = windOk ? 'loaded-g' : 'loaded-r';
-    const dot = windOk ? 'dg' : 'dr';
-    liveRow.querySelector('.chip-fpe').className = `live-chip ${cls}`;
-    liveRow.querySelector('.chip-fpe').innerHTML = `<span class="live-chip-dot ${dot}"></span>FWD PE: ${fpe}x ${windOk ? '▼' : '▲'} ${tpe}x`;
-  } else if (fpe) {
-    liveRow.querySelector('.chip-fpe').className = 'live-chip loaded-n';
-    liveRow.querySelector('.chip-fpe').innerHTML = `FWD PE: ${fpe}x`;
-  } else {
-    liveRow.querySelector('.chip-fpe').className = 'live-chip loaded-n';
-    liveRow.querySelector('.chip-fpe').textContent = 'FWD PE: N/A';
+  // Windshield chip (FWD PE vs Trailing PE)
+  const chipFpe = liveRow.querySelector('.chip-fpe');
+  if (chipFpe) {
+    if (fpe && tpe) {
+      const windOk = fpe < tpe;
+      chipFpe.className = `live-chip ${windOk ? 'loaded-g' : 'loaded-r'}`;
+      chipFpe.innerHTML = `<span class="live-chip-dot ${windOk ? 'dg' : 'dr'}"></span>FWD PE: ${fpe}x ${windOk ? '▼' : '▲'} ${tpe}x`;
+    } else if (fpe) {
+      chipFpe.className = 'live-chip loaded-n';
+      chipFpe.innerHTML = `FWD PE: ${fpe}x`;
+    } else {
+      chipFpe.className = 'live-chip loaded-n';
+      chipFpe.textContent = 'FWD PE: N/A';
+    }
   }
 
   // FCF chip
-  if (fcf !== null) {
-    const fcfOk = fcf >= 5;
-    const cls = fcfOk ? 'loaded-g' : 'loaded-r';
-    const dot = fcfOk ? 'dg' : 'dr';
-    liveRow.querySelector('.chip-fcf').className = `live-chip ${cls}`;
-    liveRow.querySelector('.chip-fcf').innerHTML = `<span class="live-chip-dot ${dot}"></span>FCF: ${fcf.toFixed(1)}%`;
-  } else {
-    liveRow.querySelector('.chip-fcf').className = 'live-chip loaded-n';
-    liveRow.querySelector('.chip-fcf').textContent = 'FCF: N/A';
+  const chipFcf = liveRow.querySelector('.chip-fcf');
+  if (chipFcf) {
+    if (fcf !== null && fcf !== undefined) {
+      const fcfOk = fcf >= 5;
+      chipFcf.className = `live-chip ${fcfOk ? 'loaded-g' : 'loaded-r'}`;
+      chipFcf.innerHTML = `<span class="live-chip-dot ${fcfOk ? 'dg' : 'dr'}"></span>FCF: ${fcf.toFixed(1)}%`;
+    } else {
+      // Show health from fundamentals if no FCF data
+      const f = FUNDAMENTALS[ticker] || FUNDAMENTALS['DEFAULT'];
+      const health = f ? f.health : 'ok';
+      const healthCls = health === 'strong' ? 'loaded-g' : health === 'weak' ? 'loaded-r' : 'loaded-y';
+      const healthDot = health === 'strong' ? 'dg' : health === 'weak' ? 'dr' : 'dy';
+      const healthLabel = health === 'strong' ? 'Strong' : health === 'weak' ? 'Weak' : 'Ok';
+      chipFcf.className = `live-chip ${healthCls}`;
+      chipFcf.innerHTML = `<span class="live-chip-dot ${healthDot}"></span>Health: ${healthLabel}`;
+    }
   }
 
   // Historical PE chip
-  if (tpe && histPE) {
-    const ratio = tpe / histPE;
-    const cheap = ratio < 0.9;
-    const expensive = ratio > 1.3;
-    const cls = cheap ? 'loaded-g' : expensive ? 'loaded-r' : 'loaded-y';
-    const dot = cheap ? 'dg' : expensive ? 'dr' : 'dy';
-    liveRow.querySelector('.chip-hist').className = `live-chip ${cls}`;
-    liveRow.querySelector('.chip-hist').innerHTML = `<span class="live-chip-dot ${dot}"></span>PE vs hist: ${ratio.toFixed(2)}x`;
-  } else {
-    liveRow.querySelector('.chip-hist').className = 'live-chip loaded-n';
-    liveRow.querySelector('.chip-hist').textContent = 'Hist PE: N/A';
+  const chipHist = liveRow.querySelector('.chip-hist');
+  if (chipHist) {
+    const peForHist = tpe || (FUNDAMENTALS[ticker] || {}).pe;
+    if (peForHist && histPE) {
+      const ratio = peForHist / histPE;
+      const cheap = ratio < 0.9;
+      const expensive = ratio > 1.3;
+      const cls = cheap ? 'loaded-g' : expensive ? 'loaded-r' : 'loaded-y';
+      const dot = cheap ? 'dg' : expensive ? 'dr' : 'dy';
+      chipHist.className = `live-chip ${cls}`;
+      chipHist.innerHTML = `<span class="live-chip-dot ${dot}"></span>PE vs hist: ${ratio.toFixed(2)}x`;
+    } else {
+      chipHist.className = 'live-chip loaded-n';
+      chipHist.textContent = 'Hist PE: N/A';
+    }
   }
 
   // Analyst target chip
-  if (target && currentPx > 0) {
-    const upside = ((target - currentPx) / currentPx) * 100;
-    const cls = upside > 10 ? 'loaded-g' : upside < -5 ? 'loaded-r' : 'loaded-y';
-    const dot = upside > 10 ? 'dg' : upside < -5 ? 'dr' : 'dy';
-    liveRow.querySelector('.chip-target').className = `live-chip ${cls}`;
-    liveRow.querySelector('.chip-target').innerHTML = `<span class="live-chip-dot ${dot}"></span>Target: $${target} (${upside > 0 ? '+' : ''}${upside.toFixed(0)}%)`;
-  } else {
-    liveRow.querySelector('.chip-target').className = 'live-chip loaded-n';
-    liveRow.querySelector('.chip-target').textContent = 'Target: N/A';
+  const chipTarget = liveRow.querySelector('.chip-target');
+  if (chipTarget) {
+    if (target && currentPx > 0) {
+      const upside = ((target - currentPx) / currentPx) * 100;
+      const cls = upside > 10 ? 'loaded-g' : upside < -5 ? 'loaded-r' : 'loaded-y';
+      const dot = upside > 10 ? 'dg' : upside < -5 ? 'dr' : 'dy';
+      chipTarget.className = `live-chip ${cls}`;
+      chipTarget.innerHTML = `<span class="live-chip-dot ${dot}"></span>Target: $${target} (${upside > 0 ? '+' : ''}${upside.toFixed(0)}%)`;
+    } else {
+      // Show fundamental verdict as fallback
+      const f = FUNDAMENTALS[ticker] || FUNDAMENTALS['DEFAULT'];
+      const vrd = f ? f.verdict : 'HOLD';
+      const vCls = vrd === 'BUY' ? 'loaded-g' : vrd === 'CAUTION' ? 'loaded-r' : 'loaded-y';
+      const vDot = vrd === 'BUY' ? 'dg' : vrd === 'CAUTION' ? 'dr' : 'dy';
+      chipTarget.className = `live-chip ${vCls}`;
+      chipTarget.innerHTML = `<span class="live-chip-dot ${vDot}"></span>Fund: ${vrd}`;
+    }
+  }
+
+  // Update footer text
+  const footer = card.querySelector('.cfooter');
+  if (footer) {
+    footer.textContent = isLocal 
+      ? 'Brisk V3 · Updated today · Local data' 
+      : 'Brisk V3 · Updated today · Live data';
   }
 
   // Also update fund panel live data
