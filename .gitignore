@@ -1,0 +1,42 @@
+# ════════════════════════════════════════════════════════════════
+# SECURITY: Never commit secrets or sensitive files to git
+# ════════════════════════════════════════════════════════════════
+
+# Environment variables — NEVER commit
+.env
+.env.local
+.env.*.local
+
+# API keys and secrets
+.env.production.local
+.env.development.local
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.log
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+out/
+
+# Vercel
+.vercel/
