@@ -31,7 +31,6 @@ const STOCKS_DB=[
 {t:'CRWD',n:'CrowdStrike Holdings',s:'Technology'},
 {t:'FTNT',n:'Fortinet Inc.',s:'Technology'},
 {t:'SHOP',n:'Shopify Inc.',s:'Technology'},
-{t:'SQ',n:'Block Inc.',s:'Technology'},
 {t:'DDOG',n:'Datadog Inc.',s:'Technology'},
 {t:'NET',n:'Cloudflare Inc.',s:'Technology'},
 {t:'ZS',n:'Zscaler Inc.',s:'Technology'},
@@ -206,8 +205,10 @@ STOCKS_DB.forEach(s=>{STOCKS_MAP[s.t]=s;});
 function getSector(ticker){
   const s=STOCKS_MAP[ticker];
   if(s) return s.s;
-  // Guess from HUMAN translations
-  const h=HUMAN[ticker];
-  if(h&&h.sector) return h.sector;
+  // Guess from HUMAN translations (only available on dashboard page)
+  if(typeof HUMAN!=='undefined'){
+    const h=HUMAN[ticker];
+    if(h&&h.sector) return h.sector;
+  }
   return 'Other';
 }
